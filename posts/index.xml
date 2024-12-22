@@ -1,20 +1,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<title>Posts on SDN-Techtalk | Steven Schramm</title>
-		<link>http://localhost:30000/posts/</link>
+		<link>https://sdn-techtalk.com/posts/</link>
 		<description>Recent content in Posts on SDN-Techtalk | Steven Schramm</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<copyright>Steven Schramm</copyright>
 		<lastBuildDate>Sat, 21 Dec 2024 19:54:18 +0100</lastBuildDate>
-		<atom:link href="http://localhost:30000/posts/index.xml" rel="self" type="application/rss+xml" />
+		<atom:link href="https://sdn-techtalk.com/posts/index.xml" rel="self" type="application/rss+xml" />
 		
 		<item>
 			<title>Controlling the egress IPs for K8s Pods within Tanzu</title>
-			<link>http://localhost:30000/posts/antrea-egress/</link>
+			<link>https://sdn-techtalk.com/posts/antrea-egress/</link>
 			<pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
 			
-			<guid>http://localhost:30000/posts/antrea-egress/</guid>
+			<guid>https://sdn-techtalk.com/posts/antrea-egress/</guid>
 			<description><![CDATA[%!s(<nil>)]]></description>
 			<content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
 <p>The integration of K8s platforms within a enterprise network environment is always a challenge regarding security and routing of certain K8s pods. Multiple pods are running in the same K8s cluster but might have different functinalities and requirements to access services outside of the K8s platform.

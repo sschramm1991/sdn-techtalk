@@ -2,42 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:30000/tags/antrea/</loc>
+    <loc>https://sdn-techtalk.com/tags/antrea/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/posts/antrea-egress/</loc>
+    <loc>https://sdn-techtalk.com/posts/antrea-egress/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/tags/esxi/</loc>
+    <loc>https://sdn-techtalk.com/tags/esxi/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/tags/homelab/</loc>
+    <loc>https://sdn-techtalk.com/tags/homelab/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/tags/nested-lab/</loc>
+    <loc>https://sdn-techtalk.com/tags/nested-lab/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/tags/network/</loc>
+    <loc>https://sdn-techtalk.com/tags/network/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/tags/nsx/</loc>
+    <loc>https://sdn-techtalk.com/tags/nsx/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/posts/</loc>
+    <loc>https://sdn-techtalk.com/posts/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/</loc>
+    <loc>https://sdn-techtalk.com/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/tags/</loc>
+    <loc>https://sdn-techtalk.com/tags/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/tags/tanzu/</loc>
+    <loc>https://sdn-techtalk.com/tags/tanzu/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/tags/vmware/</loc>
+    <loc>https://sdn-techtalk.com/tags/vmware/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:30000/about/</loc>
+    <loc>https://sdn-techtalk.com/about/</loc>
   </url>
 </urlset>
