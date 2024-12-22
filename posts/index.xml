@@ -257,26 +257,17 @@ It is also possible to adjust the configuration after the deployment of the K8s 
 </span></span><span class="line"><span class="cl">NAME                 EGRESSIP       AGE   NODE
 </span></span><span class="line"><span class="cl">egress-prod-web      10.100.5.10    42s   tkc-test01-hsqsg-vmm2w
 </span></span><span class="line"><span class="cl">egress-staging-web   10.100.5.130   28s   tkc-test01-worker-s9s27-qqhrg-z6jd5
-</span></span><span class="line"><span class="cl">```
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">## Create noSNAT rule
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">As already mentioned it is required to manually configure a noSNAT rule for the external IP pool subnets, if NAT mode is enabled for the used vSphere Namespace where the K8s cluster is deployed.
-</span></span><span class="line"><span class="cl">The noSNAT rule needs to be configured on the T1 router where the child segments are connected as shown in the picture below.
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">[![noSNAT](nosnat.png)](nosnat.png)
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">## Testing if egress ip pool assigment is working
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">The following tests are showing an access from the web pod in both namespaces and which external IP will be used to access the webserver deployed in dockers as mentioned earlier.
-</span></span><span class="line"><span class="cl">The Requester IP is the egress IP visible for the target web serverrunning in docker.
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">``````Plaintext
-</span></span><span class="line"><span class="cl">stevenschramm@Stevens-MacBook-Pro homelab % kubectl -n prod exec web-54d6b8f598-7ddqv -- curl -s 192.168.178.222:88
+</span></span></code></pre></div><h2 id="create-nosnat-rule">Create noSNAT rule</h2>
+<p>As already mentioned it is required to manually configure a noSNAT rule for the external IP pool subnets, if NAT mode is enabled for the used vSphere Namespace where the K8s cluster is deployed.
+The noSNAT rule needs to be configured on the T1 router where the child segments are connected as shown in the picture below.</p>
+<p><a href="nosnat.png"><img src="nosnat.png" alt="noSNAT"></a></p>
+<h2 id="testing-if-egress-ip-pool-assigment-is-working">Testing if egress ip pool assigment is working</h2>
+<p>The following tests are showing an access from the web pod in both namespaces and which external IP will be used to access the webserver deployed in dockers as mentioned earlier.
+The Requester IP is the egress IP visible for the target web serverrunning in docker.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">stevenschramm@Stevens-MacBook-Pro homelab % kubectl -n prod exec web-54d6b8f598-7ddqv -- curl -s 192.168.178.222:88
 </span></span><span class="line"><span class="cl">Requester IP: 10.100.5.10
 </span></span><span class="line"><span class="cl">stevenschramm@Stevens-MacBook-Pro homelab % kubectl -n staging exec web-54d6b8f598-slnm8 -- curl -s 192.168.178.222:88
 </span></span><span class="line"><span class="cl">Requester IP: 10.100.5.130
-</span></span><span class="line"><span class="cl">```
 </span></span></code></pre></div>]]></content>
 		</item>
 		
