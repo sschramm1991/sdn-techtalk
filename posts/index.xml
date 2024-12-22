@@ -187,7 +187,7 @@ async def index(request: Request):
 </code></pre><p>I executed the same command for staging with some other parameters.</p>
 <pre tabindex="0"><code>antreansxctl child-segment-create --nsx-managers=10.0.1.12 --user=admin --password=&#39;VMware1!VMware1!&#39; --cidr=&#34;10.100.5.128/30&#34; --gateway=&#34;10.100.5.129&#34; --parent=&#34;/infra/segments/vnet_60f55536-121d-40d0-ac48-4cb976decf3d_0&#34; --vlan=120 egress-staging
 </code></pre><p>The two child segments are now visible in the NSX UI as shown in the following picture.
-<img src="childsegmentsui.png" alt="Childsegents"></p>
+<a href="childsegmentsui.png"><img src="childsegmentsui.png" alt="Childsegents"></a></p>
 <h2 id="create-and-assign-antrea-external-ip-pools">Create and assign antrea external ip pools</h2>
 <p>I created one external IP pool for staging and one for prod.</p>
 <p>Prod external IP Pool YAML-File:</p>
@@ -260,7 +260,7 @@ egress-staging-web   10.100.5.130   28s   tkc-test01-worker-s9s27-qqhrg-z6jd5
 </code></pre><h2 id="create-nosnat-rule">Create noSNAT rule</h2>
 <p>As already mentioned it is required to manually configure a noSNAT rule for the external IP pool subnets, if NAT mode is enabled for the used vSphere Namespace where the K8s cluster is deployed.
 The noSNAT rule needs to be configured on the T1 router where the child segments are connected as shown in the picture below.</p>
-<p><img src="nosnat.png" alt="noSNAT"></p>
+<p><a href="nosnat.png"><img src="nosnat.png" alt="noSNAT"></a></p>
 <h2 id="testing-if-egress-ip-pool-assigment-is-working">Testing if egress ip pool assigment is working</h2>
 <p>The following tests are showing an access from the web pod in both namespaces and which external IP will be used to access the webserver deployed in dockers as mentioned earlier.
 The Requester IP is the egress IP visible for the target web serverrunning in docker.</p>
