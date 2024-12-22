@@ -19,13 +19,13 @@
 			<content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
 <p>The integration of K8s platforms within a enterprise network environment is always a challenge regarding security and routing of certain K8s pods. Multiple pods are running in the same K8s cluster but might have different functinalities and requirements to access services outside of the K8s platform.
 What should you do, if you are unable to assign a specific outgoing IP to a specific pod or group of pods? In this case you are forced to treat all the pods within a specific K8s cluster the same way and create firewall rules based on this.
-That does mean all the different pods within a K8s cluster will have network permissions and it is very challenging to implement further isolation.</p>
-<p>For legacy applications which were deployed on physical servers or specific virtual servers, each of those servers got a specific IP assigned. Based on this it was possible to create specific firewall rules for teh specific servers based on the different requirements to access other services or beeing accessed from other systems.
-This brought some isolation and overall security to the enterprise networks and is also a demand to satisfy the guidelines of some specific authorities like BAFIN or based on DORA.</p>
+That does mean all the different pods within a K8s cluster will have the same network permissions and it is very challenging to implement further isolation.</p>
+<p>For legacy applications which were deployed on physical servers or specific virtual servers, each of those servers got a specific IP assigned. Based on this it was possible to create specific firewall rules for the specific servers based on the different requirements to access other services or beeing accessed from other systems.
+This brought some isolation and overall security to the enterprise networks and is also a requirement to satisfy the guidelines of some specific authorities like BAFIN or based on DORA.</p>
 <p>Why is this now a challenge within K8s? K8s is an additinal layer of abstraction to increase the efficiency to deploy different services on a single server. The layer of K8s will be installed ontop of an operationg system, which is either installed on a physical or virtual server.
-Since the most enterprised does have a high ratio of virtualisation, it is more likli that K8s is deployed ontop of VM or bunch of VMs to build a K8s cluster. Each of those VMs is now called K8s worker or master and will run one or pultiple K8s services. In this case all the different VMs still have a specific IP adress that can be used in firewall rules, but the K8s services are getting deployed ontop of thoese VMs.
+Since the most enterprises does have a high ratio of virtualisation, it is more likely that K8s is deployed ontop of a VM or group of VMs to build a K8s cluster. Each of those VMs is now called K8s worker or master and will run one or multiple K8s services. In this case all the different VMs still have a specific IP adress that can be used in firewall rules, but the K8s services are getting deployed ontop of thoese VMs.
 That means multiple K8s services are sharing the same group of VMs and if a K8s service wants to reach a different service outside of K8s it will leave the K8s worker or master by using the IP of those VMs.</p>
-<p>But in K8s there are multiple solutions for this challenge. I would like to tell you about one solution that can be used in the K8s platform by VMware Tanzu (VKS) and requires the K8s network plugin (CNI) &ldquo;Antrea&rdquo;.
+<p>Nevertheless there are multiple solutions for this challenge. I would like to tell you about one solution that can be used in the K8s platform by VMware Tanzu (VKS) and requires the K8s network plugin (CNI) &ldquo;Antrea&rdquo;.
 The specific feature is called &ldquo;Antrea Engress&rdquo;.</p>
 <p>I will not show how to deploy the Tanzu supervisor cluster, but how to create a K8s guest cluster with the required features enabled and how to assign specific egress IPs to specific K8s pods.</p>
 <h2 id="lab-environment">Lab environment</h2>
@@ -43,11 +43,11 @@ The specific feature is called &ldquo;Antrea Engress&rdquo;.</p>
 <li>TKG Services 3.2.0</li>
 </ul>
 <p>Further it is required to deploy Tanzu with NSX as networking layer and using Antrea as CNI.
-For NSX a specific feature called &ldquo;Child Segments&rdquo; will be used to get this implementation done, so take care you current NSX version is supporting this feature.</p>
-<p>The next requirement is optional, but influence the overall configuration that needs to be done manually.
+For NSX a specific feature called &ldquo;Child Segments&rdquo; will be used to get this implementation done, so take care your current NSX version is supporting this feature.</p>
+<p>The next requirement is optional, but does influence the overall configuration that needs to be done manually.
 If you are using NAT mode, you need to manually create NoSNAT rules for the NSX child segments that will be cerated within the process. If NAT mode is disabled, this manuall configuration is not required.</p>
 <h2 id="nsx-child-segments">NSX child segments</h2>
-<p>Before digging into the steps how to assign seperate egress subnets to different K8s pods, I will shortly describe whar NSX child segments are.
+<p>Before digging into the steps how to assign seperate egress subnets to different K8s pods, I will shortly describe what NSX child segments are.
 If you are not aware of NSX and the routers within NSX, you need to familiarize with that first. Therefore I would recommend the NSX reference design guide <a href="https://community.broadcom.com/viewdocument/nsx-reference-design-guide-42-v10?CommunityKey=b76535ef-c5a2-474d-8270-3e83685f020e&amp;tab=librarydocuments">https://community.broadcom.com/viewdocument/nsx-reference-design-guide-42-v10?CommunityKey=b76535ef-c5a2-474d-8270-3e83685f020e&amp;tab=librarydocuments</a>.</p>
 <p>NSX child segents are based on a parent segment which is connected to a T1 router. The child segment it self can be either connected to the same or a different T1 router than the parent segment.
 The connection between the parent and the child segment will be done by a VLAN tag and two child segments cannot share the same VLAN tag.</p>
@@ -55,10 +55,10 @@ The connection between the parent and the child segment will be done by a VLAN t
 <p>Based on this feature different pods can be assigned to different subnets without the requirement of assigning different portgroups to the K8s worker and master nodes. Those subnets also does not interfere withe the reserved IPs for the assigned namespace CIDR of the K8s clusters.</p>
 <p>More information of the child sgements can be discoverd in the documentation of Broadcom. <a href="https://techdocs.broadcom.com/us/en/vmware-cis/nsx/vmware-nsx/4-2/administration-guide/segments/creating-a-child-segment.html">https://techdocs.broadcom.com/us/en/vmware-cis/nsx/vmware-nsx/4-2/administration-guide/segments/creating-a-child-segment.html</a></p>
 <h2 id="prepering-the-k8s-guest-cluster">Prepering the K8s guest cluster</h2>
-<p>Before creating the K8s cluster intself, it is required to create the Antrea configuration to enable the feature &ldquo;EgressSeperateSubnet&rdquo;.
+<p>Before creating the K8s cluster, it is required to create the Antrea configuration to enable the feature &ldquo;EgressSeperateSubnet&rdquo;.
 The following example shows an example configuration. This configuration does not negate the default settings of Antrea, which are not mentioned in this YAML-File.
 I also added the NSX integration in my configuration to integrate the NSX Distributed Firewall with Antrea, but this will not be further discussed in this article. Further the feature of &ldquo;NodePortLocal&rdquo; is also not required for the assignment of dedicated egress subnets.</p>
-<p>The name of the K8s object &ldquo;AntreaConfig&rdquo; is very important and should match the prefix <!-- raw HTML omitted -->-antrea-package, otherwhise the Antrea config will not be assigned. Further this configuration needs to be added before the K8s cluster is created.
+<p>The name of the K8s object &ldquo;AntreaConfig&rdquo; is very important and should match the prefix &lt;K8s cluster name&gt;-antrea-package, otherwhise the Antrea config will not be assigned. Further this configuration needs to be added before the K8s cluster is created.
 It is also possible to adjust the configuration after the deployment of the K8s cluster, but this is much more complex and required a reboot of the K8s nodes.</p>
 <pre tabindex="0"><code>apiVersion: cni.tanzu.vmware.com/v1alpha1
 kind: AntreaConfig
