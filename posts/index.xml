@@ -60,103 +60,103 @@ The following example shows an example configuration. This configuration does no
 I also added the NSX integration in my configuration to integrate the NSX Distributed Firewall with Antrea, but this will not be further discussed in this article. Further the feature of &ldquo;NodePortLocal&rdquo; is also not required for the assignment of dedicated egress subnets.</p>
 <p>The name of the K8s object &ldquo;AntreaConfig&rdquo; is very important and should match the prefix &lt;K8s cluster name&gt;-antrea-package, otherwhise the Antrea config will not be assigned. Further this configuration needs to be added before the K8s cluster is created.
 It is also possible to adjust the configuration after the deployment of the K8s cluster, but this is much more complex and required a reboot of the K8s nodes.</p>
-<pre tabindex="0"><code>apiVersion: cni.tanzu.vmware.com/v1alpha1
-kind: AntreaConfig
-metadata:
- name: tkc-test01-antrea-package #prefix required
- namespace: test
-spec:
-  antrea:
-    config:
-      featureGates:
-        EgressSeparateSubnet: true
-        NodePortLocal: true
-  antreaNSX:
-    enable: true #false by default
-</code></pre><p>After the configuration is applied, you can start with the K8s cluster deployment. Following my example K8s cluster YAML-File.</p>
-<pre tabindex="0"><code>apiVersion: run.tanzu.vmware.com/v1alpha3
-kind: TanzuKubernetesCluster
-metadata:
-  name: tkc-test01
-  namespace: test
-spec:
-  topology:
-    controlPlane:
-      replicas: 1
-      vmClass: best-effort-medium
-      storageClass: labnfs
-      tkr:
-        reference:
-          #name: v1.29.4---vmware.3-fips.1-tkg.1
-          name: v1.31.1---vmware.2-fips-vkr.2
-    nodePools:
-    - replicas: 2
-      name: worker
-      vmClass: best-effort-medium
-      storageClass: labnfs
-  settings:
-    network:
-      pods:
-        cidrBlocks: [&#34;192.168.0.0/16&#34;]
-      services:
-        cidrBlocks: [&#34;10.196.0.0/12&#34;]
-</code></pre><h2 id="creating-test-k8s-deployments">Creating test K8s deployments</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">cni.tanzu.vmware.com/v1alpha1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">AntreaConfig</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">tkc-test01-antrea-package</span><span class="w"> </span><span class="c">#prefix required</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">antrea</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">featureGates</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">EgressSeparateSubnet</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">NodePortLocal</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">antreaNSX</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c">#false by default</span><span class="w">
+</span></span></span></code></pre></div><p>After the configuration is applied, you can start with the K8s cluster deployment. Following my example K8s cluster YAML-File.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">run.tanzu.vmware.com/v1alpha3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">TanzuKubernetesCluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">tkc-test01</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">topology</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">controlPlane</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">vmClass</span><span class="p">:</span><span class="w"> </span><span class="l">best-effort-medium</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l">labnfs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">tkr</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">reference</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="c">#name: v1.29.4---vmware.3-fips.1-tkg.1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">v1.31.1---vmware.2-fips-vkr.2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">nodePools</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">worker</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">vmClass</span><span class="p">:</span><span class="w"> </span><span class="l">best-effort-medium</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l">labnfs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">settings</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">network</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">pods</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">cidrBlocks</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;192.168.0.0/16&#34;</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">cidrBlocks</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;10.196.0.0/12&#34;</span><span class="p">]</span><span class="w">
+</span></span></span></code></pre></div><h2 id="creating-test-k8s-deployments">Creating test K8s deployments</h2>
 <p>As a next step I created two namespaces to assign two different egress subnets later on.</p>
 <ul>
 <li>Namespace 1: prod</li>
 <li>Namespace 2: staging</li>
 </ul>
 <p>In each of those namespaces I created a test deployment based on the follwoing YAML-File.</p>
-<pre tabindex="0"><code>apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: web
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: web
-  template:
-    metadata:
-      labels:
-        app: web
-    spec:
-      containers:
-        - name: nginx
-          image: nginx:latest
-</code></pre><p>The commands used for this deployment are shown below.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">web</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">web</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">web</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:latest</span><span class="w">
+</span></span></span></code></pre></div><p>The commands used for this deployment are shown below.</p>
 <p>Creating namespaces:</p>
-<pre tabindex="0"><code>kubectl create ns &lt;namespace name&gt;
-</code></pre><p>Creating deployment:</p>
-<pre tabindex="0"><code>kubectl apply -f web.yaml -n &lt;namespace name&gt;
-</code></pre><p>In addition to the K8s deployments I deployed a docker container outside my NSX environment based on the following steps.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl create ns &lt;namespace name&gt;
+</span></span></code></pre></div><p>Creating deployment:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl apply -f web.yaml -n &lt;namespace name&gt;
+</span></span></code></pre></div><p>In addition to the K8s deployments I deployed a docker container outside my NSX environment based on the following steps.</p>
 <ol>
 <li>Create folder your Dockerfile and create the Dockerfile</li>
 </ol>
-<pre tabindex="0"><code>FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
-COPY ./app /app
-</code></pre><ol start="2">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="k">FROM</span><span class="s"> tiangolo/uvicorn-gunicorn-fastapi:python3.9</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">COPY</span> ./app /app<span class="err">
+</span></span></span></code></pre></div><ol start="2">
 <li>Create a subolder called &ldquo;app&rdquo;</li>
 <li>Create a file with the name &ldquo;main.py&rdquo; in the subfolder &ldquo;app&rdquo; with the content below.</li>
 </ol>
-<pre tabindex="0"><code>from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-
-app = FastAPI()
-
-@app.get(&#34;/&#34;, response_class=HTMLResponse)
-async def index(request: Request):
-    client_host = request.client.host
-    return &#34;Requester IP: &#34; + client_host + &#34;\n&#34;
-</code></pre><ol start="4">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Py" data-lang="Py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Request</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">fastapi.responses</span> <span class="kn">import</span> <span class="n">HTMLResponse</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@app.get</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">HTMLResponse</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">async</span> <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">client_host</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s2">&#34;Requester IP: &#34;</span> <span class="o">+</span> <span class="n">client_host</span> <span class="o">+</span> <span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span>
+</span></span></code></pre></div><ol start="4">
 <li>Go back to the folder where the Dockerfile is located and build the docker image</li>
 </ol>
-<pre tabindex="0"><code>docker build -t showfastip .
-</code></pre><ol start="5">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">docker build -t showfastip .
+</span></span></code></pre></div><ol start="5">
 <li>Run the docker imaged with a choosen port, which is not in use. I decided to use external port 88</li>
 </ol>
-<pre tabindex="0"><code>docker run -d -p 88:80 showfastip
-</code></pre><h2 id="create-child-segments">Create child segments</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">docker run -d -p 88:80 showfastip
+</span></span></code></pre></div><h2 id="create-child-segments">Create child segments</h2>
 <p>I decided to create the child segments with the commandline tool &ldquo;antreansxctl&rdquo;. This commandline tool can be either downloaded to your local PC or you can connect to the Antrea pod of your K8s cluster to execute the desired command.</p>
 
     <aside class="admonition warning">
@@ -171,8 +171,8 @@ async def index(request: Request):
         <div class="admonition-content">This Pod will be deployed, if you enable the feature antreaNSX show above in the AntreaConfig example.</div>
     </aside>
 <p>A connection to the internetworking pod can be done by the kubectl command below.</p>
-<pre tabindex="0"><code>kubectl exec -n vmware-system-antrea interworking-5bdd8f5b5f-wd6wg -c mp-adapter -it -- bash
-</code></pre><p>The command to create a child segment requires the follwoing information.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl exec -n vmware-system-antrea interworking-5bdd8f5b5f-wd6wg -c mp-adapter -it -- bash
+</span></span></code></pre></div><p>The command to create a child segment requires the follwoing information.</p>
 <ul>
 <li>Path of the parent segment: can be gathered via NSX API by the code &ldquo;curl &ndash;location &ndash;request GET &lsquo;<a href="https://nsx.lab.home/policy/api/v1/infra/segments/'">https://nsx.lab.home/policy/api/v1/infra/segments/'</a> &ndash;header &lsquo;Content-Type: application/json&rsquo; &ndash;header &lsquo;Authorization: Basic <!-- raw HTML omitted -->&rsquo;&rdquo;</li>
 <li>NSX Manager IP</li>
@@ -181,94 +181,103 @@ async def index(request: Request):
 <li>CIDR and Gateway IP of the child segmnet (the gateway IP will be created on the T1 router used for the child segment, which is the same T1 as for the parent T1 in this case)</li>
 </ul>
 <p>Command description:</p>
-<pre tabindex="0"><code>antreansxctl child-segment-create --nsx-managers=&lt;NSX Manager IP&gt; --user=admin --password=&#39;&lt;NSX Manager admin password&gt;&#39; --cidr=&#34;&lt;CIDR child segment&gt;&#34; --gateway=&#34;&lt;Gateway IP of child segment&gt;&#34; --parent=&#34;&lt;path of parent segment&gt;&#34; --vlan=&lt;vlan id&gt; &lt;name of child segment&gt;
-</code></pre><p>An example of this command is shown below.</p>
-<pre tabindex="0"><code>antreansxctl child-segment-create --nsx-managers=10.0.1.12 --user=admin --password=&#39;VMware1!VMware1!&#39; --cidr=&#34;10.100.5.0/25&#34; --gateway=&#34;10.100.5.1&#34; --parent=&#34;/infra/segments/vnet_60f55536-121d-40d0-ac48-4cb976decf3d_0&#34; --vlan=110 egress-prod
-</code></pre><p>I executed the same command for staging with some other parameters.</p>
-<pre tabindex="0"><code>antreansxctl child-segment-create --nsx-managers=10.0.1.12 --user=admin --password=&#39;VMware1!VMware1!&#39; --cidr=&#34;10.100.5.128/30&#34; --gateway=&#34;10.100.5.129&#34; --parent=&#34;/infra/segments/vnet_60f55536-121d-40d0-ac48-4cb976decf3d_0&#34; --vlan=120 egress-staging
-</code></pre><p>The two child segments are now visible in the NSX UI as shown in the following picture.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">antreansxctl child-segment-create --nsx-managers=&lt;NSX Manager IP&gt; --user=admin --password=&#39;&lt;NSX Manager admin password&gt;&#39; --cidr=&#34;&lt;CIDR child segment&gt;&#34; --gateway=&#34;&lt;Gateway IP of child segment&gt;&#34; --parent=&#34;&lt;path of parent segment&gt;&#34; --vlan=&lt;vlan id&gt; &lt;name of child segment&gt;
+</span></span></code></pre></div><p>An example of this command is shown below.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">antreansxctl child-segment-create --nsx-managers=10.0.1.12 --user=admin --password=&#39;VMware1!VMware1!&#39; --cidr=&#34;10.100.5.0/25&#34; --gateway=&#34;10.100.5.1&#34; --parent=&#34;/infra/segments/vnet_60f55536-121d-40d0-ac48-4cb976decf3d_0&#34; --vlan=110 egress-prod
+</span></span></code></pre></div><p>I executed the same command for staging with some other parameters.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">antreansxctl child-segment-create --nsx-managers=10.0.1.12 --user=admin --password=&#39;VMware1!VMware1!&#39; --cidr=&#34;10.100.5.128/30&#34; --gateway=&#34;10.100.5.129&#34; --parent=&#34;/infra/segments/vnet_60f55536-121d-40d0-ac48-4cb976decf3d_0&#34; --vlan=120 egress-staging
+</span></span></code></pre></div><p>The two child segments are now visible in the NSX UI as shown in the following picture.
 <a href="childsegmentsui.png"><img src="childsegmentsui.png" alt="Childsegents"></a></p>
 <h2 id="create-and-assign-antrea-external-ip-pools">Create and assign antrea external ip pools</h2>
 <p>I created one external IP pool for staging and one for prod.</p>
 <p>Prod external IP Pool YAML-File:</p>
-<pre tabindex="0"><code>apiVersion: crd.antrea.io/v1beta1
-kind: ExternalIPPool
-metadata:
-  name: prod-external-ip-pool
-spec:
-  ipRanges:
-  - start: 10.100.5.10
-    end: 10.100.5.20
-  subnetInfo:
-    gateway: 10.100.5.1
-    prefixLength: 25
-    vlan: 110
-  nodeSelector: {}
-</code></pre><p>Staging external IP pool YAML-File:</p>
-<pre tabindex="0"><code>apiVersion: crd.antrea.io/v1beta1
-kind: ExternalIPPool
-metadata:
-  name: staging-external-ip-pool
-spec:
-  ipRanges:
-  - start: 10.100.5.130
-    end: 10.100.5.130
-  subnetInfo:
-    gateway: 10.100.5.129
-    prefixLength: 30
-    vlan: 120
-  nodeSelector: {}
-</code></pre><p>Creating the two IP pools:</p>
-<pre tabindex="0"><code>kubectl apply -f antrea-externalippool-prod.yaml
-kubectl apply -f antrea-externalippool-staging.yaml
-</code></pre><p>YAML-Files for assignment of prod IP pool to prod web deployment:</p>
-<pre tabindex="0"><code>apiVersion: crd.antrea.io/v1beta1
-kind: Egress
-metadata:
-  name: egress-prod-web
-spec:
-  appliedTo:
-    namespaceSelector:
-      matchLabels:
-        kubernetes.io/metadata.name: prod
-    podSelector:
-      matchLabels:
-        app: web
-  externalIPPool: prod-external-ip-pool
-</code></pre><p>YAML-Files for assignment of staging IP pool to prod web deployment:</p>
-<pre tabindex="0"><code>apiVersion: crd.antrea.io/v1beta1
-kind: Egress
-metadata:
-  name: egress-staging-web
-spec:
-  appliedTo:
-    namespaceSelector:
-      matchLabels:
-        kubernetes.io/metadata.name: staging
-    podSelector:
-      matchLabels:
-        app: web
-  externalIPPool: staging-external-ip-pool
-</code></pre><p>Assigning  the external IP pools:</p>
-<pre tabindex="0"><code>kubectl apply -f egress-prod-web.yaml -n prod
-kubectl apply -f egress-staging-web.yaml -n staging
-</code></pre><p>The following command shows the assigned IPs of the two IP pools.</p>
-<pre tabindex="0"><code>kubectl get egress
-NAME                 EGRESSIP       AGE   NODE
-egress-prod-web      10.100.5.10    42s   tkc-test01-hsqsg-vmm2w
-egress-staging-web   10.100.5.130   28s   tkc-test01-worker-s9s27-qqhrg-z6jd5
-</code></pre><h2 id="create-nosnat-rule">Create noSNAT rule</h2>
-<p>As already mentioned it is required to manually configure a noSNAT rule for the external IP pool subnets, if NAT mode is enabled for the used vSphere Namespace where the K8s cluster is deployed.
-The noSNAT rule needs to be configured on the T1 router where the child segments are connected as shown in the picture below.</p>
-<p><a href="nosnat.png"><img src="nosnat.png" alt="noSNAT"></a></p>
-<h2 id="testing-if-egress-ip-pool-assigment-is-working">Testing if egress ip pool assigment is working</h2>
-<p>The following tests are showing an access from the web pod in both namespaces and which external IP will be used to access the webserver deployed in dockers as mentioned earlier.
-The Requester IP is the egress IP visible for the target web serverrunning in docker.</p>
-<pre tabindex="0"><code>stevenschramm@Stevens-MacBook-Pro homelab % kubectl -n prod exec web-54d6b8f598-7ddqv -- curl -s 192.168.178.222:88
-Requester IP: 10.100.5.10
-stevenschramm@Stevens-MacBook-Pro homelab % kubectl -n staging exec web-54d6b8f598-slnm8 -- curl -s 192.168.178.222:88
-Requester IP: 10.100.5.130
-</code></pre>]]></content>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">crd.antrea.io/v1beta1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ExternalIPPool</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">prod-external-ip-pool</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ipRanges</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">start</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.10</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">end</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.20</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">subnetInfo</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">prefixLength</span><span class="p">:</span><span class="w"> </span><span class="m">25</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">vlan</span><span class="p">:</span><span class="w"> </span><span class="m">110</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span></code></pre></div><p>Staging external IP pool YAML-File:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">crd.antrea.io/v1beta1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ExternalIPPool</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">staging-external-ip-pool</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ipRanges</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">start</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.130</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">end</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.130</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">subnetInfo</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.129</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">prefixLength</span><span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">vlan</span><span class="p">:</span><span class="w"> </span><span class="m">120</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span></code></pre></div><p>Creating the two IP pools:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl apply -f antrea-externalippool-prod.yaml
+</span></span><span class="line"><span class="cl">kubectl apply -f antrea-externalippool-staging.yaml
+</span></span></code></pre></div><p>YAML-Files for assignment of prod IP pool to prod web deployment:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">crd.antrea.io/v1beta1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Egress</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">egress-prod-web</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">appliedTo</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">namespaceSelector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">kubernetes.io/metadata.name</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">podSelector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">web</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">externalIPPool</span><span class="p">:</span><span class="w"> </span><span class="l">prod-external-ip-pool</span><span class="w">
+</span></span></span></code></pre></div><p>YAML-Files for assignment of staging IP pool to prod web deployment:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">crd.antrea.io/v1beta1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Egress</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">egress-staging-web</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">appliedTo</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">namespaceSelector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">kubernetes.io/metadata.name</span><span class="p">:</span><span class="w"> </span><span class="l">staging</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">podSelector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">web</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">externalIPPool</span><span class="p">:</span><span class="w"> </span><span class="l">staging-external-ip-pool</span><span class="w">
+</span></span></span></code></pre></div><p>Assigning  the external IP pools:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl apply -f egress-prod-web.yaml -n prod
+</span></span><span class="line"><span class="cl">kubectl apply -f egress-staging-web.yaml -n staging
+</span></span></code></pre></div><p>The following command shows the assigned IPs of the two IP pools.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl get egress
+</span></span><span class="line"><span class="cl">NAME                 EGRESSIP       AGE   NODE
+</span></span><span class="line"><span class="cl">egress-prod-web      10.100.5.10    42s   tkc-test01-hsqsg-vmm2w
+</span></span><span class="line"><span class="cl">egress-staging-web   10.100.5.130   28s   tkc-test01-worker-s9s27-qqhrg-z6jd5
+</span></span><span class="line"><span class="cl">```
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">## Create noSNAT rule
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">As already mentioned it is required to manually configure a noSNAT rule for the external IP pool subnets, if NAT mode is enabled for the used vSphere Namespace where the K8s cluster is deployed.
+</span></span><span class="line"><span class="cl">The noSNAT rule needs to be configured on the T1 router where the child segments are connected as shown in the picture below.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[![noSNAT](nosnat.png)](nosnat.png)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">## Testing if egress ip pool assigment is working
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">The following tests are showing an access from the web pod in both namespaces and which external IP will be used to access the webserver deployed in dockers as mentioned earlier.
+</span></span><span class="line"><span class="cl">The Requester IP is the egress IP visible for the target web serverrunning in docker.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">``````Plaintext
+</span></span><span class="line"><span class="cl">stevenschramm@Stevens-MacBook-Pro homelab % kubectl -n prod exec web-54d6b8f598-7ddqv -- curl -s 192.168.178.222:88
+</span></span><span class="line"><span class="cl">Requester IP: 10.100.5.10
+</span></span><span class="line"><span class="cl">stevenschramm@Stevens-MacBook-Pro homelab % kubectl -n staging exec web-54d6b8f598-slnm8 -- curl -s 192.168.178.222:88
+</span></span><span class="line"><span class="cl">Requester IP: 10.100.5.130
+</span></span><span class="line"><span class="cl">```
+</span></span></code></pre></div>]]></content>
 		</item>
 		
 	</channel>
