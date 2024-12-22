@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nested Lab on SDN-Techtalk | Steven Schramm</title>
+    <link>http://localhost:30000/tags/nested-lab/</link>
+    <description>Recent content in Nested Lab on SDN-Techtalk | Steven Schramm</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>Steven Schramm</copyright>
+    <lastBuildDate>Sat, 21 Dec 2024 19:54:18 +0100</lastBuildDate>
+    <atom:link href="http://localhost:30000/tags/nested-lab/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Controlling the egress IPs for K8s Pods within Tanzu</title>
+      <link>http://localhost:30000/posts/antrea-egress/</link>
+      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
+      <guid>http://localhost:30000/posts/antrea-egress/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;The integration of K8s platforms within a enterprise network environment is always a challenge regarding security and routing of certain K8s pods. Multiple pods are running in the same K8s cluster but might have different functinalities and requirements to access services outside of the K8s platform.&#xA;What should you do, if you are unable to assign a specific outgoing IP to a specific pod or group of pods? In this case you are forced to treat all the pods within a specific K8s cluster the same way and create firewall rules based on this.&#xA;That does mean all the different pods within a K8s cluster will have network permissions and it is very challenging to implement further isolation.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

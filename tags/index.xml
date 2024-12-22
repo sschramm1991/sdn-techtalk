@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on SDN-Techtalk | Steven Schramm</title>
+    <link>http://localhost:30000/tags/</link>
+    <description>Recent content in Tags on SDN-Techtalk | Steven Schramm</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>Steven Schramm</copyright>
+    <lastBuildDate>Sat, 21 Dec 2024 19:54:18 +0100</lastBuildDate>
+    <atom:link href="http://localhost:30000/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Antrea</title>
+      <link>http://localhost:30000/tags/antrea/</link>
+      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
+      <guid>http://localhost:30000/tags/antrea/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Esxi</title>
+      <link>http://localhost:30000/tags/esxi/</link>
+      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
+      <guid>http://localhost:30000/tags/esxi/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Homelab</title>
+      <link>http://localhost:30000/tags/homelab/</link>
+      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
+      <guid>http://localhost:30000/tags/homelab/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Nested Lab</title>
+      <link>http://localhost:30000/tags/nested-lab/</link>
+      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
+      <guid>http://localhost:30000/tags/nested-lab/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Network</title>
+      <link>http://localhost:30000/tags/network/</link>
+      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
+      <guid>http://localhost:30000/tags/network/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Nsx</title>
+      <link>http://localhost:30000/tags/nsx/</link>
+      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
+      <guid>http://localhost:30000/tags/nsx/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tanzu</title>
+      <link>http://localhost:30000/tags/tanzu/</link>
+      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
+      <guid>http://localhost:30000/tags/tanzu/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Vmware</title>
+      <link>http://localhost:30000/tags/vmware/</link>
+      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
+      <guid>http://localhost:30000/tags/vmware/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

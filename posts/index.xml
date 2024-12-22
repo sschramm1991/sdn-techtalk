@@ -1,0 +1,275 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Posts on SDN-Techtalk | Steven Schramm</title>
+		<link>http://localhost:30000/posts/</link>
+		<description>Recent content in Posts on SDN-Techtalk | Steven Schramm</description>
+		<generator>Hugo -- gohugo.io</generator>
+		<language>en-us</language>
+		<copyright>Steven Schramm</copyright>
+		<lastBuildDate>Sat, 21 Dec 2024 19:54:18 +0100</lastBuildDate>
+		<atom:link href="http://localhost:30000/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Controlling the egress IPs for K8s Pods within Tanzu</title>
+			<link>http://localhost:30000/posts/antrea-egress/</link>
+			<pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
+			
+			<guid>http://localhost:30000/posts/antrea-egress/</guid>
+			<description><![CDATA[%!s(<nil>)]]></description>
+			<content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>The integration of K8s platforms within a enterprise network environment is always a challenge regarding security and routing of certain K8s pods. Multiple pods are running in the same K8s cluster but might have different functinalities and requirements to access services outside of the K8s platform.
+What should you do, if you are unable to assign a specific outgoing IP to a specific pod or group of pods? In this case you are forced to treat all the pods within a specific K8s cluster the same way and create firewall rules based on this.
+That does mean all the different pods within a K8s cluster will have network permissions and it is very challenging to implement further isolation.</p>
+<p>For legacy applications which were deployed on physical servers or specific virtual servers, each of those servers got a specific IP assigned. Based on this it was possible to create specific firewall rules for teh specific servers based on the different requirements to access other services or beeing accessed from other systems.
+This brought some isolation and overall security to the enterprise networks and is also a demand to satisfy the guidelines of some specific authorities like BAFIN or based on DORA.</p>
+<p>Why is this now a challenge within K8s? K8s is an additinal layer of abstraction to increase the efficiency to deploy different services on a single server. The layer of K8s will be installed ontop of an operationg system, which is either installed on a physical or virtual server.
+Since the most enterprised does have a high ratio of virtualisation, it is more likli that K8s is deployed ontop of VM or bunch of VMs to build a K8s cluster. Each of those VMs is now called K8s worker or master and will run one or pultiple K8s services. In this case all the different VMs still have a specific IP adress that can be used in firewall rules, but the K8s services are getting deployed ontop of thoese VMs.
+That means multiple K8s services are sharing the same group of VMs and if a K8s service wants to reach a different service outside of K8s it will leave the K8s worker or master by using the IP of those VMs.</p>
+<p>But in K8s there are multiple solutions for this challenge. I would like to tell you about one solution that can be used in the K8s platform by VMware Tanzu (VKS) and requires the K8s network plugin (CNI) &ldquo;Antrea&rdquo;.
+The specific feature is called &ldquo;Antrea Engress&rdquo;.</p>
+<p>I will not show how to deploy the Tanzu supervisor cluster, but how to create a K8s guest cluster with the required features enabled and how to assign specific egress IPs to specific K8s pods.</p>
+<h2 id="lab-environment">Lab environment</h2>
+<p>For the tests I worked with the following lab environment.</p>
+<ul>
+<li>Three nested ESXi hosts of version 8.0.3, 24022510</li>
+<li>vCenter server of version 8.0.3, 24022515</li>
+<li>NSX Datacenter version 4.2.1.1</li>
+<li>Tanzu supervisor cluster integrated with NSX Datacenter</li>
+</ul>
+<h2 id="requirements">Requirements</h2>
+<p>My tests are based on assigning seperate egress subnets to different K8s pods within the same K8s cluster. To implement this solution the following versions are required.</p>
+<ul>
+<li>TKr 1.31</li>
+<li>TKG Services 3.2.0</li>
+</ul>
+<p>Further it is required to deploy Tanzu with NSX as networking layer and using Antrea as CNI.
+For NSX a specific feature called &ldquo;Child Segments&rdquo; will be used to get this implementation done, so take care you current NSX version is supporting this feature.</p>
+<p>The next requirement is optional, but influence the overall configuration that needs to be done manually.
+If you are using NAT mode, you need to manually create NoSNAT rules for the NSX child segments that will be cerated within the process. If NAT mode is disabled, this manuall configuration is not required.</p>
+<h2 id="nsx-child-segments">NSX child segments</h2>
+<p>Before digging into the steps how to assign seperate egress subnets to different K8s pods, I will shortly describe whar NSX child segments are.
+If you are not aware of NSX and the routers within NSX, you need to familiarize with that first. Therefore I would recommend the NSX reference design guide <a href="https://community.broadcom.com/viewdocument/nsx-reference-design-guide-42-v10?CommunityKey=b76535ef-c5a2-474d-8270-3e83685f020e&amp;tab=librarydocuments">https://community.broadcom.com/viewdocument/nsx-reference-design-guide-42-v10?CommunityKey=b76535ef-c5a2-474d-8270-3e83685f020e&amp;tab=librarydocuments</a>.</p>
+<p>NSX child segents are based on a parent segment which is connected to a T1 router. The child segment it self can be either connected to the same or a different T1 router than the parent segment.
+The connection between the parent and the child segment will be done by a VLAN tag and two child segments cannot share the same VLAN tag.</p>
+<p>This feature is currently not available in the UI and those child segments can be wither created through the NSX API or the Antrea NSX control application.</p>
+<p>Based on this feature different pods can be assigned to different subnets without the requirement of assigning different portgroups to the K8s worker and master nodes. Those subnets also does not interfere withe the reserved IPs for the assigned namespace CIDR of the K8s clusters.</p>
+<p>More information of the child sgements can be discoverd in the documentation of Broadcom. <a href="https://techdocs.broadcom.com/us/en/vmware-cis/nsx/vmware-nsx/4-2/administration-guide/segments/creating-a-child-segment.html">https://techdocs.broadcom.com/us/en/vmware-cis/nsx/vmware-nsx/4-2/administration-guide/segments/creating-a-child-segment.html</a></p>
+<h2 id="prepering-the-k8s-guest-cluster">Prepering the K8s guest cluster</h2>
+<p>Before creating the K8s cluster intself, it is required to create the Antrea configuration to enable the feature &ldquo;EgressSeperateSubnet&rdquo;.
+The following example shows an example configuration. This configuration does not negate the default settings of Antrea, which are not mentioned in this YAML-File.
+I also added the NSX integration in my configuration to integrate the NSX Distributed Firewall with Antrea, but this will not be further discussed in this article. Further the feature of &ldquo;NodePortLocal&rdquo; is also not required for the assignment of dedicated egress subnets.</p>
+<p>The name of the K8s object &ldquo;AntreaConfig&rdquo; is very important and should match the prefix <!-- raw HTML omitted -->-antrea-package, otherwhise the Antrea config will not be assigned. Further this configuration needs to be added before the K8s cluster is created.
+It is also possible to adjust the configuration after the deployment of the K8s cluster, but this is much more complex and required a reboot of the K8s nodes.</p>
+<pre tabindex="0"><code>apiVersion: cni.tanzu.vmware.com/v1alpha1
+kind: AntreaConfig
+metadata:
+ name: tkc-test01-antrea-package #prefix required
+ namespace: test
+spec:
+  antrea:
+    config:
+      featureGates:
+        EgressSeparateSubnet: true
+        NodePortLocal: true
+  antreaNSX:
+    enable: true #false by default
+</code></pre><p>After the configuration is applied, you can start with the K8s cluster deployment. Following my example K8s cluster YAML-File.</p>
+<pre tabindex="0"><code>apiVersion: run.tanzu.vmware.com/v1alpha3
+kind: TanzuKubernetesCluster
+metadata:
+  name: tkc-test01
+  namespace: test
+spec:
+  topology:
+    controlPlane:
+      replicas: 1
+      vmClass: best-effort-medium
+      storageClass: labnfs
+      tkr:
+        reference:
+          #name: v1.29.4---vmware.3-fips.1-tkg.1
+          name: v1.31.1---vmware.2-fips-vkr.2
+    nodePools:
+    - replicas: 2
+      name: worker
+      vmClass: best-effort-medium
+      storageClass: labnfs
+  settings:
+    network:
+      pods:
+        cidrBlocks: [&#34;192.168.0.0/16&#34;]
+      services:
+        cidrBlocks: [&#34;10.196.0.0/12&#34;]
+</code></pre><h2 id="creating-test-k8s-deployments">Creating test K8s deployments</h2>
+<p>As a next step I created two namespaces to assign two different egress subnets later on.</p>
+<ul>
+<li>Namespace 1: prod</li>
+<li>Namespace 2: staging</li>
+</ul>
+<p>In each of those namespaces I created a test deployment based on the follwoing YAML-File.</p>
+<pre tabindex="0"><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+</code></pre><p>The commands used for this deployment are shown below.</p>
+<p>Creating namespaces:</p>
+<pre tabindex="0"><code>kubectl create ns &lt;namespace name&gt;
+</code></pre><p>Creating deployment:</p>
+<pre tabindex="0"><code>kubectl apply -f web.yaml -n &lt;namespace name&gt;
+</code></pre><p>In addition to the K8s deployments I deployed a docker container outside my NSX environment based on the following steps.</p>
+<ol>
+<li>Create folder your Dockerfile and create the Dockerfile</li>
+</ol>
+<pre tabindex="0"><code>FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
+COPY ./app /app
+</code></pre><ol start="2">
+<li>Create a subolder called &ldquo;app&rdquo;</li>
+<li>Create a file with the name &ldquo;main.py&rdquo; in the subfolder &ldquo;app&rdquo; with the content below.</li>
+</ol>
+<pre tabindex="0"><code>from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+
+app = FastAPI()
+
+@app.get(&#34;/&#34;, response_class=HTMLResponse)
+async def index(request: Request):
+    client_host = request.client.host
+    return &#34;Requester IP: &#34; + client_host + &#34;\n&#34;
+</code></pre><ol start="4">
+<li>Go back to the folder where the Dockerfile is located and build the docker image</li>
+</ol>
+<pre tabindex="0"><code>docker build -t showfastip .
+</code></pre><ol start="5">
+<li>Run the docker imaged with a choosen port, which is not in use. I decided to use external port 88</li>
+</ol>
+<pre tabindex="0"><code>docker run -d -p 88:80 showfastip
+</code></pre><h2 id="create-child-segments">Create child segments</h2>
+<p>I decided to create the child segments with the commandline tool &ldquo;antreansxctl&rdquo;. This commandline tool can be either downloaded to your local PC or you can connect to the Antrea pod of your K8s cluster to execute the desired command.</p>
+
+    <aside class="admonition warning">
+        <div class="admonition-title">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+   </svg></div><b>It&#39;s important to note that the antreansxctl commandline tool is provided in the internetworking pod</b>
+        </div>
+        <div class="admonition-content">This Pod will be deployed, if you enable the feature antreaNSX show above in the AntreaConfig example.</div>
+    </aside>
+<p>A connection to the internetworking pod can be done by the kubectl command below.</p>
+<pre tabindex="0"><code>kubectl exec -n vmware-system-antrea interworking-5bdd8f5b5f-wd6wg -c mp-adapter -it -- bash
+</code></pre><p>The command to create a child segment requires the follwoing information.</p>
+<ul>
+<li>Path of the parent segment: can be gathered via NSX API by the code &ldquo;curl &ndash;location &ndash;request GET &lsquo;<a href="https://nsx.lab.home/policy/api/v1/infra/segments/'">https://nsx.lab.home/policy/api/v1/infra/segments/'</a> &ndash;header &lsquo;Content-Type: application/json&rsquo; &ndash;header &lsquo;Authorization: Basic <!-- raw HTML omitted -->&rsquo;&rdquo;</li>
+<li>NSX Manager IP</li>
+<li>NSX Manager User and Password</li>
+<li>VLAN ID used to tag the child segment (this VLAN ID will not be visible outside of NSX and will to overlap with any VLAN on the underlay network)</li>
+<li>CIDR and Gateway IP of the child segmnet (the gateway IP will be created on the T1 router used for the child segment, which is the same T1 as for the parent T1 in this case)</li>
+</ul>
+<p>Command description:</p>
+<pre tabindex="0"><code>antreansxctl child-segment-create --nsx-managers=&lt;NSX Manager IP&gt; --user=admin --password=&#39;&lt;NSX Manager admin password&gt;&#39; --cidr=&#34;&lt;CIDR child segment&gt;&#34; --gateway=&#34;&lt;Gateway IP of child segment&gt;&#34; --parent=&#34;&lt;path of parent segment&gt;&#34; --vlan=&lt;vlan id&gt; &lt;name of child segment&gt;
+</code></pre><p>An example of this command is shown below.</p>
+<pre tabindex="0"><code>antreansxctl child-segment-create --nsx-managers=10.0.1.12 --user=admin --password=&#39;VMware1!VMware1!&#39; --cidr=&#34;10.100.5.0/25&#34; --gateway=&#34;10.100.5.1&#34; --parent=&#34;/infra/segments/vnet_60f55536-121d-40d0-ac48-4cb976decf3d_0&#34; --vlan=110 egress-prod
+</code></pre><p>I executed the same command for staging with some other parameters.</p>
+<pre tabindex="0"><code>antreansxctl child-segment-create --nsx-managers=10.0.1.12 --user=admin --password=&#39;VMware1!VMware1!&#39; --cidr=&#34;10.100.5.128/30&#34; --gateway=&#34;10.100.5.129&#34; --parent=&#34;/infra/segments/vnet_60f55536-121d-40d0-ac48-4cb976decf3d_0&#34; --vlan=120 egress-staging
+</code></pre><p>The two child segments are now visible in the NSX UI as shown in the following picture.
+<img src="childsegmentsui.png" alt="Childsegents"></p>
+<h2 id="create-and-assign-antrea-external-ip-pools">Create and assign antrea external ip pools</h2>
+<p>I created one external IP pool for staging and one for prod.</p>
+<p>Prod external IP Pool YAML-File:</p>
+<pre tabindex="0"><code>apiVersion: crd.antrea.io/v1beta1
+kind: ExternalIPPool
+metadata:
+  name: prod-external-ip-pool
+spec:
+  ipRanges:
+  - start: 10.100.5.10
+    end: 10.100.5.20
+  subnetInfo:
+    gateway: 10.100.5.1
+    prefixLength: 25
+    vlan: 110
+  nodeSelector: {}
+</code></pre><p>Staging external IP pool YAML-File:</p>
+<pre tabindex="0"><code>apiVersion: crd.antrea.io/v1beta1
+kind: ExternalIPPool
+metadata:
+  name: staging-external-ip-pool
+spec:
+  ipRanges:
+  - start: 10.100.5.130
+    end: 10.100.5.130
+  subnetInfo:
+    gateway: 10.100.5.129
+    prefixLength: 30
+    vlan: 120
+  nodeSelector: {}
+</code></pre><p>Creating the two IP pools:</p>
+<pre tabindex="0"><code>kubectl apply -f antrea-externalippool-prod.yaml
+kubectl apply -f antrea-externalippool-staging.yaml
+</code></pre><p>YAML-Files for assignment of prod IP pool to prod web deployment:</p>
+<pre tabindex="0"><code>apiVersion: crd.antrea.io/v1beta1
+kind: Egress
+metadata:
+  name: egress-prod-web
+spec:
+  appliedTo:
+    namespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: prod
+    podSelector:
+      matchLabels:
+        app: web
+  externalIPPool: prod-external-ip-pool
+</code></pre><p>YAML-Files for assignment of staging IP pool to prod web deployment:</p>
+<pre tabindex="0"><code>apiVersion: crd.antrea.io/v1beta1
+kind: Egress
+metadata:
+  name: egress-staging-web
+spec:
+  appliedTo:
+    namespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: staging
+    podSelector:
+      matchLabels:
+        app: web
+  externalIPPool: staging-external-ip-pool
+</code></pre><p>Assigning  the external IP pools:</p>
+<pre tabindex="0"><code>kubectl apply -f egress-prod-web.yaml -n prod
+kubectl apply -f egress-staging-web.yaml -n staging
+</code></pre><p>The following command shows the assigned IPs of the two IP pools.</p>
+<pre tabindex="0"><code>kubectl get egress
+NAME                 EGRESSIP       AGE   NODE
+egress-prod-web      10.100.5.10    42s   tkc-test01-hsqsg-vmm2w
+egress-staging-web   10.100.5.130   28s   tkc-test01-worker-s9s27-qqhrg-z6jd5
+</code></pre><h2 id="create-nosnat-rule">Create noSNAT rule</h2>
+<p>As already mentioned it is required to manually configure a noSNAT rule for the external IP pool subnets, if NAT mode is enabled for the used vSphere Namespace where the K8s cluster is deployed.
+The noSNAT rule needs to be configured on the T1 router where the child segments are connected as shown in the picture below.</p>
+<p><img src="nosnat.png" alt="noSNAT"></p>
+<h2 id="testing-if-egress-ip-pool-assigment-is-working">Testing if egress ip pool assigment is working</h2>
+<p>The following tests are showing an access from the web pod in both namespaces and which external IP will be used to access the webserver deployed in dockers as mentioned earlier.
+The Requester IP is the egress IP visible for the target web serverrunning in docker.</p>
+<pre tabindex="0"><code>stevenschramm@Stevens-MacBook-Pro homelab % kubectl -n prod exec web-54d6b8f598-7ddqv -- curl -s 192.168.178.222:88
+Requester IP: 10.100.5.10
+stevenschramm@Stevens-MacBook-Pro homelab % kubectl -n staging exec web-54d6b8f598-slnm8 -- curl -s 192.168.178.222:88
+Requester IP: 10.100.5.130
+</code></pre>]]></content>
+		</item>
+		
+	</channel>
+</rss>
