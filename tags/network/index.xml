@@ -10,7 +10,7 @@
     <lastBuildDate>Sat, 21 Dec 2024 19:54:18 +0100</lastBuildDate>
     <atom:link href="https://sdn-techtalk.com/tags/network/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Controlling the egress IPs for K8s Pods within Tanzu</title>
+      <title>Antrea Egress - Controlling the egress IPs for K8s Pods within Tanzu</title>
       <link>https://sdn-techtalk.com/posts/antrea-egress/</link>
       <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
       <guid>https://sdn-techtalk.com/posts/antrea-egress/</guid>
