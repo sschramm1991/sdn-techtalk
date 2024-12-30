@@ -129,7 +129,8 @@ It is also possible to adjust the configuration after the deployment of the K8s 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl create ns &lt;namespace name&gt;
 </span></span></code></pre></div><p>Creating deployment:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl apply -f web.yaml -n &lt;namespace name&gt;
-</span></span></code></pre></div><p>In addition to the K8s deployments I deployed a docker container outside my NSX environment based on the following steps.</p>
+</span></span></code></pre></div><p>In addition to the K8s deployments I deployed a docker container outside my NSX environment based on the following steps.
+The docker caontainer will run a small web application, which responds with the IP used to access this application. Based on this it will be easy to validate which IP will be used by the different K8s Pods and if the egress IP are assigned as expected.</p>
 <ol>
 <li>Create folder your Dockerfile and create the Dockerfile</li>
 </ol>
