@@ -24,15 +24,15 @@ I personally started with NSX in version 2.3 and one of the first important impr
 But one major problem in case of specific failover scenarios was still in place! This problem comes into place, if the physical uplinks of the ESXi hosts and the baremetal edges or the virtual network interfaces of the edge VMs are up, but the Layer2 or Layer3 connectivity of the TEP interfaces is broken.
 In this situation the TEP interfaces do not failover, since the assigned BFD sessions are validating the link stats only.
 That means a failover of a TEP interface was just triggered by a failed connectivity between the physical switch and the connected port of the host transport nodes. For edge this will normally not happen and therefore a failover will not be triggered, if the connectivity is broken, but the virtual cable is still connected.</p>
-<p>This behaviour is finally is finally changed in NSX 4.1 by implementing Multi-TEP High Availability and supplemented by TEP groups HA for edge nodes in 4.2.1.
+<p>This behavior is finally changed in NSX 4.1 by implementing Multi-TEP High Availability and supplemented by TEP groups HA for edge nodes in 4.2.1.
 I addition the TEP group feature also improves the load sharing for the North/ South traffic of overlay segments or all overlay traffic sent over edge nodes by using a service router. The load sharing feature of TEP groups is also available for edges in NSX 4.2.0, just the HA addition was implemented a bit later in 4.2.1. You might wonder why I am talking about load sharing as a new feature, but this was previously implemented for per segment and not per flow.</p>
-<p>Within this blog pos I will talk about the HA and loadshareing behaviour and compare the behaivour with and without those features. The results will be vaidated by the following test cases.</p>
+<p>Within this blog pos I will talk about the HA and loadshareing behavior and compare the behaivour with and without those features. The results will be vaidated by the following test cases.</p>
 <ul>
 <li>Inspecting packet capture created on the two fp-eth interfaces used for the edge node after implementing the new features (Check section &ldquo;What is Multi-TEP and TEP Group HA&rdquo;)</li>
-<li>Breaking Layer2 communication of an ESXi host by manipulating the assigned VLAN IDs before implementing the new features (CHeck section &ldquo;Test case execution before applying the changes&rdquo;)</li>
-<li>Breaking Layer2 communication of an egde node by manipulating the assigned VLAN IDs before implementing the new features (CHeck section &ldquo;Test case execution before applying the changes&rdquo;)</li>
-<li>Breaking Layer2 communication of an ESXi host by manipulating the assigned VLAN IDs after implementing the new features (CHeck section &ldquo;Test case execution after applying the changes&rdquo;)</li>
-<li>Breaking Layer2 communication of an egde node by manipulating the assigned VLAN IDs after implementing the new features (CHeck section &ldquo;Test case execution after applying the changes&rdquo;)</li>
+<li>Breaking Layer2 communication of an ESXi host by manipulating the assigned VLAN IDs before implementing the new features (Check section &ldquo;Test case execution before applying the changes&rdquo;)</li>
+<li>Breaking Layer2 communication of an egde node by manipulating the assigned VLAN IDs before implementing the new features (Check section &ldquo;Test case execution before applying the changes&rdquo;)</li>
+<li>Breaking Layer2 communication of an ESXi host by manipulating the assigned VLAN IDs after implementing the new features (Check section &ldquo;Test case execution after applying the changes&rdquo;)</li>
+<li>Breaking Layer2 communication of an egde node by manipulating the assigned VLAN IDs after implementing the new features (Check section &ldquo;Test case execution after applying the changes&rdquo;)</li>
 </ul>
 <p>Before and while implementing those test cases, I will ping a test VM to show the bevaivour of the communication.</p>
 <h2 id="lab-environment">Lab environment</h2>
@@ -44,21 +44,21 @@ I addition the TEP group feature also improves the load sharing for the North/ S
 <li>Alpine test VM</li>
 </ul>
 <h2 id="what-is-multi-tep-and-tep-group-ha">What is Multi-TEP and TEP Group HA?</h2>
-<p>Multi-TEP HA is a feature implemented in NSX Datacenter 4.1 and optimizes the behaviour of TEP failover. Starting with NSX Datacenter 4.1 it was applicable for host transport nodes only, not for edge transport nodes.
+<p>Multi-TEP HA is a feature implemented in NSX Datacenter 4.1 and optimizes the behavior of TEP failover. Starting with NSX Datacenter 4.1 it was applicable for host transport nodes only, not for edge transport nodes.
 Without Multi-TEP HA a layer2 or layer3 outage did not cause an failover of a TEP on any type of NSX transport nodes, if the link state is kept online. The missing failover of the affected TEP caused an outage for all worklaods using this TEP interface.
 Based on the loadsharing alogorithm &ldquo;Load Balance source&rdquo; this will cause approx. 50% of the whole workload located on the affected transport nodes.</p>
 <p>Multi-TEP HA solves this challenge by implementing BFD sessions actively sending keepalive messages between the different transport nodes. Those keepalive messages will trigger a failover in case the corresponding BFD sessions switching the state from &ldquo;UP&rdquo; to &ldquo;DOWN&rdquo;.</p>
 <p>As an example the following drawing shows the connection between two different host transport nodes using two TEP interfaces each. This drawing also shows the base scenario of the upcoming failover scenarios.</p>
 <p><a href="notepha-before-failover.png"><img src="notepha-before-failover.png" alt="notepha-before-failover"></a></p>
-<p>Based on the BFD sessions validating only the link state instead of sending real keepalive messages, the following drwawing shows the two possible failover behaviours without Multi-TEP HA.
+<p>Based on the BFD sessions validating only the link state instead of sending real keepalive messages, the following drwawing shows the two possible failover behaviors without Multi-TEP HA.
 The first situation  where the link changes his state from &ldquo;UP&rdquo; to &ldquo;DOWN&rdquo; and the second situation where the layer2 communication is broken, but the link is still in state &ldquo;UP&rdquo;.
-As you can see in the first situation the VM will be still available, but for teh second situation the VM becomes unavailable.</p>
+As you can see in the first situation the VM will be still available, but for the second situation the VM becomes unavailable.</p>
 <p><a href="notepha-failover.png"><img src="notepha-failover.png" alt="notepha-failover"></a></p>
 <p>After the implementation of Multi-TEP HA the second situation is covered as well as the first situation. The result is shown in the drawing below.</p>
 <p><a href="tepha-failover.png"><img src="tepha-failover.png" alt="tepha-failover"></a></p>
 <p>The next scenario shows a failover for edge transport nodes which are using multiple TEP interfaces. For edge transport nodes this requires the configuration of TEP Groups which are available since NSX 4.2 and TEP Group HA introduced with NSX 4.2.1.
 A TEP Group defines a group of multiple TEP interfaces, which will be used instead of the dedicated fastpath interfaces like &ldquo;fp-eth0&rdquo; available on the edge transport nodes from type VM.
-Without the enhancement of Multi-TEP HA it improves the loadsharing behaviour for communication sent of edge transport nodes. If TEP Groups are not implemented each overlay segment is explicitly bound with a single fastpath interface.
+Without the enhancement of Multi-TEP HA it improves the loadsharing behavior for communication sent of edge transport nodes. If TEP Groups are not implemented each overlay segment is explicitly bound with a single fastpath interface.
 This can be validated with the command &ldquo;get logical-switch&rdquo; or &ldquo;get segments&rdquo;, if you are connected to the nsxcli of an edge transport node. The following output shows an example output of my lab environment.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">UUID                                   VNI          ENCAP    DEVICE       NAME                                               GLOBAL_VNI(FED)
 </span></span><span class="line"><span class="cl">3465eadb-9f77-4f33-978c-c70eb5746195   70657        GENEVE   fp-eth1      avi-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-0
@@ -277,7 +277,7 @@ The following drawing visualizes the mapping of a overlay sgement with and witho
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span></code></pre></div><p>To enable Multi-TEP HA it is not required to do anything else. It is just required to have NSX updated to version 4.2.1 or later and TEP groups enabled.</p>
 <h2 id="test-cases">Test cases</h2>
-<p>The following section describes the tests done to validate the behaviour before and after the changes. The validation is done by executing cli commands in the nsxcli and the execution of ICMP messages.</p>
+<p>The following section describes the tests done to validate the behavior before and after the changes. The validation is done by executing cli commands in the nsxcli and the execution of ICMP messages.</p>
 <ul>
 <li>Source of ICMP: 192.168.178.222</li>
 <li>Destination of ICMP: 10.100.12.2 (Alpine VM connected to segment &ldquo;seg-preseveclientip-backend&rdquo;)</li>
@@ -361,7 +361,7 @@ vmk11  10.0.2.13     255.255.255.0  10.0.2.255       STATIC        10.0.2.1     
 vmk50  169.254.1.1   255.255.0.0    169.254.255.255  STATIC        0.0.0.0      false
 </code></pre><p>Output of edge node from before and after the changes is visible in the section &ldquo;What is Multi-TEP and TEP Group HA?&rdquo;.</p>
 <h3 id="test-case-execution-before-applying-the-changes">Test case execution before applying the changes</h3>
-<p>Before validating the behavoiour after the changes, lets start with the behaviour before all the optimisations.</p>
+<p>Before validating the behavoiour after the changes, lets start with the behavior before all the optimisations.</p>
 <h4 id="multi-tep-ha---host-transport-nodes">Multi-TEP HA - Host Transport Nodes</h4>
 <p>After the layer2 communication is interrupted, the VM is still assigned to the affected TEP IP, as shown below.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">get logical-switch c9390ed0-c587-4214-b26e-26705d4cd2f0 mac-table
@@ -435,7 +435,7 @@ In this case the TEP IP will be moved from the failed vmnic to the any other vmn
 But you should keep in mind that VLAN backed segments on the edge nodes will not failover, if the link is down. Therfore it is higly reommended to use named teaming policies where redundancy is required, like for the T0 uplinks.
 In the case of T0 router tha failovermight be handled over BGP, in case at least one of the BGP uplinks is up and running.</p>
 <h3 id="test-case-execution-after-the-changes-are-applied">Test case execution after the changes are applied</h3>
-<p>Since you are aware of the behaviour before the changes, lets check what is now improved.</p>
+<p>Since you are aware of the behavior before the changes, lets check what is now improved.</p>
 <h4 id="multi-tep-ha---host-transport-nodes-1">Multi-TEP HA - Host Transport Nodes</h4>
 <p>After breaking the layer2 communication of the ESXi host where the VM was running, the assigned TEP IP was changed from 10.0.2.13 to 10.0.2.12, as shown below.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">get logical-switch c9390ed0-c587-4214-b26e-26705d4cd2f0 mac-table
@@ -496,11 +496,11 @@ As shown within the ICMP protocol below, just three packets were lost.</p>
 </span></span></code></pre></div><p>Further you can inspect the GENEVE tunnels of the edge node, where you can see some tunnels in state &ldquo;DOWN&rdquo; based on &ldquo;1 - Control Detection Time Expired&rdquo;.</p>
 <p><a href="edgetunneldown.png"><img src="edgetunneldown.png" alt="edgetunneldown"></a></p>
 <h2 id="summary">Summary</h2>
-<p>After testing the new features of Multi-TEP HA and TEP Group HA I can say this is really a great improvemnent of the failover behaviour.
+<p>After testing the new features of Multi-TEP HA and TEP Group HA I can say this is really a great improvemnent of the failover behavior.
 From my point of view this is a very important step in case of resiliency and reducing the impact of many failure scenarios like software bugs in the underlay network wich are causing the switches to freeze.
 Further is also improves  the loadsharing, since it is flow based after TEP groups are enabled compared to have loadsharing just available segment wise. This could also increase the total bandwitdh possible for a single VM, which is now load-shared per flow instead stically mapped to one fastpath interface of an edge transport node.</p>
-<p>Since this feature is very easy to implement and will improve the failover behaviour by optiomizing the BFD sessions and load-sharing mechanism on the edge nodes, I would highly recommend to implement those two features.
-Sure the features are quite new and there might be some bugs, but I did not find any unexpected behaviour so far. Anyways it would always be the best to test new features in dev before implementation in production.</p>
+<p>Since this feature is very easy to implement and will improve the failover behavior by optiomizing the BFD sessions and load-sharing mechanism on the edge nodes, I would highly recommend to implement those two features.
+Sure the features are quite new and there might be some bugs, but I did not find any unexpected behavior so far. Anyways it would always be the best to test new features in dev before implementation in production.</p>
 ]]></content>
 		</item>
 		
