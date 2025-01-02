@@ -6,13 +6,13 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<copyright>Steven Schramm</copyright>
-		<lastBuildDate>Wed, 01 Jan 2025 19:54:18 +0100</lastBuildDate>
+		<lastBuildDate>Thu, 02 Jan 2025 12:00:00 +0100</lastBuildDate>
 		<atom:link href="https://sdn-techtalk.com/posts/index.xml" rel="self" type="application/rss+xml" />
 		
 		<item>
 			<title>Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability</title>
 			<link>https://sdn-techtalk.com/posts/multitep-ha/</link>
-			<pubDate>Wed, 01 Jan 2025 19:54:18 +0100</pubDate>
+			<pubDate>Thu, 02 Jan 2025 12:00:00 +0100</pubDate>
 			
 			<guid>https://sdn-techtalk.com/posts/multitep-ha/</guid>
 			<description><![CDATA[%!s(<nil>)]]></description>
