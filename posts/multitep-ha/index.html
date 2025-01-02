@@ -1,22 +1,203 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-	<channel>
-		<title>Posts on SDN-Techtalk | Steven Schramm</title>
-		<link>https://sdn-techtalk.com/posts/</link>
-		<description>Recent content in Posts on SDN-Techtalk | Steven Schramm</description>
-		<generator>Hugo -- gohugo.io</generator>
-		<language>en-us</language>
-		<copyright>Steven Schramm</copyright>
-		<lastBuildDate>Wed, 01 Jan 2025 19:54:18 +0100</lastBuildDate>
-		<atom:link href="https://sdn-techtalk.com/posts/index.xml" rel="self" type="application/rss+xml" />
-		
-		<item>
-			<title>Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability</title>
-			<link>https://sdn-techtalk.com/posts/multitep-ha/</link>
-			<pubDate>Wed, 01 Jan 2025 19:54:18 +0100</pubDate>
-			
-			<guid>https://sdn-techtalk.com/posts/multitep-ha/</guid>
-			<description><![CDATA[%!s(<nil>)]]></description>
-			<content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head><meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge"><meta name="robots" content="index, follow"><link rel="author" href="/humans.txt">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+<meta name="theme-color" content="#494f5c">
+<meta name="msapplication-TileColor" content="#494f5c">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#494f5c"><meta name="author" content="Steven Schramm">
+
+  <meta itemprop="name" content="Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability">
+  <meta itemprop="description" content="Introduction Some of you are using NSX for many years already and are aware of the different changes and improvements implemented in the last years. I personally started with NSX in version 2.3 and one of the first important improvements I recognized is “MultiTEP” for edge nodes from type VM released with NSX 2.5 and officially added to the reference design guide.
+By the way: The reference design guide is still a great resource to learn the design pricipals for NSX implementaions. This is especially intersting for those who might be new to NSX.">
+  <meta itemprop="datePublished" content="2025-01-01T19:54:18+01:00">
+  <meta itemprop="dateModified" content="2025-01-01T19:54:18+01:00">
+  <meta itemprop="wordCount" content="3855">
+  <meta itemprop="keywords" content="Homelab,Nested Lab,Vmware,Network,Nsx,Loadsharing,High Availability"><meta property="og:url" content="https://sdn-techtalk.com/posts/multitep-ha/">
+  <meta property="og:site_name" content="SDN-Techtalk | Steven Schramm">
+  <meta property="og:title" content="Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability">
+  <meta property="og:description" content="Introduction Some of you are using NSX for many years already and are aware of the different changes and improvements implemented in the last years. I personally started with NSX in version 2.3 and one of the first important improvements I recognized is “MultiTEP” for edge nodes from type VM released with NSX 2.5 and officially added to the reference design guide.
+By the way: The reference design guide is still a great resource to learn the design pricipals for NSX implementaions. This is especially intersting for those who might be new to NSX.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-01-01T19:54:18+01:00">
+    <meta property="article:modified_time" content="2025-01-01T19:54:18+01:00">
+    <meta property="article:tag" content="Homelab">
+    <meta property="article:tag" content="Nested Lab">
+    <meta property="article:tag" content="Vmware">
+    <meta property="article:tag" content="Network">
+    <meta property="article:tag" content="Nsx">
+    <meta property="article:tag" content="Loadsharing">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability">
+  <meta name="twitter:description" content="Introduction Some of you are using NSX for many years already and are aware of the different changes and improvements implemented in the last years. I personally started with NSX in version 2.3 and one of the first important improvements I recognized is “MultiTEP” for edge nodes from type VM released with NSX 2.5 and officially added to the reference design guide.
+By the way: The reference design guide is still a great resource to learn the design pricipals for NSX implementaions. This is especially intersting for those who might be new to NSX.">
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability",
+    "name": "Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability",
+    "description": "Introduction Some of you are using NSX for many years already and are aware of the different changes and improvements implemented in the last years. I personally started with NSX in version 2.3 and one of the first important improvements I recognized is \u0026ldquo;MultiTEP\u0026rdquo; for edge nodes from type VM released with NSX 2.5 and officially added to the reference design guide.\nBy the way: The reference design guide is still a great resource to learn the design pricipals for NSX implementaions. This is especially intersting for those who might be new to NSX.\n",
+    "keywords": ["homelab", "nested lab", "vmware", "network", "nsx", "loadsharing", "High Availability"],
+    "articleBody": "Introduction Some of you are using NSX for many years already and are aware of the different changes and improvements implemented in the last years. I personally started with NSX in version 2.3 and one of the first important improvements I recognized is “MultiTEP” for edge nodes from type VM released with NSX 2.5 and officially added to the reference design guide.\nBy the way: The reference design guide is still a great resource to learn the design pricipals for NSX implementaions. This is especially intersting for those who might be new to NSX.\nOver the years some additional enhancements were implemeted like the enhanced datapath, ECMP optimisations any many more. But one major problem in case of specific failover scenarios was still in place! This problem comes into place, if the physical uplinks of the ESXi hosts and the baremetal edges or the virtual network interfaces of the edge VMs are up, but the Layer2 or Layer3 connectivity of the TEP interfaces is broken. In this situation the TEP interfaces do not failover, since the assigned BFD sessions are validating the link stats only. That means a failover of a TEP interface was just triggered by a failed connectivity between the physical switch and the connected port of the host transport nodes. For edge this will normally not happen and therefore a failover will not be triggered, if the connectivity is broken, but the virtual cable is still connected.\nThis behaviour is finally is finally changed in NSX 4.1 by implementing Multi-TEP High Availability and supplemented by TEP groups HA for edge nodes in 4.2.1. I addition the TEP group feature also improves the load sharing for the North/ South traffic of overlay segments or all overlay traffic sent over edge nodes by using a service router. The load sharing feature of TEP groups is also available for edges in NSX 4.2.0, just the HA addition was implemented a bit later in 4.2.1. You might wonder why I am talking about load sharing as a new feature, but this was previously implemented for per segment and not per flow.\nWithin this blog pos I will talk about the HA and loadshareing behaviour and compare the behaivour with and without those features. The results will be vaidated by the following test cases.\nInspecting packet capture created on the two fp-eth interfaces used for the edge node after implementing the new features (Check section “What is Multi-TEP and TEP Group HA”) Breaking Layer2 communication of an ESXi host by manipulating the assigned VLAN IDs before implementing the new features (CHeck section “Test case execution before applying the changes”) Breaking Layer2 communication of an egde node by manipulating the assigned VLAN IDs before implementing the new features (CHeck section “Test case execution before applying the changes”) Breaking Layer2 communication of an ESXi host by manipulating the assigned VLAN IDs after implementing the new features (CHeck section “Test case execution after applying the changes”) Breaking Layer2 communication of an egde node by manipulating the assigned VLAN IDs after implementing the new features (CHeck section “Test case execution after applying the changes”) Before and while implementing those test cases, I will ping a test VM to show the bevaivour of the communication.\nLab environment For the tests I worked with the following lab environment.\nThree nested ESXi hosts of version 8.0.3, 24022510 vCenter server of version 8.0.3, 24022515 NSX Datacenter version 4.2.1.1 Alpine test VM What is Multi-TEP and TEP Group HA? Multi-TEP HA is a feature implemented in NSX Datacenter 4.1 and optimizes the behaviour of TEP failover. Starting with NSX Datacenter 4.1 it was applicable for host transport nodes only, not for edge transport nodes. Without Multi-TEP HA a layer2 or layer3 outage did not cause an failover of a TEP on any type of NSX transport nodes, if the link state is kept online. The missing failover of the affected TEP caused an outage for all worklaods using this TEP interface. Based on the loadsharing alogorithm “Load Balance source” this will cause approx. 50% of the whole workload located on the affected transport nodes.\nMulti-TEP HA solves this challenge by implementing BFD sessions actively sending keepalive messages between the different transport nodes. Those keepalive messages will trigger a failover in case the corresponding BFD sessions switching the state from “UP” to “DOWN”.\nAs an example the following drawing shows the connection between two different host transport nodes using two TEP interfaces each. This drawing also shows the base scenario of the upcoming failover scenarios.\nBased on the BFD sessions validating only the link state instead of sending real keepalive messages, the following drwawing shows the two possible failover behaviours without Multi-TEP HA. The first situation where the link changes his state from “UP” to “DOWN” and the second situation where the layer2 communication is broken, but the link is still in state “UP”. As you can see in the first situation the VM will be still available, but for teh second situation the VM becomes unavailable.\nAfter the implementation of Multi-TEP HA the second situation is covered as well as the first situation. The result is shown in the drawing below.\nThe next scenario shows a failover for edge transport nodes which are using multiple TEP interfaces. For edge transport nodes this requires the configuration of TEP Groups which are available since NSX 4.2 and TEP Group HA introduced with NSX 4.2.1. A TEP Group defines a group of multiple TEP interfaces, which will be used instead of the dedicated fastpath interfaces like “fp-eth0” available on the edge transport nodes from type VM. Without the enhancement of Multi-TEP HA it improves the loadsharing behaviour for communication sent of edge transport nodes. If TEP Groups are not implemented each overlay segment is explicitly bound with a single fastpath interface. This can be validated with the command “get logical-switch” or “get segments”, if you are connected to the nsxcli of an edge transport node. The following output shows an example output of my lab environment.\nUUID VNI ENCAP DEVICE NAME GLOBAL_VNI(FED) 3465eadb-9f77-4f33-978c-c70eb5746195 70657 GENEVE fp-eth1 avi-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-0 46299707-dc54-46e8-8e64-aee000f47789 65536 GENEVE fp-eth0 multicast-transit-bp-bf5d6838-365d-4896-a86d-ff038f3aefe0 40ae9a74-03f2-41c7-b8c7-a8bcb70461ca 68609 GENEVE fp-eth1 seg-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-test-0 ee681ecb-224c-48a6-b5d0-11b5a713d3d4 72706 GENEVE fp-eth0 transit-rl-1af22a37-499a-40af-9f38-4e399ca9b3df c9390ed0-c587-4214-b26e-26705d4cd2f0 74753 GENEVE fp-eth1 seg-preseveclientip-backend 7439a8de-2137-4ce6-a492-d7e75cec8f21 74752 GENEVE fp-eth1 inter-sr-routing-bp-t0-test 0fb2a9a8-2042-483f-8f50-3c9a7e7acfae 65538 GENEVE fp-eth1 transit-bp-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b e1c55b2c-6b32-4166-b6b7-2fdc125dabdc 65539 GENEVE fp-eth1 vnet-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-test-tkc-test01-mz-820c6-0 d47b2c28-d25e-4224-a4b8-6d300ae3baa5 68611 GENEVE fp-eth1 transit-bp-t1_c21033c0-3741-43c7-a4bb-11f6b3ef0a7f_rtr 5c8d0a5e-e1dc-4474-b27a-9f0e8c03ca25 65537 GENEVE fp-eth1 transit-rl-194b6bb8-a56e-4c3d-8236-9687c93c64d5 64ae82a1-769c-4f78-83e4-a42978bcd07c 71682 GENEVE fp-eth1 avi-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-test-0 4e3820e9-8e3d-40aa-b21b-f7b9c02079b8 72704 GENEVE fp-eth1 avi-mgmt 4fbe907a-e30d-4a86-989d-ae390fef74fc 72705 GENEVE fp-eth1 avi-data c26f82d1-987f-4d36-b99b-a6efe3b01789 69633 GENEVE fp-eth1 transit-bp-t1-preserveclientip-test 6fe806ec-64cc-47b8-8451-84ffeb65fecd 65542 GENEVE fp-eth0 egress-staging d509b42e-5db6-4458-9543-17a582fe1e40 65541 GENEVE fp-eth1 seg-preserveclientip-sedata 9ac22341-e348-4d76-8444-456d5d179e3a 70656 GENEVE fp-eth0 transit-rl-6f9eb35f-7778-4eca-ba9d-b7dd4af26800 91384425-136a-48c6-8245-fa370f02112c 68612 GENEVE fp-eth1 transit-rl-7ea6dc1b-bd41-4028-96ab-8c351c1fee67 6f3b4dc3-90a4-4dbd-97f5-8f7f4c00c3af 67584 GENEVE fp-eth0 transit-rl-a879bdaf-37d8-4dda-801d-76fa5bf0c670 106aedc8-08b2-48a9-8f34-5d590faf5f99 69632 GENEVE fp-eth0 vm-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-vif-default-network-0 f8a9f3b1-827d-4de0-8b80-081220566a07 71683 GENEVE fp-eth0 egress-prod a1b4f3f7-ce15-4e92-876a-591abc15dddc 68610 GENEVE fp-eth0 avi-data2 40069c22-3a20-476c-bc16-113892c29eb7 73728 GENEVE fp-eth0 transit-rl-8ed6fb22-d842-42b6-b034-c7dd2e053f02 dcbd8196-5550-466e-9bae-2c4f08476386 71681 GENEVE fp-eth1 seg-tanzu-infra b7f36c3d-8415-4904-9e6d-1820dfeb106f 71680 GENEVE fp-eth0 transit-bp-t0-test In this example the whole communication of a overlay segment will be sent over the shown fastpath interface within the privous output. This is the case for each packet sent through the edge transport nodes. That means you will not have any loadsharing, if you are using a single segment. Loadsharing is just applicable, if you are using mutiple segments and thos segments are mapped to different fastpath interfaces.\nAfter the feature of TEP groups is enabled, the output will be as shown below. But this time it is required to use the command “get logical-switch”, since “get segments” does not show any device for the overlay segments, if TEP groups are enabled.\nUUID VNI ENCAP TEP_GROUP NAME GLOBAL_VNI(FED) 3465eadb-9f77-4f33-978c-c70eb5746195 70657 GENEVE 285696 avi-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-0 46299707-dc54-46e8-8e64-aee000f47789 65536 GENEVE 285696 multicast-transit-bp-bf5d6838-365d-4896-a86d-ff038f3aefe0 40ae9a74-03f2-41c7-b8c7-a8bcb70461ca 68609 GENEVE 285696 seg-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-test-0 ee681ecb-224c-48a6-b5d0-11b5a713d3d4 72706 GENEVE 285696 transit-rl-1af22a37-499a-40af-9f38-4e399ca9b3df c9390ed0-c587-4214-b26e-26705d4cd2f0 74753 GENEVE 285696 seg-preseveclientip-backend 7439a8de-2137-4ce6-a492-d7e75cec8f21 74752 GENEVE 285696 inter-sr-routing-bp-t0-test 0fb2a9a8-2042-483f-8f50-3c9a7e7acfae 65538 GENEVE 285696 transit-bp-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b e1c55b2c-6b32-4166-b6b7-2fdc125dabdc 65539 GENEVE 285696 vnet-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-test-tkc-test01-mz-820c6-0 d47b2c28-d25e-4224-a4b8-6d300ae3baa5 68611 GENEVE 285696 transit-bp-t1_c21033c0-3741-43c7-a4bb-11f6b3ef0a7f_rtr 5c8d0a5e-e1dc-4474-b27a-9f0e8c03ca25 65537 GENEVE 285696 transit-rl-194b6bb8-a56e-4c3d-8236-9687c93c64d5 64ae82a1-769c-4f78-83e4-a42978bcd07c 71682 GENEVE 285696 avi-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-test-0 4e3820e9-8e3d-40aa-b21b-f7b9c02079b8 72704 GENEVE 285696 avi-mgmt 4fbe907a-e30d-4a86-989d-ae390fef74fc 72705 GENEVE 285696 avi-data c26f82d1-987f-4d36-b99b-a6efe3b01789 69633 GENEVE 285696 transit-bp-t1-preserveclientip-test 6fe806ec-64cc-47b8-8451-84ffeb65fecd 65542 GENEVE 285696 egress-staging d509b42e-5db6-4458-9543-17a582fe1e40 65541 GENEVE 285696 seg-preserveclientip-sedata 9ac22341-e348-4d76-8444-456d5d179e3a 70656 GENEVE 285696 transit-rl-6f9eb35f-7778-4eca-ba9d-b7dd4af26800 91384425-136a-48c6-8245-fa370f02112c 68612 GENEVE 285696 transit-rl-7ea6dc1b-bd41-4028-96ab-8c351c1fee67 6f3b4dc3-90a4-4dbd-97f5-8f7f4c00c3af 67584 GENEVE 285696 transit-rl-a879bdaf-37d8-4dda-801d-76fa5bf0c670 106aedc8-08b2-48a9-8f34-5d590faf5f99 69632 GENEVE 285696 vm-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-vif-default-network-0 f8a9f3b1-827d-4de0-8b80-081220566a07 71683 GENEVE 285696 egress-prod a1b4f3f7-ce15-4e92-876a-591abc15dddc 68610 GENEVE 285696 avi-data2 40069c22-3a20-476c-bc16-113892c29eb7 73728 GENEVE 285696 transit-rl-8ed6fb22-d842-42b6-b034-c7dd2e053f02 dcbd8196-5550-466e-9bae-2c4f08476386 71681 GENEVE 285696 seg-tanzu-infra b7f36c3d-8415-4904-9e6d-1820dfeb106f 71680 GENEVE 285696 transit-bp-t0-test As you can see in the previous output, the different segments are now mapped with a TEP group instead of a dedicated fastpath interfaces. As soon as this is the case the communication of all overlay segments is load-shared on per flow basis. Traffic sourced by edge transport nodes is then load-shared across all source edge TEPs and the traffic destined to edge transport nodes is then load-shared across all destination edge TEPs. As prove of the flow based loadsharing I did a test on a alpine VM connected to the segment “seg-preseveclientip-backend” by using a iperf session. The alpine VM acts as iperf client and a server outside of the NSX overlay acts as the iperf server.\nStarting the iperf server on the destination:\niperf3 -s -p 5001 Starting iperf on the clinet (alpine VM):\niperf3 -c \\ -p 5001 To track the used fastpath interfaces I started a packet capture on the edge transport nodes from the nsxcli by using the following command.\nset capture session 1 interface fp-eth0 direction dual set capture session 1 interface fp-eth1 direction dual set capture session 1 file tepha.pcap To be able to understand the following packet capture the following overview shows the two fastpath interfaces of the edge transport node used to forward the North/ South communication.\nfp-eth0: TEP IP: 10.0.2.16 MAC: 00:50:56:8d:bf:e4 fp-eth1: TEP IP: 10.0.2.17 MAC: 00:50:56:8d:df:ce Alpine VM: Segment: seg-preseveclientip-backend IP: 10.100.12.2 IPerf Server: IP: 192.168.178.222 The following two screenshots are the prove that the same VM connected to the same segment is load-shared over both fastpath interfaces. Please be aware, that the packet capture examples are showing the response packets only.\nPCAP output where flow is using fp-eth0: PCAP output where flow is using fp-eth1: After upgrading to NSX 4.2.1, the feature of Multi-TEP is automatically enabled for als edge transport node TEP interfaces, if the TEP group feature is enabld. The following drawing visualizes the mapping of a overlay sgement with and without TEP groups.\nIn the next drawing you can discover the result of a layer2 comminication issue in case you are using TEP groups with Multi-TEP HA compared to a implementation without TEP groups and no Multi-TEP HA as TEP group enhancement.\nHow to implement Multi-TEP HA? To implement Muti-TEP HA the following steps are required.\nCreate a TEP HA host switch profile as shown below. PUT https:///policy/api/v1/infra/host-switch-profiles/vtephaprofile1 { \"enabled\": \"true\", \"failover_timeout\":\"5\", \"auto_recovery\" : \"true\", \"auto_recovery_initial_wait\" : \"300\", \"auto_recovery_max_backoff\" : \"86400\", \"resource_type\": \"PolicyVtepHAHostSwitchProfile\", \"display_name\": \"VtepHAProfile1\" } Assign the TEP HA profile to an transport node profile. Based on the asignment of the transport node profile, you are able to select the hosts which should get the Multi-TEP HA feature enabled. Do not forget to gather the ID of the transport node profile, otherwhise you are unable to map the TEP HA profile. PUT https:///policy/api/v1/infra/host-transport-node-profiles/ { \"host_switch_spec\": { \"host_switches\": [ { \"host_switch_name\": \"vtepha_vds\", \"host_switch_id\": \"50 22 ee c4 f6 40 79 8b-0e a4 2b da 6a 4c 36 b3\", \"host_switch_type\": \"VDS\", \"host_switch_mode\": \"ENS_INTERRUPT\", \"host_switch_profile_ids\": [ { \"key\": \"UplinkHostSwitchProfile\", \"value\": \"/infra/host-switch-profiles/b32e6ce6-f1ba-4e31-a2c4-33d550505cdd\" }, { \"key\": \"VtepHAHostSwitchProfile\", \"value\": \"/infra/host-switch-profiles/vtephaprofile1\" } ], \"uplinks\": [ { \"vds_uplink_name\": \"Uplink 1\", \"uplink_name\": \"uplink-1\" }, { \"vds_uplink_name\": \"Uplink 2\", \"uplink_name\": \"uplink-2\" } ], \"is_migrate_pnics\": false, \"ip_assignment_spec\": { \"ip_pool_id\": \"/infra/ip-pools/v4\", \"resource_type\": \"StaticIpPoolSpec\" }, \"cpu_config\": [], \"transport_zone_endpoints\": [ { \"transport_zone_id\": \"/infra/sites/default/enforcement-points/default/transport-zones/de47a6b9-fa4c-4bf3-bd75-385859895949\", \"transport_zone_profile_ids\": [] } ], \"not_ready\": false } ], \"resource_type\": \"StandardHostSwitchSpec\" }, \"ignore_overridden_hosts\": false, \"resource_type\": \"PolicyHostTransportNodeProfile\" } Verify if the TEP HA profile is applied to the transport node profile GET https:///policy/api/v1/infra/host-transport-nodes-profiles/ Expected output:\n\"host_switch_profile_ids\": [ { \"key\": \"VtepHAHostSwitchProfile\", \"value\": \"/infra/host-switch-profiles/\" } ], How to implement TEP Groups? The impementation of TEP groups of edge transport nodes can be done by changing a single parameter from the NSX API.\nGET https:///policy/api/v1/infra/connectivity-global-config Important fragment of the expected output shows the value for the required parameter “enable_tep_grouping_on_edge” set to “false”:\n{ // ... \"global_replication_mode_enabled\": false, \"is_inherited\": false, \"site_infos\": [], \"tep_group_config\": { \"enable_tep_grouping_on_edge\": false }, \"resource_type\": \"GlobalConfig\", \"id\": \"global-config\", \"display_name\": \"default\", \"path\": \"/infra/global-config\", // ... } With the following API call the parameter should be changed to “true”, if you want to enable the TEP group feature.\nPUT https:///policy/api/v1/infra/connectivity-global-config { // ... \"global_replication_mode_enabled\": false, \"is_inherited\": false, \"site_infos\": [], \"tep_group_config\": { \"enable_tep_grouping_on_edge\": true }, \"resource_type\": \"GlobalConfig\", \"id\": \"global-config\", \"display_name\": \"default\", \"path\": \"/infra/global-config\", // ... } To enable Multi-TEP HA it is not required to do anything else. It is just required to have NSX updated to version 4.2.1 or later and TEP groups enabled.\nTest cases The following section describes the tests done to validate the behaviour before and after the changes. The validation is done by executing cli commands in the nsxcli and the execution of ICMP messages.\nSource of ICMP: 192.168.178.222 Destination of ICMP: 10.100.12.2 (Alpine VM connected to segment “seg-preseveclientip-backend”) As an additional overview for the tests you can see the information for the segement where the alpine is connected in comparison to a second segment.\nOutput of ESXi host\nget logical-switch VNI Logical Switch UUID Name 71680 b7f36c3d-8415-4904-9e6d-1820dfeb106f transit-bp-t0-test 74753 c9390ed0-c587-4214-b26e-26705d4cd2f0 seg-preseveclientip-backend 68611 d47b2c28-d25e-4224-a4b8-6d300ae3baa5 transit-bp-t1_c21033c0-3741-43c7-a4bb-11f6b3ef0a7f_rtr 70657 3465eadb-9f77-4f33-978c-c70eb5746195 avi-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-0 69633 c26f82d1-987f-4d36-b99b-a6efe3b01789 transit-bp-t1-preserveclientip-test 65538 0fb2a9a8-2042-483f-8f50-3c9a7e7acfae transit-bp-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b 65541 d509b42e-5db6-4458-9543-17a582fe1e40 seg-preserveclientip-sedata 65539 e1c55b2c-6b32-4166-b6b7-2fdc125dabdc vnet-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-test-tkc-test01-mz-820c6-0 73728 40069c22-3a20-476c-bc16-113892c29eb7 transit-rl-8ed6fb22-d842-42b6-b034-c7dd2e053f02 71681 dcbd8196-5550-466e-9bae-2c4f08476386 seg-tanzu-infra 65537 5c8d0a5e-e1dc-4474-b27a-9f0e8c03ca25 transit-rl-194b6bb8-a56e-4c3d-8236-9687c93c64d5 70656 9ac22341-e348-4d76-8444-456d5d179e3a transit-rl-6f9eb35f-7778-4eca-ba9d-b7dd4af26800 71682 64ae82a1-769c-4f78-83e4-a42978bcd07c avi-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-test-0 72705 4fbe907a-e30d-4a86-989d-ae390fef74fc avi-data 68610 a1b4f3f7-ce15-4e92-876a-591abc15dddc avi-data2 72706 ee681ecb-224c-48a6-b5d0-11b5a713d3d4 transit-rl-1af22a37-499a-40af-9f38-4e399ca9b3df 69632 106aedc8-08b2-48a9-8f34-5d590faf5f99 vm-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-vif-default-network-0 72704 4e3820e9-8e3d-40aa-b21b-f7b9c02079b8 avi-mgmt 65542 6fe806ec-64cc-47b8-8451-84ffeb65fecd egress-staging 67584 6f3b4dc3-90a4-4dbd-97f5-8f7f4c00c3af transit-rl-a879bdaf-37d8-4dda-801d-76fa5bf0c670 68612 91384425-136a-48c6-8245-fa370f02112c transit-rl-7ea6dc1b-bd41-4028-96ab-8c351c1fee67 68609 40ae9a74-03f2-41c7-b8c7-a8bcb70461ca seg-domain-c20:d6f4ac77-09e6-4a22-8d95-3b17ba939c3b-test-0 71683 f8a9f3b1-827d-4de0-8b80-081220566a07 egress-prod The upcomming command shows the assigned TEP IP for the segment “seg-preseveclientip-backend”. Within the output below, the “Inner MAC” is the MAC of the VM connected to this segment, the “Outer MAC” is the MAC of the TEP interface and the “Outer IP” is the TEP IP. Important is the entry “LCP Local Entry” the entry “LCP Remote Entry” is describing the VMs running on other host transport nodes.\nget logical-switch c9390ed0-c587-4214-b26e-26705d4cd2f0 mac-table Thu Jan 02 2025 UTC 09:37:43.375 Logical Switch MAC Table --------------------------------------------------------------------------- Host Kernel Entry =========================================================================== Inner MAC Outer MAC Outer IP Flags LCP Remote Entry =========================================================================== Inner MAC Outer MAC Outer IP LCP Local Entry =========================================================================== Inner MAC Outer MAC Outer IP 00:50:56:8d:0c:dd 00:50:56:61:ec:3c 10.0.2.13 As comparison the following output shows the assignment of the TEP interface for segment “seg-tanzu-infra”\nget logical-switch dcbd8196-5550-466e-9bae-2c4f08476386 mac-table Thu Jan 02 2025 UTC 09:38:01.367 Logical Switch MAC Table --------------------------------------------------------------------------- Host Kernel Entry =========================================================================== Inner MAC Outer MAC Outer IP Flags 00:50:56:8d:fe:35 00:50:56:6e:30:1e 10.0.2.11 0xf 00:50:56:8d:6b:6c 00:50:56:6d:f3:87 10.0.2.14 0xf LCP Remote Entry =========================================================================== Inner MAC Outer MAC Outer IP 00:50:56:8d:fe:35 00:50:56:6e:30:1e 10.0.2.11 00:50:56:8d:6b:6c 00:50:56:6d:f3:87 10.0.2.14 LCP Local Entry =========================================================================== Inner MAC Outer MAC Outer IP 00:50:56:8d:27:f0 00:50:56:6b:71:aa 10.0.2.12 Output of the TEP interfaces including IP of the host transport node (vmk10 and vmk11).\nesxcli network ip interface ipv4 get Name IPv4 Address IPv4 Netmask IPv4 Broadcast Address Type Gateway DHCP DNS\r----- ------------ ------------- --------------- ------------ -------- --------\rvmk0 10.0.1.101 255.255.255.0 10.0.1.255 STATIC 10.0.1.1 false\rvmk10 10.0.2.12 255.255.255.0 10.0.2.255 STATIC 10.0.2.1 false\rvmk11 10.0.2.13 255.255.255.0 10.0.2.255 STATIC 10.0.2.1 false\rvmk50 169.254.1.1 255.255.0.0 169.254.255.255 STATIC 0.0.0.0 false Output of edge node from before and after the changes is visible in the section “What is Multi-TEP and TEP Group HA?”.\nTest case execution before applying the changes Before validating the behavoiour after the changes, lets start with the behaviour before all the optimisations.\nMulti-TEP HA - Host Transport Nodes After the layer2 communication is interrupted, the VM is still assigned to the affected TEP IP, as shown below.\nget logical-switch c9390ed0-c587-4214-b26e-26705d4cd2f0 mac-table Thu Jan 02 2025 UTC 10:53:31.084 Logical Switch MAC Table --------------------------------------------------------------------------- Host Kernel Entry =========================================================================== Inner MAC Outer MAC Outer IP Flags LCP Remote Entry =========================================================================== Inner MAC Outer MAC Outer IP LCP Local Entry =========================================================================== Inner MAC Outer MAC Outer IP 00:50:56:8d:0c:dd 00:50:56:61:ec:3c 10.0.2.13 The ICMP output proves that the VM is no longer reachable as expected.\n64 bytes from 10.100.12.2: icmp_seq=33 ttl=60 time=3.97 ms 64 bytes from 10.100.12.2: icmp_seq=34 ttl=60 time=2.50 ms 64 bytes from 10.100.12.2: icmp_seq=35 ttl=60 time=5.38 ms 64 bytes from 10.100.12.2: icmp_seq=36 ttl=60 time=8.48 ms 64 bytes from 10.100.12.2: icmp_seq=37 ttl=60 time=8.03 ms 64 bytes from 10.100.12.2: icmp_seq=38 ttl=60 time=14.3 ms 64 bytes from 10.100.12.2: icmp_seq=39 ttl=60 time=2.78 ms 64 bytes from 10.100.12.2: icmp_seq=40 ttl=60 time=24.9 ms --- 10.100.12.2 ping statistics --- 55 packets transmitted, 40 received, 27% packet loss, time 54399ms rtt min/avg/max/mdev = 2.509/10.785/49.817/9.683 ms But as already mentioned NSX is able to failover without the implementation of the Multi-TEP HA feature, if the link state is changing from “UP” to “DOWN”. In this case the TEP IP will be moved from the failed vmnic to the any other vmnic, wich is still working. An example is shown below.\nMapping between vmk11 and vmnics before failover. The output is discoverd by the command “esxtop” in the networking overview.\nMapping between vmk11 and vmnics after failover.\nThe ICMP protocols shows a very fast failover after only one packet is lost.\n64 bytes from 10.100.12.2: icmp_seq=6 ttl=60 time=6.02 ms 64 bytes from 10.100.12.2: icmp_seq=7 ttl=60 time=23.2 ms 64 bytes from 10.100.12.2: icmp_seq=8 ttl=60 time=31.4 ms 64 bytes from 10.100.12.2: icmp_seq=9 ttl=60 time=8.55 ms 64 bytes from 10.100.12.2: icmp_seq=10 ttl=60 time=7.19 ms 64 bytes from 10.100.12.2: icmp_seq=11 ttl=60 time=19.0 ms 64 bytes from 10.100.12.2: icmp_seq=12 ttl=60 time=51.3 ms 64 bytes from 10.100.12.2: icmp_seq=13 ttl=60 time=79.2 ms 64 bytes from 10.100.12.2: icmp_seq=15 ttl=60 time=13.6 ms 64 bytes from 10.100.12.2: icmp_seq=16 ttl=60 time=17.0 ms 64 bytes from 10.100.12.2: icmp_seq=17 ttl=60 time=10.0 ms 64 bytes from 10.100.12.2: icmp_seq=18 ttl=60 time=11.0 ms ^C --- 10.100.12.2 ping statistics --- 18 packets transmitted, 17 received, 5% packet loss, time 17043ms rtt min/avg/max/mdev = 5.584/23.531/79.297/20.795 ms TEP Groups - Edge Transport Nodes After breaking the layer2 connectivity of fp-eth1 where the segment of the alpine VM is assigned to, the alpine loses the reachability. This is also shown in the following ICMP protocol.\n64 bytes from 10.100.12.2: icmp_seq=31 ttl=60 time=32.4 ms 64 bytes from 10.100.12.2: icmp_seq=32 ttl=60 time=18.4 ms 64 bytes from 10.100.12.2: icmp_seq=33 ttl=60 time=11.5 ms 64 bytes from 10.100.12.2: icmp_seq=34 ttl=60 time=6.23 ms 64 bytes from 10.100.12.2: icmp_seq=35 ttl=60 time=4.79 ms 64 bytes from 10.100.12.2: icmp_seq=36 ttl=60 time=17.9 ms 64 bytes from 10.100.12.2: icmp_seq=37 ttl=60 time=3.63 ms 64 bytes from 10.100.12.2: icmp_seq=38 ttl=60 time=7.20 ms 64 bytes from 10.100.12.2: icmp_seq=39 ttl=60 time=8.14 ms ^C --- 10.100.12.2 ping statistics --- 46 packets transmitted, 38 received, 17% packet loss, time 45225ms rtt min/avg/max/mdev = 2.273/9.839/32.415/6.569 ms A test for a link failure is not realistic, since it is a VM, but it would work exactly like the ESXi host and the TEP IP would move to the fp-eth interface which is still available. But you should keep in mind that VLAN backed segments on the edge nodes will not failover, if the link is down. Therfore it is higly reommended to use named teaming policies where redundancy is required, like for the T0 uplinks. In the case of T0 router tha failovermight be handled over BGP, in case at least one of the BGP uplinks is up and running.\nTest case execution after the changes are applied Since you are aware of the behaviour before the changes, lets check what is now improved.\nMulti-TEP HA - Host Transport Nodes After breaking the layer2 communication of the ESXi host where the VM was running, the assigned TEP IP was changed from 10.0.2.13 to 10.0.2.12, as shown below.\nget logical-switch c9390ed0-c587-4214-b26e-26705d4cd2f0 mac-table Thu Jan 02 2025 UTC 10:24:49.329 Logical Switch MAC Table --------------------------------------------------------------------------- Host Kernel Entry =========================================================================== Inner MAC Outer MAC Outer IP Flags LCP Remote Entry =========================================================================== Inner MAC Outer MAC Outer IP LCP Local Entry =========================================================================== Inner MAC Outer MAC Outer IP 00:50:56:8d:0c:dd 00:50:56:6b:71:aa 10.0.2.12 As prove of the reachability and failover time you can check teh following ICMP output. Here you can see that 10 packets were lost witin the time of the failover.\n64 bytes from 10.100.12.2: icmp_seq=33 ttl=60 time=110 ms 64 bytes from 10.100.12.2: icmp_seq=34 ttl=60 time=6.79 ms 64 bytes from 10.100.12.2: icmp_seq=35 ttl=60 time=3.06 ms 64 bytes from 10.100.12.2: icmp_seq=45 ttl=60 time=8.99 ms 64 bytes from 10.100.12.2: icmp_seq=46 ttl=60 time=6.65 ms 64 bytes from 10.100.12.2: icmp_seq=47 ttl=60 time=11.8 ms 64 bytes from 10.100.12.2: icmp_seq=48 ttl=60 time=6.23 ms 64 bytes from 10.100.12.2: icmp_seq=49 ttl=60 time=9.94 ms 64 bytes from 10.100.12.2: icmp_seq=50 ttl=60 time=6.40 ms 64 bytes from 10.100.12.2: icmp_seq=51 ttl=60 time=8.25 ms 64 bytes from 10.100.12.2: icmp_seq=52 ttl=60 time=5.65 ms 64 bytes from 10.100.12.2: icmp_seq=53 ttl=60 time=5.71 ms ^C --- 10.100.12.2 ping statistics --- 53 packets transmitted, 43 received, 18% packet loss, time 52262ms rtt min/avg/max/mdev = 2.282/16.680/110.415/25.816 ms Further you can check the GENEE tunnels from the NSX Manager UI. Based on this output all GENEVE tunnels from TEP IP 10.0.2.13 are gone and you see the tunnels from 10.0.2.12 only.\nTEP Groups - Edge Transport Nodes After breaking the layer2 connection of one TEP interface, the connection was shortly interrupted and recovered after few seconds. As shown within the ICMP protocol below, just three packets were lost.\n64 bytes from 10.100.12.2: icmp_seq=1 ttl=60 time=6.25 ms 64 bytes from 10.100.12.2: icmp_seq=2 ttl=60 time=3.54 ms 64 bytes from 10.100.12.2: icmp_seq=3 ttl=60 time=28.0 ms 64 bytes from 10.100.12.2: icmp_seq=4 ttl=60 time=3.14 ms 64 bytes from 10.100.12.2: icmp_seq=5 ttl=60 time=4.47 ms 64 bytes from 10.100.12.2: icmp_seq=6 ttl=60 time=4.53 ms 64 bytes from 10.100.12.2: icmp_seq=7 ttl=60 time=40.0 ms 64 bytes from 10.100.12.2: icmp_seq=11 ttl=60 time=6.80 ms 64 bytes from 10.100.12.2: icmp_seq=12 ttl=60 time=13.3 ms 64 bytes from 10.100.12.2: icmp_seq=13 ttl=60 time=4.11 ms 64 bytes from 10.100.12.2: icmp_seq=14 ttl=60 time=4.38 ms 64 bytes from 10.100.12.2: icmp_seq=15 ttl=60 time=35.4 ms ^C --- 10.100.12.2 ping statistics --- 15 packets transmitted, 12 received, 20% packet loss, time 14073ms rtt min/avg/max/mdev = 3.145/12.842/40.042/12.995 ms Further you can inspect the GENEVE tunnels of the edge node, where you can see some tunnels in state “DOWN” based on “1 - Control Detection Time Expired”.\nSummary After testing the new features of Multi-TEP HA and TEP Group HA I can say this is really a great improvemnent of the failover behaviour. From my point of view this is a very important step in case of resiliency and reducing the impact of many failure scenarios like software bugs in the underlay network wich are causing the switches to freeze. Further is also improves the loadsharing, since it is flow based after TEP groups are enabled compared to have loadsharing just available segment wise. This could also increase the total bandwitdh possible for a single VM, which is now load-shared per flow instead stically mapped to one fastpath interface of an edge transport node.\nSince this feature is very easy to implement and will improve the failover behaviour by optiomizing the BFD sessions and load-sharing mechanism on the edge nodes, I would highly recommend to implement those two features. Sure the features are quite new and there might be some bugs, but I did not find any unexpected behaviour so far. Anyways it would always be the best to test new features in dev before implementation in production.\n",
+    "wordCount" : "3855",
+    "inLanguage": "en",
+    "datePublished": "2025-01-01T19:54:18+01:00",
+    "dateModified": "2025-01-01T19:54:18+01:00",
+    "author":{
+        "@type": "Person",
+        "name": "Steven Schramm",
+        "url": "https://sdn-techtalk.com/about/"
+        },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://sdn-techtalk.com/posts/multitep-ha/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SDN-Techtalk | Steven Schramm",
+      "description": "",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://sdn-techtalk.com/favicon.ico"
+      }
+    }
+}
+</script><title>Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability</title>
+<link rel="stylesheet dns-prefetch preconnect preload prefetch" as="style" href="https://sdn-techtalk.com/css/style.min.5c8d6d17b88c7b7d66d60851d5eaab8d6264b4f1f602f57a704fac1db6716b4c.css" integrity="sha256-XI1tF7iMe31m1ghR1eqrjWJktPH2AvV6cE+sHbZxa0w=" crossorigin="anonymous">
+	</head>
+<body id="page">
+	<header id="site-header">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://sdn-techtalk.com/">SDN-Techtalk | Steven Schramm</a>
+				</div>
+				<nav class="site-nav hide-in-mobile"><a href="https://sdn-techtalk.com/posts/">Posts</a><a href="https://sdn-techtalk.com/about/">About Me</a></nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-links hide-in-mobile"><a href="https://www.linkedin.com/in/steven-schramm-87083113a" target="_blank" rel="noopener me" title="Linkedin"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
+   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+   <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+   <rect x="2" y="9" width="4" height="12"></rect>
+   <circle cx="4" cy="4" r="2"></circle>
+</svg></a></span><button id="share-btn" class="hdr-btn" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2">
+      <circle cx="18" cy="5" r="3"></circle>
+      <circle cx="6" cy="12" r="3"></circle>
+      <circle cx="18" cy="19" r="3"></circle>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+   </svg></button>
+ 
+<div id="share-links" class="animated fast">
+    
+    
+    
+    
+    <ul>
+        <li>
+            <a href="https://twitter.com/intent/tweet?hashtags=hermit2&amp;url=https%3a%2f%2fsdn-techtalk.com%2fposts%2fmultitep-ha%2f&amp;text=Improving%20NSX%20Datacenter%20TEP%20performance%20and%20availability%20-%20Multi-TEP%20and%20TEP%20Group%20High%20Availability" target="_blank" rel="noopener" aria-label="Share on X"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
+   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+   <path class="st0" d="m21.3 21.1 -11.4 -18.2h-7.2l11.4 18.2zm-18.6 0 7.2 -6.6m4.2 -5 7.2 -6.6" />
+</svg></a>
+        </li>
+        <li>
+            <a href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fsdn-techtalk.com%2fposts%2fmultitep-ha%2f" target="_blank" rel="noopener" aria-label="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
+   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+</svg></a>
+        </li>
+        <li>
+            <a href="mailto:?subject=Improving%20NSX%20Datacenter%20TEP%20performance%20and%20availability%20-%20Multi-TEP%20and%20TEP%20Group%20High%20Availability&amp;body=https%3a%2f%2fsdn-techtalk.com%2fposts%2fmultitep-ha%2f" target="_self" rel="noopener" aria-label="Share on Email"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
+   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+   <polyline points="22,6 12,13 2,6"></polyline>
+</svg></a>
+        </li>
+        <li>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fsdn-techtalk.com%2fposts%2fmultitep-ha%2f&amp;source=https%3a%2f%2fsdn-techtalk.com%2f&amp;title=Improving%20NSX%20Datacenter%20TEP%20performance%20and%20availability%20-%20Multi-TEP%20and%20TEP%20Group%20High%20Availability&amp;summary=Improving%20NSX%20Datacenter%20TEP%20performance%20and%20availability%20-%20Multi-TEP%20and%20TEP%20Group%20High%20Availability%2c%20by%20Steven%20Schramm%0a%0a%3cnil%3e%0a" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
+   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+   <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+   <rect x="2" y="9" width="4" height="12"></rect>
+   <circle cx="4" cy="4" r="2"></circle>
+</svg></a>
+        </li>
+        <li>
+            <a href="#" onclick="linkShare(&#34;Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability&#34;,&#34;https://sdn-techtalk.com/posts/multitep-ha/&#34;,&#34;Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability, by Steven Schramm\n\n\u003cnil\u003e\n&#34;); return false;" target="_self" rel="noopener" aria-label="Copy Link"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+   </svg></a>
+        </li>
+    </ul>
+</div><button id="menu-btn" class="hdr-btn" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+   </svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://sdn-techtalk.com/posts/">Posts</a></li>
+			<li><a href="https://sdn-techtalk.com/about/">About Me</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster"><article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Jan 1, 2025</span></div>
+				<h1>Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability</h1>
+			</header>
+			<div class="post-info"><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-feather">
+   <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
+   <line x1="16" y1="8" x2="2" y2="22"></line>
+   <line x1="17.5" y1="15" x2="9" y2="15"></line>
+</svg><a href="/about/" target="_blank">Steven Schramm</a></p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
+      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+      <line x1="7" y1="7" x2="7" y2="7"></line>
+   </svg><span class="tag"><a href="https://sdn-techtalk.com/tags/homelab">homelab</a></span><span class="tag"><a href="https://sdn-techtalk.com/tags/nested-lab">nested lab</a></span><span class="tag"><a href="https://sdn-techtalk.com/tags/vmware">vmware</a></span><span class="tag"><a href="https://sdn-techtalk.com/tags/network">network</a></span><span class="tag"><a href="https://sdn-techtalk.com/tags/nsx">nsx</a></span><span class="tag"><a href="https://sdn-techtalk.com/tags/loadsharing">loadsharing</a></span><span class="tag"><a href="https://sdn-techtalk.com/tags/high-availability">High Availability</a></span></p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+      <polyline points="14 2 14 8 20 8"></polyline>
+      <line x1="16" y1="13" x2="8" y2="13"></line>
+      <line x1="16" y1="17" x2="8" y2="17"></line>
+      <polyline points="10 9 9 9 8 9"></polyline>
+   </svg>3855 Words
+     Words // ReadTime
+    
+    
+    
+    17 Minutes, 31 Seconds</p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+      <line x1="16" y1="2" x2="16" y2="6"></line>
+      <line x1="8" y1="2" x2="8" y2="6"></line>
+      <line x1="3" y1="10" x2="21" y2="10"></line>
+   </svg>2025-01-01 19:54 &#43;0100</p></div>
+			<hr class="post-end">
+			<div class="content">
+				<h2 id="introduction">Introduction<a href="#introduction" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>Some of you are using NSX for many years already and are aware of the different changes and improvements implemented in the last years.
 I personally started with NSX in version 2.3 and one of the first important improvements I recognized is &ldquo;MultiTEP&rdquo; for edge nodes from type VM released with NSX 2.5 and officially added to the reference design guide.</p>
 <p>By the way: The reference design guide is still a great resource to learn the design pricipals for NSX implementaions. This is especially intersting for those who might be new to NSX.</p>
@@ -35,7 +216,7 @@ I addition the TEP group feature also improves the load sharing for the North/ S
 <li>Breaking Layer2 communication of an egde node by manipulating the assigned VLAN IDs after implementing the new features (CHeck section &ldquo;Test case execution after applying the changes&rdquo;)</li>
 </ul>
 <p>Before and while implementing those test cases, I will ping a test VM to show the bevaivour of the communication.</p>
-<h2 id="lab-environment">Lab environment</h2>
+<h2 id="lab-environment">Lab environment<a href="#lab-environment" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>For the tests I worked with the following lab environment.</p>
 <ul>
 <li>Three nested ESXi hosts of version 8.0.3, 24022510</li>
@@ -43,7 +224,7 @@ I addition the TEP group feature also improves the load sharing for the North/ S
 <li>NSX Datacenter version 4.2.1.1</li>
 <li>Alpine test VM</li>
 </ul>
-<h2 id="what-is-multi-tep-and-tep-group-ha">What is Multi-TEP and TEP Group HA?</h2>
+<h2 id="what-is-multi-tep-and-tep-group-ha">What is Multi-TEP and TEP Group HA?<a href="#what-is-multi-tep-and-tep-group-ha" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>Multi-TEP HA is a feature implemented in NSX Datacenter 4.1 and optimizes the behaviour of TEP failover. Starting with NSX Datacenter 4.1 it was applicable for host transport nodes only, not for edge transport nodes.
 Without Multi-TEP HA a layer2 or layer3 outage did not cause an failover of a TEP on any type of NSX transport nodes, if the link state is kept online. The missing failover of the affected TEP caused an outage for all worklaods using this TEP interface.
 Based on the loadsharing alogorithm &ldquo;Load Balance source&rdquo; this will cause approx. 50% of the whole workload located on the affected transport nodes.</p>
@@ -163,7 +344,7 @@ The following drawing visualizes the mapping of a overlay sgement with and witho
 <p><a href="tepgroup-before-failover.png"><img src="tepgroup-before-failover.png" alt="tepgroup-before-failover"></a></p>
 <p>In the next drawing you can discover the result of a layer2 comminication issue in case you are using TEP groups with Multi-TEP HA compared to a implementation without TEP groups and no Multi-TEP HA as TEP group enhancement.</p>
 <p><a href="tepgroup-failover.png"><img src="tepgroup-failover.png" alt="tepgroup-failover"></a></p>
-<h2 id="how-to-implement-multi-tep-ha">How to implement Multi-TEP HA?</h2>
+<h2 id="how-to-implement-multi-tep-ha">How to implement Multi-TEP HA?<a href="#how-to-implement-multi-tep-ha" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>To implement Muti-TEP HA the following steps are required.</p>
 <ol>
 <li>Create a TEP HA host switch profile as shown below.</li>
@@ -241,7 +422,7 @@ The following drawing visualizes the mapping of a overlay sgement with and witho
 </span></span><span class="line"><span class="cl">        <span class="nt">&#34;value&#34;</span><span class="p">:</span> <span class="s2">&#34;/infra/host-switch-profiles/&lt;vtephaprofile1&gt;&#34;</span>
 </span></span><span class="line"><span class="cl">      <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">]</span><span class="err">,</span>
-</span></span></code></pre></div><h2 id="how-to-implement-tep-groups">How to implement TEP Groups?</h2>
+</span></span></code></pre></div><h2 id="how-to-implement-tep-groups">How to implement TEP Groups?<a href="#how-to-implement-tep-groups" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>The impementation of TEP groups of edge transport nodes can be done by changing a single parameter from the NSX API.</p>
 <pre tabindex="0"><code>GET https://&lt;NSX manager&gt;/policy/api/v1/infra/connectivity-global-config
 </code></pre><p>Important fragment of the expected output shows the value for the required parameter &ldquo;enable_tep_grouping_on_edge&rdquo; set to &ldquo;false&rdquo;:</p>
@@ -276,7 +457,7 @@ The following drawing visualizes the mapping of a overlay sgement with and witho
 </span></span><span class="line"><span class="cl">    <span class="c1">// ...
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span></code></pre></div><p>To enable Multi-TEP HA it is not required to do anything else. It is just required to have NSX updated to version 4.2.1 or later and TEP groups enabled.</p>
-<h2 id="test-cases">Test cases</h2>
+<h2 id="test-cases">Test cases<a href="#test-cases" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>The following section describes the tests done to validate the behaviour before and after the changes. The validation is done by executing cli commands in the nsxcli and the execution of ICMP messages.</p>
 <ul>
 <li>Source of ICMP: 192.168.178.222</li>
@@ -360,9 +541,9 @@ vmk10  10.0.2.12     255.255.255.0  10.0.2.255       STATIC        10.0.2.1     
 vmk11  10.0.2.13     255.255.255.0  10.0.2.255       STATIC        10.0.2.1     false
 vmk50  169.254.1.1   255.255.0.0    169.254.255.255  STATIC        0.0.0.0      false
 </code></pre><p>Output of edge node from before and after the changes is visible in the section &ldquo;What is Multi-TEP and TEP Group HA?&rdquo;.</p>
-<h3 id="test-case-execution-before-applying-the-changes">Test case execution before applying the changes</h3>
+<h3 id="test-case-execution-before-applying-the-changes">Test case execution before applying the changes<a href="#test-case-execution-before-applying-the-changes" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 <p>Before validating the behavoiour after the changes, lets start with the behaviour before all the optimisations.</p>
-<h4 id="multi-tep-ha---host-transport-nodes">Multi-TEP HA - Host Transport Nodes</h4>
+<h4 id="multi-tep-ha---host-transport-nodes">Multi-TEP HA - Host Transport Nodes<a href="#multi-tep-ha---host-transport-nodes" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 <p>After the layer2 communication is interrupted, the VM is still assigned to the affected TEP IP, as shown below.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">get logical-switch c9390ed0-c587-4214-b26e-26705d4cd2f0 mac-table
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">Thu Jan 02 2025 UTC 10:53:31.084
@@ -416,7 +597,7 @@ In this case the TEP IP will be moved from the failed vmnic to the any other vmn
 </span></span><span class="line"><span class="cl">--- 10.100.12.2 ping statistics ---
 </span></span><span class="line"><span class="cl">18 packets transmitted, 17 received, 5% packet loss, time 17043ms
 </span></span><span class="line"><span class="cl">rtt min/avg/max/mdev = 5.584/23.531/79.297/20.795 ms
-</span></span></code></pre></div><h4 id="tep-groups---edge-transport-nodes">TEP Groups - Edge Transport Nodes</h4>
+</span></span></code></pre></div><h4 id="tep-groups---edge-transport-nodes">TEP Groups - Edge Transport Nodes<a href="#tep-groups---edge-transport-nodes" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 <p>After breaking the layer2 connectivity of fp-eth1 where the segment of the alpine VM is assigned to, the alpine loses the reachability. This is also shown in the following ICMP protocol.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">64 bytes from 10.100.12.2: icmp_seq=31 ttl=60 time=32.4 ms
 </span></span><span class="line"><span class="cl">64 bytes from 10.100.12.2: icmp_seq=32 ttl=60 time=18.4 ms
@@ -434,9 +615,9 @@ In this case the TEP IP will be moved from the failed vmnic to the any other vmn
 </span></span></code></pre></div><p>A test for a link failure is not realistic, since it is a VM, but it would work exactly like the ESXi host and the TEP IP would move to the fp-eth interface which is still available.
 But you should keep in mind that VLAN backed segments on the edge nodes will not failover, if the link is down. Therfore it is higly reommended to use named teaming policies where redundancy is required, like for the T0 uplinks.
 In the case of T0 router tha failovermight be handled over BGP, in case at least one of the BGP uplinks is up and running.</p>
-<h3 id="test-case-execution-after-the-changes-are-applied">Test case execution after the changes are applied</h3>
+<h3 id="test-case-execution-after-the-changes-are-applied">Test case execution after the changes are applied<a href="#test-case-execution-after-the-changes-are-applied" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 <p>Since you are aware of the behaviour before the changes, lets check what is now improved.</p>
-<h4 id="multi-tep-ha---host-transport-nodes-1">Multi-TEP HA - Host Transport Nodes</h4>
+<h4 id="multi-tep-ha---host-transport-nodes-1">Multi-TEP HA - Host Transport Nodes<a href="#multi-tep-ha---host-transport-nodes-1" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 <p>After breaking the layer2 communication of the ESXi host where the VM was running, the assigned TEP IP was changed from 10.0.2.13 to 10.0.2.12, as shown below.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">get logical-switch c9390ed0-c587-4214-b26e-26705d4cd2f0 mac-table
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">Thu Jan 02 2025 UTC 10:24:49.329
@@ -474,7 +655,7 @@ In the case of T0 router tha failovermight be handled over BGP, in case at least
 </span></span><span class="line"><span class="cl">rtt min/avg/max/mdev = 2.282/16.680/110.415/25.816 ms
 </span></span></code></pre></div><p>Further you can check the GENEE tunnels from the NSX Manager UI. Based on this output all GENEVE tunnels from TEP IP 10.0.2.13 are gone and you see the tunnels from 10.0.2.12 only.</p>
 <p><a href="tunneloverview-tepha-failover.png"><img src="tunneloverview-tepha-failover.png" alt="tunneloverview-tepha-failover"></a></p>
-<h4 id="tep-groups---edge-transport-nodes-1">TEP Groups - Edge Transport Nodes</h4>
+<h4 id="tep-groups---edge-transport-nodes-1">TEP Groups - Edge Transport Nodes<a href="#tep-groups---edge-transport-nodes-1" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 <p>After breaking the layer2 connection of one TEP interface, the connection was shortly interrupted and recovered after few seconds.
 As shown within the ICMP protocol below, just three packets were lost.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">64 bytes from 10.100.12.2: icmp_seq=1 ttl=60 time=6.25 ms
@@ -495,277 +676,45 @@ As shown within the ICMP protocol below, just three packets were lost.</p>
 </span></span><span class="line"><span class="cl">rtt min/avg/max/mdev = 3.145/12.842/40.042/12.995 ms
 </span></span></code></pre></div><p>Further you can inspect the GENEVE tunnels of the edge node, where you can see some tunnels in state &ldquo;DOWN&rdquo; based on &ldquo;1 - Control Detection Time Expired&rdquo;.</p>
 <p><a href="edgetunneldown.png"><img src="edgetunneldown.png" alt="edgetunneldown"></a></p>
-<h2 id="summary">Summary</h2>
+<h2 id="summary">Summary<a href="#summary" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>After testing the new features of Multi-TEP HA and TEP Group HA I can say this is really a great improvemnent of the failover behaviour.
 From my point of view this is a very important step in case of resiliency and reducing the impact of many failure scenarios like software bugs in the underlay network wich are causing the switches to freeze.
 Further is also improves  the loadsharing, since it is flow based after TEP groups are enabled compared to have loadsharing just available segment wise. This could also increase the total bandwitdh possible for a single VM, which is now load-shared per flow instead stically mapped to one fastpath interface of an edge transport node.</p>
 <p>Since this feature is very easy to implement and will improve the failover behaviour by optiomizing the BFD sessions and load-sharing mechanism on the edge nodes, I would highly recommend to implement those two features.
 Sure the features are quite new and there might be some bugs, but I did not find any unexpected behaviour so far. Anyways it would always be the best to test new features in dev before implementation in production.</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>Antrea Egress - Controlling the egress IPs for K8s Pods within Tanzu</title>
-			<link>https://sdn-techtalk.com/posts/antrea-egress/</link>
-			<pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
-			
-			<guid>https://sdn-techtalk.com/posts/antrea-egress/</guid>
-			<description><![CDATA[%!s(<nil>)]]></description>
-			<content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
-<p>The integration of K8s platforms within a enterprise network environment is always a challenge regarding security and routing of certain K8s pods. Multiple pods are running in the same K8s cluster but might have different functinalities and requirements to access services outside of the K8s platform.
-What should you do, if you are unable to assign a specific outgoing IP to a specific pod or group of pods? In this case you are forced to treat all the pods within a specific K8s cluster the same way and create firewall rules based on this.
-That does mean all the different pods within a K8s cluster will have the same network permissions and it is very challenging to implement further isolation.</p>
-<p>For legacy applications which were deployed on physical servers or specific virtual servers, each of those servers got a specific IP assigned. Based on this it was possible to create specific firewall rules for the specific servers based on the different requirements to access other services or beeing accessed from other systems.
-This brought some isolation and overall security to the enterprise networks and is also a requirement to satisfy the guidelines of some specific authorities like BAFIN or based on DORA.</p>
-<p>Why is this now a challenge within K8s? K8s is an additinal layer of abstraction to increase the efficiency to deploy different services on a single server. The layer of K8s will be installed ontop of an operationg system, which is either installed on a physical or virtual server.
-Since the most enterprises does have a high ratio of virtualisation, it is more likely that K8s is deployed ontop of a VM or group of VMs to build a K8s cluster. Each of those VMs is now called K8s worker or master and will run one or multiple K8s services. In this case all the different VMs still have a specific IP adress that can be used in firewall rules, but the K8s services are getting deployed ontop of thoese VMs.
-That means multiple K8s services are sharing the same group of VMs and if a K8s service wants to reach a different service outside of K8s it will leave the K8s worker or master by using the IP of those VMs.</p>
-<p>Nevertheless there are multiple solutions for this challenge. I would like to tell you about one solution that can be used in the K8s platform by VMware Tanzu (VKS) and requires the K8s network plugin (CNI) &ldquo;Antrea&rdquo;.
-The specific feature is called &ldquo;Antrea Engress&rdquo;.</p>
-<p>I will not show how to deploy the Tanzu supervisor cluster, but how to create a K8s guest cluster with the required features enabled and how to assign specific egress IPs to specific K8s pods.</p>
-<h2 id="lab-environment">Lab environment</h2>
-<p>For the tests I worked with the following lab environment.</p>
-<ul>
-<li>Three nested ESXi hosts of version 8.0.3, 24022510</li>
-<li>vCenter server of version 8.0.3, 24022515</li>
-<li>NSX Datacenter version 4.2.1.1</li>
-<li>Tanzu supervisor cluster integrated with NSX Datacenter</li>
-</ul>
-<h2 id="requirements">Requirements</h2>
-<p>My tests are based on assigning seperate egress subnets to different K8s pods within the same K8s cluster. To implement this solution the following versions are required.</p>
-<ul>
-<li>TKr 1.31</li>
-<li>TKG Services 3.2.0</li>
-</ul>
-<p>Further it is required to deploy Tanzu with NSX as networking layer and using Antrea as CNI.
-For NSX a specific feature called &ldquo;Child Segments&rdquo; will be used to get this implementation done, so take care your current NSX version is supporting this feature.</p>
-<p>The next requirement is optional, but does influence the overall configuration that needs to be done manually.
-If you are using NAT mode, you need to manually create NoSNAT rules for the NSX child segments that will be cerated within the process. If NAT mode is disabled, this manuall configuration is not required.</p>
-<h2 id="nsx-child-segments">NSX child segments</h2>
-<p>Before digging into the steps how to assign seperate egress subnets to different K8s pods, I will shortly describe what NSX child segments are.
-If you are not aware of NSX and the routers within NSX, you need to familiarize with that first. Therefore I would recommend the NSX reference design guide <a href="https://community.broadcom.com/viewdocument/nsx-reference-design-guide-42-v10?CommunityKey=b76535ef-c5a2-474d-8270-3e83685f020e&amp;tab=librarydocuments">https://community.broadcom.com/viewdocument/nsx-reference-design-guide-42-v10?CommunityKey=b76535ef-c5a2-474d-8270-3e83685f020e&amp;tab=librarydocuments</a>.</p>
-<p>NSX child segents are based on a parent segment which is connected to a T1 router. The child segment it self can be either connected to the same or a different T1 router than the parent segment.
-The connection between the parent and the child segment will be done by a VLAN tag and two child segments cannot share the same VLAN tag.</p>
-<p>This feature is currently not available in the UI and those child segments can be wither created through the NSX API or the Antrea NSX control application.</p>
-<p>Based on this feature different pods can be assigned to different subnets without the requirement of assigning different portgroups to the K8s worker and master nodes. Those subnets also does not interfere withe the reserved IPs for the assigned namespace CIDR of the K8s clusters.</p>
-<p>More information of the child sgements can be discoverd in the documentation of Broadcom. <a href="https://techdocs.broadcom.com/us/en/vmware-cis/nsx/vmware-nsx/4-2/administration-guide/segments/creating-a-child-segment.html">https://techdocs.broadcom.com/us/en/vmware-cis/nsx/vmware-nsx/4-2/administration-guide/segments/creating-a-child-segment.html</a></p>
-<h2 id="prepering-the-k8s-guest-cluster">Prepering the K8s guest cluster</h2>
-<p>Before creating the K8s cluster, it is required to create the Antrea configuration to enable the feature &ldquo;EgressSeperateSubnet&rdquo;.
-The following example shows an example configuration. This configuration does not negate the default settings of Antrea, which are not mentioned in this YAML-File.
-I also added the NSX integration in my configuration to integrate the NSX Distributed Firewall with Antrea, but this will not be further discussed in this article. Further the feature of &ldquo;NodePortLocal&rdquo; is also not required for the assignment of dedicated egress subnets.</p>
-<p>The name of the K8s object &ldquo;AntreaConfig&rdquo; is very important and should match the prefix &lt;K8s cluster name&gt;-antrea-package, otherwhise the Antrea config will not be assigned. Further this configuration needs to be added before the K8s cluster is created.
-It is also possible to adjust the configuration after the deployment of the K8s cluster, but this is much more complex and required a reboot of the K8s nodes.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">cni.tanzu.vmware.com/v1alpha1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">AntreaConfig</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">tkc-test01-antrea-package</span><span class="w"> </span><span class="c">#prefix required</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">antrea</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">featureGates</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">EgressSeparateSubnet</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">NodePortLocal</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">antreaNSX</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c">#false by default</span><span class="w">
-</span></span></span></code></pre></div><p>After the configuration is applied, you can start with the K8s cluster deployment. Following my example K8s cluster YAML-File.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">run.tanzu.vmware.com/v1alpha3</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">TanzuKubernetesCluster</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">tkc-test01</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">topology</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">controlPlane</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">vmClass</span><span class="p">:</span><span class="w"> </span><span class="l">best-effort-medium</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l">labnfs</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">tkr</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">reference</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="c">#name: v1.29.4---vmware.3-fips.1-tkg.1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">v1.31.1---vmware.2-fips-vkr.2</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">nodePools</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">worker</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">vmClass</span><span class="p">:</span><span class="w"> </span><span class="l">best-effort-medium</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l">labnfs</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">settings</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">network</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">pods</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">cidrBlocks</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;192.168.0.0/16&#34;</span><span class="p">]</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">services</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">cidrBlocks</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;10.196.0.0/12&#34;</span><span class="p">]</span><span class="w">
-</span></span></span></code></pre></div><h2 id="creating-test-k8s-deployments">Creating test K8s deployments</h2>
-<p>As a next step I created two namespaces to assign two different egress subnets later on.</p>
-<ul>
-<li>Namespace 1: prod</li>
-<li>Namespace 2: staging</li>
-</ul>
-<p>In each of those namespaces I created a test deployment based on the follwoing YAML-File.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">web</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">web</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">web</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:latest</span><span class="w">
-</span></span></span></code></pre></div><p>The commands used for this deployment are shown below.</p>
-<p>Creating namespaces:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl create ns &lt;namespace name&gt;
-</span></span></code></pre></div><p>Creating deployment:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl apply -f web.yaml -n &lt;namespace name&gt;
-</span></span></code></pre></div><p>In addition to the K8s deployments I deployed a docker container outside my NSX environment based on the following steps.
-The docker caontainer will run a small web application, which responds with the IP used to access this application. Based on this it will be easy to validate which IP will be used by the different K8s Pods and if the egress IP are assigned as expected.</p>
-<ol>
-<li>Create folder your Dockerfile and create the Dockerfile</li>
-</ol>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="k">FROM</span><span class="s"> tiangolo/uvicorn-gunicorn-fastapi:python3.9</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">COPY</span> ./app /app<span class="err">
-</span></span></span></code></pre></div><ol start="2">
-<li>Create a subolder called &ldquo;app&rdquo;</li>
-<li>Create a file with the name &ldquo;main.py&rdquo; in the subfolder &ldquo;app&rdquo; with the content below.</li>
-</ol>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Py" data-lang="Py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Request</span>
-</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">fastapi.responses</span> <span class="kn">import</span> <span class="n">HTMLResponse</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nd">@app.get</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">HTMLResponse</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="k">async</span> <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="n">client_host</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s2">&#34;Requester IP: &#34;</span> <span class="o">+</span> <span class="n">client_host</span> <span class="o">+</span> <span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span>
-</span></span></code></pre></div><ol start="4">
-<li>Go back to the folder where the Dockerfile is located and build the docker image</li>
-</ol>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">docker build -t showfastip .
-</span></span></code></pre></div><ol start="5">
-<li>Run the docker imaged with a choosen port, which is not in use. I decided to use external port 88</li>
-</ol>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">docker run -d -p 88:80 showfastip
-</span></span></code></pre></div><h2 id="create-child-segments">Create child segments</h2>
-<p>I decided to create the child segments with the commandline tool &ldquo;antreansxctl&rdquo;. This commandline tool can be either downloaded to your local PC or you can connect to the Antrea pod of your K8s cluster to execute the desired command.</p>
 
-    <aside class="admonition warning">
-        <div class="admonition-title">
-            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="12" y1="8" x2="12" y2="12"></line>
-      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-   </svg></div><b>It&#39;s important to note that the antreansxctl commandline tool is provided in the internetworking pod</b>
-        </div>
-        <div class="admonition-content">This Pod will be deployed, if you enable the feature antreaNSX show above in the AntreaConfig example.</div>
-    </aside>
-<p>A connection to the internetworking pod can be done by the kubectl command below.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl exec -n vmware-system-antrea interworking-5bdd8f5b5f-wd6wg -c mp-adapter -it -- bash
-</span></span></code></pre></div><p>The command to create a child segment requires the follwoing information.</p>
-<ul>
-<li>Path of the parent segment: can be gathered via NSX API by the code &ldquo;curl &ndash;location &ndash;request GET &lsquo;<a href="https://nsx.lab.home/policy/api/v1/infra/segments/'">https://nsx.lab.home/policy/api/v1/infra/segments/'</a> &ndash;header &lsquo;Content-Type: application/json&rsquo; &ndash;header &lsquo;Authorization: Basic <!-- raw HTML omitted -->&rsquo;&rdquo;</li>
-<li>NSX Manager IP</li>
-<li>NSX Manager User and Password</li>
-<li>VLAN ID used to tag the child segment (this VLAN ID will not be visible outside of NSX and will to overlap with any VLAN on the underlay network)</li>
-<li>CIDR and Gateway IP of the child segmnet (the gateway IP will be created on the T1 router used for the child segment, which is the same T1 as for the parent T1 in this case)</li>
-</ul>
-<p>Command description:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">antreansxctl child-segment-create --nsx-managers=&lt;NSX Manager IP&gt; --user=admin --password=&#39;&lt;NSX Manager admin password&gt;&#39; --cidr=&#34;&lt;CIDR child segment&gt;&#34; --gateway=&#34;&lt;Gateway IP of child segment&gt;&#34; --parent=&#34;&lt;path of parent segment&gt;&#34; --vlan=&lt;vlan id&gt; &lt;name of child segment&gt;
-</span></span></code></pre></div><p>An example of this command is shown below.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">antreansxctl child-segment-create --nsx-managers=10.0.1.12 --user=admin --password=&#39;VMware1!VMware1!&#39; --cidr=&#34;10.100.5.0/25&#34; --gateway=&#34;10.100.5.1&#34; --parent=&#34;/infra/segments/vnet_60f55536-121d-40d0-ac48-4cb976decf3d_0&#34; --vlan=110 egress-prod
-</span></span></code></pre></div><p>I executed the same command for staging with some other parameters.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">antreansxctl child-segment-create --nsx-managers=10.0.1.12 --user=admin --password=&#39;VMware1!VMware1!&#39; --cidr=&#34;10.100.5.128/30&#34; --gateway=&#34;10.100.5.129&#34; --parent=&#34;/infra/segments/vnet_60f55536-121d-40d0-ac48-4cb976decf3d_0&#34; --vlan=120 egress-staging
-</span></span></code></pre></div><p>The two child segments are now visible in the NSX UI as shown in the following picture.
-<a href="childsegmentsui.png"><img src="childsegmentsui.png" alt="Childsegents"></a></p>
-<h2 id="create-and-assign-antrea-external-ip-pools">Create and assign antrea external ip pools</h2>
-<p>I created one external IP pool for staging and one for prod.</p>
-<p>Prod external IP Pool YAML-File:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">crd.antrea.io/v1beta1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ExternalIPPool</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">prod-external-ip-pool</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ipRanges</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">start</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.10</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">end</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.20</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">subnetInfo</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">prefixLength</span><span class="p">:</span><span class="w"> </span><span class="m">25</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">vlan</span><span class="p">:</span><span class="w"> </span><span class="m">110</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
-</span></span></span></code></pre></div><p>Staging external IP pool YAML-File:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">crd.antrea.io/v1beta1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ExternalIPPool</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">staging-external-ip-pool</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ipRanges</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">start</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.130</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">end</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.130</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">subnetInfo</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="m">10.100.5.129</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">prefixLength</span><span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">vlan</span><span class="p">:</span><span class="w"> </span><span class="m">120</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
-</span></span></span></code></pre></div><p>Creating the two IP pools:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl apply -f antrea-externalippool-prod.yaml
-</span></span><span class="line"><span class="cl">kubectl apply -f antrea-externalippool-staging.yaml
-</span></span></code></pre></div><p>YAML-Files for assignment of prod IP pool to prod web deployment:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">crd.antrea.io/v1beta1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Egress</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">egress-prod-web</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">appliedTo</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">namespaceSelector</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">kubernetes.io/metadata.name</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">podSelector</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">web</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">externalIPPool</span><span class="p">:</span><span class="w"> </span><span class="l">prod-external-ip-pool</span><span class="w">
-</span></span></span></code></pre></div><p>YAML-Files for assignment of staging IP pool to prod web deployment:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">crd.antrea.io/v1beta1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Egress</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">egress-staging-web</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">appliedTo</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">namespaceSelector</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">kubernetes.io/metadata.name</span><span class="p">:</span><span class="w"> </span><span class="l">staging</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">podSelector</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">web</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">externalIPPool</span><span class="p">:</span><span class="w"> </span><span class="l">staging-external-ip-pool</span><span class="w">
-</span></span></span></code></pre></div><p>Assigning  the external IP pools:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl apply -f egress-prod-web.yaml -n prod
-</span></span><span class="line"><span class="cl">kubectl apply -f egress-staging-web.yaml -n staging
-</span></span></code></pre></div><p>The following command shows the assigned IPs of the two IP pools.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">kubectl get egress
-</span></span><span class="line"><span class="cl">NAME                 EGRESSIP       AGE   NODE
-</span></span><span class="line"><span class="cl">egress-prod-web      10.100.5.10    42s   tkc-test01-hsqsg-vmm2w
-</span></span><span class="line"><span class="cl">egress-staging-web   10.100.5.130   28s   tkc-test01-worker-s9s27-qqhrg-z6jd5
-</span></span></code></pre></div><h2 id="create-nosnat-rule">Create noSNAT rule</h2>
-<p>As already mentioned it is required to manually configure a noSNAT rule for the external IP pool subnets, if NAT mode is enabled for the used vSphere Namespace where the K8s cluster is deployed.
-The noSNAT rule needs to be configured on the T1 router where the child segments are connected as shown in the picture below.</p>
-<p><a href="nosnat.png"><img src="nosnat.png" alt="noSNAT"></a></p>
-<h2 id="testing-if-egress-ip-pool-assigment-is-working">Testing if egress ip pool assigment is working</h2>
-<p>The following tests are showing an access from the web pod in both namespaces and which external IP will be used to access the webserver deployed in dockers as mentioned earlier.
-The Requester IP is the egress IP visible for the target web serverrunning in docker.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">stevenschramm@Stevens-MacBook-Pro homelab % kubectl -n prod exec web-54d6b8f598-7ddqv -- curl -s 192.168.178.222:88
-</span></span><span class="line"><span class="cl">Requester IP: 10.100.5.10
-</span></span><span class="line"><span class="cl">stevenschramm@Stevens-MacBook-Pro homelab % kubectl -n staging exec web-54d6b8f598-slnm8 -- curl -s 192.168.178.222:88
-</span></span><span class="line"><span class="cl">Requester IP: 10.100.5.130
-</span></span></code></pre></div>]]></content>
-		</item>
-		
-	</channel>
-</rss>
+			</div>
+			
+
+<div class="related-posts thin">
+	<h2>See Also</h2>
+	<ul>
+	
+	<li><a href="/posts/antrea-egress/">Antrea Egress - Controlling the egress IPs for K8s Pods within Tanzu</a></li>
+	
+	</ul>
+</div>
+
+		</article>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://sdn-techtalk.com/posts/antrea-egress/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+   </svg></span><br><span>Antrea Egress - Controlling the egress IPs for K8s Pods within Tanzu</span>
+			</a>
+		</div>
+		<div id="comments" class="thin"></div>
+	</main>
+
+<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+	<p>
+		&copy; 2025 <a href="https://sdn-techtalk.com/">Steven Schramm</a>
+		&#183; COPYRIGHT Steven Schramm</p>
+
+</footer>
+<script async src="https://sdn-techtalk.com/js/bundle.min.c7c384e4d29d192bbac6811ae4660bb01767194a5bea56baca77e8260f93ea16.js" integrity="sha256-x8OE5NKdGSu6xoEa5GYLsBdnGUpb6la6ynfoJg+T6hY=" crossorigin="anonymous"></script><script async src="https://sdn-techtalk.com/js/link-share.min.24409a4f6e5537d70ffc55ec8f9192208d718678cb8638585342423020b37f39.js" integrity="sha256-JECaT25VN9cP/FXsj5GSII1xhnjLhjhYU0JCMCCzfzk=" crossorigin="anonymous"></script>
+</body>
+
+</html>
