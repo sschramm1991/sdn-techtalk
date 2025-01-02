@@ -122,7 +122,7 @@ The alpine VM acts as iperf client and a server outside of the NSX overlay acts 
 <p>Starting the iperf server on the destination:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">iperf3 -s -p 5001
 </span></span></code></pre></div><p>Starting iperf on the clinet (alpine VM):</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">iperf3 -c \&lt;ip of iperf server\&gt; -p 5001
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">iperf3 -c &lt;ip of iperf server&gt; -p 5001
 </span></span></code></pre></div><p>To track the used fastpath interfaces I started a packet capture on the edge transport nodes from the nsxcli by using the following command.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">set capture session 1 interface fp-eth0 direction dual
 </span></span><span class="line"><span class="cl">set capture session 1 interface fp-eth1 direction dual
