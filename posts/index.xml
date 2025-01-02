@@ -435,7 +435,7 @@ In this case the TEP IP will be moved from the failed vmnic to the any other vmn
 But you should keep in mind that VLAN backed segments on the edge nodes will not failover, if the link is down. Therfore it is higly reommended to use named teaming policies where redundancy is required, like for the T0 uplinks.
 In the case of T0 router tha failovermight be handled over BGP, in case at least one of the BGP uplinks is up and running.</p>
 <h3 id="test-case-execution-after-the-changes-are-applied">Test case execution after the changes are applied</h3>
-<p>Since you are aware of the behavior before the changes, lets check what is now improved.</p>
+<p>Now that we are familiar with the behavior before the changes, let&rsquo;s check what has been improved</p>
 <h4 id="multi-tep-ha---host-transport-nodes-1">Multi-TEP HA - Host Transport Nodes</h4>
 <p>After breaking the layer2 communication of the ESXi host where the VM was running, the assigned TEP IP was changed from 10.0.2.13 to 10.0.2.12, as shown below.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">get logical-switch c9390ed0-c587-4214-b26e-26705d4cd2f0 mac-table
@@ -455,7 +455,7 @@ In the case of T0 router tha failovermight be handled over BGP, in case at least
 </span></span><span class="line"><span class="cl">===========================================================================
 </span></span><span class="line"><span class="cl">     Inner MAC            Outer MAC            Outer IP
 </span></span><span class="line"><span class="cl"> 00:50:56:8d:0c:dd    00:50:56:6b:71:aa        10.0.2.12
-</span></span></code></pre></div><p>As prove of the reachability and failover time you can check teh following ICMP output. Here you can see that 10 packets were lost witin the time of the failover.</p>
+</span></span></code></pre></div><p>As prove of the reachability and failover time you can check the following ICMP output. Here you can see that 10 packets were lost witin the time of the failover.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">64 bytes from 10.100.12.2: icmp_seq=33 ttl=60 time=110 ms
 </span></span><span class="line"><span class="cl">64 bytes from 10.100.12.2: icmp_seq=34 ttl=60 time=6.79 ms
 </span></span><span class="line"><span class="cl">64 bytes from 10.100.12.2: icmp_seq=35 ttl=60 time=3.06 ms
@@ -472,7 +472,7 @@ In the case of T0 router tha failovermight be handled over BGP, in case at least
 </span></span><span class="line"><span class="cl">--- 10.100.12.2 ping statistics ---
 </span></span><span class="line"><span class="cl">53 packets transmitted, 43 received, 18% packet loss, time 52262ms
 </span></span><span class="line"><span class="cl">rtt min/avg/max/mdev = 2.282/16.680/110.415/25.816 ms
-</span></span></code></pre></div><p>Further you can check the GENEE tunnels from the NSX Manager UI. Based on this output all GENEVE tunnels from TEP IP 10.0.2.13 are gone and you see the tunnels from 10.0.2.12 only.</p>
+</span></span></code></pre></div><p>Further you can check the GENEVE tunnels from the NSX Manager UI. Based on this output all GENEVE tunnels from TEP IP 10.0.2.13 are gone and you see the tunnels from 10.0.2.12 only.</p>
 <p><a href="tunneloverview-tepha-failover.png"><img src="tunneloverview-tepha-failover.png" alt="tunneloverview-tepha-failover"></a></p>
 <h4 id="tep-groups---edge-transport-nodes-1">TEP Groups - Edge Transport Nodes</h4>
 <p>After breaking the layer2 connection of one TEP interface, the connection was shortly interrupted and recovered after few seconds.
