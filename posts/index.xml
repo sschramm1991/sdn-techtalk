@@ -501,6 +501,15 @@ From my point of view this is a very important step in case of resilience and re
 Further it also improves the load sharing, since it is flow based after TEP groups are enabled compared to have load sharing just available segment wise. This could also increase the total bandwitdh possible for a single VM, which is now load-shared per flow instead stically mapped to one fastpath interface of an edge transport node.</p>
 <p>Since this feature is very easy to implement and will improve the failover behavior by optiomizing the BFD sessions and load sharing mechanism on the edge nodes, I would highly recommend to implement those two features.
 Sure the features are quite new and there might be some bugs, but I did not find any unexpected behavior so far. Anyways it would always be the best to test new features in dev before implementation in production.</p>
+<h2 id="further-resources">Further resources</h2>
+<p>If you are interested in a more detailed perfomance tests my check out the following blog post of my esteemed colleague Daniel Krieger. He is comparing the performance with the TEP group feature disabled and enabled and how it influences the overall North-South throughput under real world conditions.</p>
+<ul>
+<li><a href="https://sdn-warrior.org/posts/nsx-tep-groups/">More performance trough NSX Edge TEP groups?</a></li>
+</ul>
+<p>Further it is always worth to check the official doctumentation for Multi-TEP HA.</p>
+<ul>
+<li><a href="https://techdocs.broadcom.com/us/en/vmware-cis/nsx/vmware-nsx/4-2/administration-guide/host-switches/multi-tep-high-availability.html">VMware NSX Administration Guide: Multi-TEP High Availability</a></li>
+</ul>
 ]]></content>
 		</item>
 		
