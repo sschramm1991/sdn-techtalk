@@ -7,8 +7,15 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Steven Schramm</copyright>
-    <lastBuildDate>Thu, 02 Jan 2025 12:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Sat, 11 Jan 2025 03:35:00 +0100</lastBuildDate>
     <atom:link href="https://sdn-techtalk.com/tags/high-availability/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AVI NSX Cloud - Is it possible to preserve the client IP for traffic forwared by a One-Arm LoadBalancer?</title>
+      <link>https://sdn-techtalk.com/posts/preserve-clientip/</link>
+      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/posts/preserve-clientip/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;LoadBalancing is a crucial feature to increase the availability and reduce the time to complete a failover for IT services. In the first moment it seems to be not to complex. You have multiple instances of your service and you forward the traffic to both of those instances to share the load.&#xA;But there a dozens of different applications and services with totally different requirements. Some of those applications are very simple and are dependent to local sessions or states inside a database. Other applications are stateless or the state is synced between the different instances.&#xA;Based on those requirements the following LoadBalancing features are a subset of the important features to understand.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability</title>
       <link>https://sdn-techtalk.com/posts/multitep-ha/</link>
