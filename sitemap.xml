@@ -2,6 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://sdn-techtalk.com/tags/advanced-loadbalancer/</loc>
+    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/avi/</loc>
+    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
+  </url><url>
     <loc>https://sdn-techtalk.com/posts/preserve-clientip/</loc>
     <lastmod>2025-01-11T03:35:00+01:00</lastmod>
   </url><url>
@@ -9,6 +15,9 @@
     <lastmod>2025-01-11T03:35:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/homelab/</loc>
+    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/loadbalancer/</loc>
     <lastmod>2025-01-11T03:35:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/loadsharing/</loc>
@@ -21,6 +30,9 @@
     <lastmod>2025-01-11T03:35:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/nsx/</loc>
+    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/nsx-alb/</loc>
     <lastmod>2025-01-11T03:35:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/posts/</loc>

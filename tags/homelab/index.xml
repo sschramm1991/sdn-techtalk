@@ -10,7 +10,7 @@
     <lastBuildDate>Sat, 11 Jan 2025 03:35:00 +0100</lastBuildDate>
     <atom:link href="https://sdn-techtalk.com/tags/homelab/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>AVI NSX Cloud - Is it possible to preserve the client IP for traffic forwared by a One-Arm LoadBalancer?</title>
+      <title>AVI NSX Cloud - Is it possible to preserve the client IP for traffic forwarded by a One-Arm LoadBalancer?</title>
       <link>https://sdn-techtalk.com/posts/preserve-clientip/</link>
       <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/posts/preserve-clientip/</guid>

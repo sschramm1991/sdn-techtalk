@@ -10,6 +10,20 @@
     <lastBuildDate>Sat, 11 Jan 2025 03:35:00 +0100</lastBuildDate>
     <atom:link href="https://sdn-techtalk.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Advanced LoadBalancer</title>
+      <link>https://sdn-techtalk.com/tags/advanced-loadbalancer/</link>
+      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/advanced-loadbalancer/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AVI</title>
+      <link>https://sdn-techtalk.com/tags/avi/</link>
+      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/avi/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>High Availability</title>
       <link>https://sdn-techtalk.com/tags/high-availability/</link>
       <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
@@ -21,6 +35,13 @@
       <link>https://sdn-techtalk.com/tags/homelab/</link>
       <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/homelab/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>LoadBalancer</title>
+      <link>https://sdn-techtalk.com/tags/loadbalancer/</link>
+      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/loadbalancer/</guid>
       <description></description>
     </item>
     <item>
@@ -52,31 +73,10 @@
       <description></description>
     </item>
     <item>
-      <title>Vmware</title>
-      <link>https://sdn-techtalk.com/tags/vmware/</link>
+      <title>NSX ALB</title>
+      <link>https://sdn-techtalk.com/tags/nsx-alb/</link>
       <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/vmware/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Antrea</title>
-      <link>https://sdn-techtalk.com/tags/antrea/</link>
-      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/antrea/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Esxi</title>
-      <link>https://sdn-techtalk.com/tags/esxi/</link>
-      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/esxi/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Tanzu</title>
-      <link>https://sdn-techtalk.com/tags/tanzu/</link>
-      <pubDate>Sat, 21 Dec 2024 19:54:18 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/tanzu/</guid>
+      <guid>https://sdn-techtalk.com/tags/nsx-alb/</guid>
       <description></description>
     </item>
   </channel>
