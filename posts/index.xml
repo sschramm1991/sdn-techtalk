@@ -126,7 +126,7 @@ This enforcment is done by the service insertion framework of NSX and takes care
 </span></span><span class="line"><span class="cl">| tenant_ref                     | admin                                               |
 </span></span><span class="line"><span class="cl">| cloud_ref                      | nsx.lab.home                                        |
 </span></span><span class="line"><span class="cl">+--------------------------------+-----------------------------------------------------+
-</span></span></code></pre></div><p>To execute the configuratio you eed to switch to the config context of the network service by using the following command.</p>
+</span></span></code></pre></div><p>To execute the configuration, you need to switch to the config context of the network service by using the following command.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">configure networkservice &lt;somename&gt;
 </span></span></code></pre></div><p>There you can configure the desired configuration parameters.</p>
 <p>After the network service is created you can proceed configure the LoadBalancing Service to enable the preserve client Ip feature.
