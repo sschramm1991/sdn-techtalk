@@ -82,7 +82,7 @@ This enforcment is done by the service insertion framework of NSX and takes care
 </ul>
 <p>The requirements are also visible under the official documentation <a href="https://techdocs.broadcom.com/us/en/vmware-security-load-balancing/avi-load-balancer/avi-load-balancer/30-2/vmware-avi-load-balancer-installation-guide/installing-nsx-alb-in-vmware-nsx-t-environments/preserve-client-ip-for-nsx-t-overlay/pre-requisites-to-configure-preserve-client-ip-for-nsx-t-overlay.html">&ldquo;Pre-Requisites to Configure Preserve Client IP for NSX-T Overlay&rdquo;</a></p>
 <h2 id="configuring-preserve-client-ip">Configuring Preserve Client IP</h2>
-<p>To enable the service nsertion, you need to gather the free IPs of the NSX ALB data segmenet first. Those IPs should not be used in any static IP or DHCP pool. The following command can be used to discover the DHCP range used for this segment</p>
+<p>To enable the service insertion, you need to gather the free IPs of the NSX ALB data segmenet first. Those IPs should not be used in any static IP or DHCP pool. The following command can be used to discover the DHCP range used for this segment</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">[admin:10-0-1-18]: &gt; show nsxt segment seg-preserveclientip-sedata
 </span></span><span class="line"><span class="cl">+--------------------+---------------------------------------------+
 </span></span><span class="line"><span class="cl">| Field              | Value                                       |
@@ -156,7 +156,7 @@ The following screenshot shows a example configuration of a well configured pool
 </span></span><span class="line"><span class="cl">Connection count: 1
 </span></span><span class="line"><span class="cl">192.168.178.26:59870  -&gt; 10.100.11.10:22  dir in protocol tcp state ESTABLISHED:ESTABLISHED f-8168 n-0
 </span></span></code></pre></div><h2 id="troubleshooting">Troubleshooting</h2>
-<p>Under normal circumstances the configuration shuld work, if all of the requirements are fulfilled, but at some point you might have the situation it will not work. In such a situation it is important to understand how the specific setup can be analyzed to check, if the service insertion is working or not.</p>
+<p>Under normal circumstances the configuration should work, if all of the requirements are fulfilled, but at some point you might have the situation it will not work. In such a situation it is important to understand how the specific setup can be analyzed to check, if the service insertion is working or not.</p>
 <p>I spent some time to find how to get some insights regarding the packet hits or where a packet capture would be helpful. So far, I just found the following command to see the packet hits for the configured service insertion.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">nsxe01&gt; get service-insertion
 </span></span><span class="line"><span class="cl">Sat Jan 11 2025 UTC 02:14:11.958
