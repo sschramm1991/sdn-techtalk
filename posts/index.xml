@@ -175,6 +175,216 @@ In my example I configured the LoadBalancing service for SSH and the command <co
 		</item>
 		
 		<item>
+			<title>Is it possible to use the NSX bridge within NSX Federation to extend a network for a single global segment to a VLAN in multiple locations?</title>
+			<link>https://sdn-techtalk.com/posts/nsxbridge-federation/</link>
+			<pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
+			
+			<guid>https://sdn-techtalk.com/posts/nsxbridge-federation/</guid>
+			<description><![CDATA[%!s(<nil>)]]></description>
+			<content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>NSX Federation is a multi site solution for NSX available since NSX 3.0. After Federation was released, the feature set was very limited and many features like VRF and NSX bridge were not supported with Federration.</p>
+<p>Overview of some enhancements with NSX 4.x:</p>
+<ul>
+<li>Support of Physical Servers in Federated Environments (4.0.0.1)</li>
+<li>Support of DFW Exclusion List (4.0.1.1)</li>
+<li>DFW Time-based rules (4.0.1.1)</li>
+<li>Overall Enable/Disable of Location DFW (4.0.1.1)</li>
+<li>L2 Bridge (4.1.0.0)</li>
+<li>Higher latency allowed between locations: Increased from 150 msec to 500 msec (4.1.0.0)</li>
+<li>VRF Lite feature can now be used with global T0 routers as parent T0 (4.2.1)</li>
+</ul>
+<p>In this article we will focus on the feature for NSX Bridge and validate if it is possible to stretch the same layer2 network simultaneously in both locations.</p>
+<p>This article requires a basic understanding of NSX and the difference between a VLAN and an Overlay network as well as a understanding of NSX Federation.</p>
+<h2 id="what-is-a-nsx-bridge">What is a NSX Bridge?</h2>
+<p>A bridge will be used to connect dedicated layer2 network to one single layer2 network. I has the ability to connect a VLAN backed and overlay backed network together as well as two dedicated overlay networks between NSX-V and NSX-T.
+Why should we connect two dedicated layer2 networks to a single broadcast domain?
+The most common use case is for migratiosn, where you have the requirement to migrate VMs between different technologies or platforms. For example NSX-V to NSX-T migrations or the migration of VMs from legacy VLAN backed networks to new overlay backed networks.
+As soon as you have a combined broadcast domain between, it is very wasy to migrate the workload VM per VM. Baed on this procedure you have the following advantages.</p>
+<ul>
+<li>Gateway is available for VMs already migrated and also for the VMs not migrated yet</li>
+<li>Gateway can be changed after all workload is migrated</li>
+<li>Migrated and not migrated VMs are still able to communicate between without the need of IP renumbering</li>
+</ul>
+<p>A second use case is, if you want to implement NSX including all overlay and routing capabilities, but you still have some physical servers in the same layer2 network.
+The VMs can be migrated and added to the overlay network, but for the physical servers this might be ether very complex or not possible.
+The second use case is supported as well as the first use case, but you need to keep ind mind that the use f NSX bridge does also have some disadvantages.
+The most important disadvantage is that the physical server will get dependent of the virtual environment. Not only from availability point of view, but also based on the available throughput.
+The NSX brdige will be implemented over the NSX edge nodes and is therfore dependent on the sizing of the specific edge node. Most of the customers are using VM type edges and the throughput is dependent on the used CPU around the following values.</p>
+<ul>
+<li>Small Edge VM (2 vCPUs and 4 GiB Memory): &lt; 2 Gbps</li>
+<li>Medium Edge VM (4 vCPUs and 8 GiB Memory): 2 Gbps</li>
+<li>Large Edge VM (8 vCPUs and 32 GiB Memory): 2-10 Gbps</li>
+<li>Extra Large Edge VM (16 vCPUs and 64 GiB Memory): &gt; 10 Gbps (maximum I saw is around 20 Gbps)</li>
+<li>Bare metal edges: much higher throughput as mentioned in the VMware blog <a href="https://blogs.vmware.com/networkvirtualization/2023/09/vmware-nsx-bare-metal-edge-performance.html/">&ldquo;VMware NSX Bare Metal Edge Performance&rdquo;</a></li>
+</ul>
+<p>Based on the expected load created by the physical server you should decide, if it is the right decision of using the NSX bridge as long term solution.
+As an alrenative you can also validate if a service interface connected to a vlan backed segmnet is a better choise. This xould be the case if you do want to use a T1 router as an gateway, but the physical server is just used within the same layer2 network and will not create load over the T1 router.</p>
+<p>There are still more options to discuss, but those will not be covered in this article.</p>
+<h2 id="overview-of-the-lab-environment">Overview of the Lab environment</h2>
+<p>The lab environment is based on two VCF instances with a single availability zone per instance. In addition NSX Federation is implemented to have multisite network setup with a single point of glass for the security groups and firewall rules.
+The following list gives an overview of the componets available in each site.</p>
+<ul>
+<li>SDDC Manager 5.2.0</li>
+<li>NSX Manager: 4.2.0.0</li>
+<li>ESXi: 8u3</li>
+<li>vCenter: 8u3</li>
+<li>Number of Hosts: 4 per site</li>
+<li>Number of local NSX Managers: 1 per site</li>
+<li>Number of Gloabal NSX Managers: 1</li>
+<li>NSX Segments (overlay backed):
+<ul>
+<li>seg-global-test: 172.16.0.0/24</li>
+<li>seg-global-test2: 172.16.1.0/24</li>
+</ul>
+</li>
+<li>Distributed port groups (VLAN backed)
+<ul>
+<li>bridge-vlan29 (Site-A): 172.16.0.0/24</li>
+<li>bridge-vlan30 (Site-B): 172.16.0.0/24</li>
+<li>bridge-trunk (Site-A and Site-B): Used as a trunk to be connected to edge nodes to forward the VLANs that should be bridged</li>
+</ul>
+</li>
+</ul>
+<p>In addition the following table shows an overview of the VMs used for the tests.</p>
+<table>
+  <thead>
+      <tr>
+          <th>VM Name</th>
+          <th>Location</th>
+          <th>Network</th>
+          <th>IP</th>
+          <th>MAC</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>a-lpine1</td>
+          <td>Site-A</td>
+          <td>seg-global-test</td>
+          <td>172.16.0.10</td>
+          <td>00:50:56:af:1b:7a</td>
+      </tr>
+      <tr>
+          <td>a-lpine2</td>
+          <td>Site-A</td>
+          <td>seg-global-test2</td>
+          <td>172.16.1.10</td>
+          <td>00:50:56:af:98:87</td>
+      </tr>
+      <tr>
+          <td>a-alpine3</td>
+          <td>Site-A</td>
+          <td>bridge-vlan29</td>
+          <td>172.16.0.11</td>
+          <td>00:50:56:af:c6:c4</td>
+      </tr>
+      <tr>
+          <td>b-lpine1</td>
+          <td>Site-B</td>
+          <td>seg-global-test</td>
+          <td>172.16.0.100</td>
+          <td>00:50:56:8e:1f:35</td>
+      </tr>
+      <tr>
+          <td>b-lpine2</td>
+          <td>Site-B</td>
+          <td>seg-global-test2</td>
+          <td>172.16.1.100</td>
+          <td>00:50:56:8e:59:22</td>
+      </tr>
+      <tr>
+          <td>b-alpine3</td>
+          <td>Site-B</td>
+          <td>bridge-vlan30</td>
+          <td>172.16.0.101</td>
+          <td>00:50:56:8e:ff:cf</td>
+      </tr>
+  </tbody>
+</table>
+<p>To give you an better overview of the planned setup, I created the following drawing. This drawing shows two site with a bridge configured on each site and a connection between the sites trhough Federation by using the Remote Tunnel Endpoint (RTEP).</p>
+
+    <aside class="admonition warning">
+        <div class="admonition-title">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+   </svg></div><b>MTU Requirement Remote Tunnel Endpoint</b>
+        </div>
+        <div class="admonition-content">The RTEP does not require a increase MTU and also supports the MTU configured to a value of 1500 bytes or below, since there is no DFbit set in the protocol.
+This is important, since the RTEP connection between the sites might be established over an WAN which does not support a MTU higher 1500. If you are using a IPsec VPN to protect your WAN communication, it is even worse and you may need to limit your MTU to a value below 1500 bytes.
+I would still recommend to use a higher MTU, if possible. This would increase the overall performance since the ratio of overhead compared to the sent payload is much better with a higher MTU like 9000 bytes.</div>
+    </aside>
+<p><a href="bridge-example.png"><img src="bridge-example.png" alt="bridge-example"></a></p>
+<h2 id="creating-the-nsx-bridge">Creating the NSX bridge</h2>
+<p>For the bridges it is required to use a NSX segment from type VLAN or a vSphere distributed portgroup, which is used as a trunk and will be connected to the edge nodes later on.
+I decided to use a vSphere port group, since the setup is slighly easier and there is no advatage from using the NSX segment from type VLAN for this use case.</p>
+<p>As a requirement the security settings of the trunk port group needs to be configured as shown in the picture below.</p>
+<p><a href="trunk-portgroup-sec-settings.png"><img src="trunk-portgroup-sec-settings.png" alt="trunk-portgroup-sec-settings"></a></p>
+<p>It is also possible to the promiscous mode and forged transmits and keep Mac learning disabled, but this created some packet loss in my tests. Using the promiscous mode does have the disadvantage that the a connected VM will receive all the frames sent within the portgroup, what is unwanted from security and performance point of view.
+A good blog article which explains this behavior is <a href="https://sdn-warrior.org/posts/mac-learning/">&ldquo;MAC Learning is your friend&rdquo;</a>.</p>
+<p>The trunk can be either configured for all VLANs with the range &ldquo;0-4094&rdquo; or you can add VLAN per VLAN based on each required bridge in future. I started with a single VLAN with VLAN type set to &ldquo;VLAN Trunking&rdquo;.</p>
+<p>For Site-A I am using VLAN 29 and for Site-B VLAN 30. You could also have the same VLAN on both sites, but in my nested lab I was forced to use dedicated VLANs. Otherwhise there were already some connection over the VLANs IDs, since all of the nested compeonents are running on a single VDS on a single physical host.</p>
+<p>Further it is recommended to create a dedicated transport zone from type VLAN. This should be done, to limit the visibility of the networks that will be initialized for the bridges.</p>
+<p>After the trunk and the transport zone are created it is time to add it as an additional fp-eth interface on the edge nodes which should be used as bridge nodes. I decided to use a dedicated fp-eth to have the communication isolated on a second NVDS.</p>
+
+    <aside class="admonition warning">
+        <div class="admonition-title">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+   </svg></div><b>Recommendation for production environments</b>
+        </div>
+        <div class="admonition-content">In a production use case I would alo prefer to use a dedicated edge node just for the bridging use case, to have the traffic fully seperated from the routed nsx overlay communication over the T1 and T0 routers.
+If you do not have sufficient resources for a dedicated edge cluster, you can use the same edge cluster as for the T1 and T1 routers, but I would highly recommend a dedicated edge cluster.</div>
+    </aside>
+<p>The adjustment of the edges have to be done in the location managers (<code>System -&gt; Fabric -&gt; Nodes -&gt; Edge Transport Nodes</code>) for all edges where the bridges should be used.
+Under the mentioned menu just select the desired edge node and hit the edit button, afterwards you should select <code>Add Switch</code>.
+The screenshot below shows the required configuration for the dedicated NVDS including the dedicated transport zone and the DVPG (Distributed vSphere Portgroup) <code>bridge-trunk</code>.</p>
+<p><a href="edge-settings.png"><img src="edge-settings.png" alt="edge-settings"></a></p>
+<p>These settings should be done in both locations!</p>
+<p>After the preperations are done, we can jump back to the global NSX manager and start the configuration of the bridge profiles under <code>Networking -&gt; Segments -&gt; Profiles -&gt; Edge Bridge Profiles</code>.
+By using the button <code>Add Edge Bridge Profile</code> you can create the edge bridge profile for the specific locations.
+Here you will select for which location the specific profile should be created and based on this you can select the desired primray and backup edge node, as well as the edge cluster and the failover mode.
+If you select <code>Preemptive</code> the primary edge node will be recovered as primary edge node, after an outage and as soon as the failed edge node is available again. If you select <code>Non Preemptive</code> the backup edge node will be kept primary after the primary edge node failed for any reason.
+The HA mode is always Active/ Standby and cannot be Active/ Active.</p>
+<p>The following screenshot shows the example configuration for two locations.</p>
+<p><a href="bridge-profiles.png"><img src="bridge-profiles.png" alt="bridge-profiles"></a></p>
+<p>As last step the overlay segement which should be connected with the VLANs on both locations needs to be configured with the bridge profiles per location.
+This configuration needs to be done under the global NSX manager as well. Therfore switch to the segments under <code>Networking -&gt; Segments</code> and select the desired segment.
+In my case this is the segment <code>seg-global-test</code> and the configuration for the bridges is under the section <code>Additional Settings</code>.
+Here you need to select the specific site and define the previously created edge bridge profiles as shown in the screenshot below.
+Important is to configure the VLAN which is applicable for the VLAN backed network on the specific site.</p>
+<p><a href="bridge-assignment.png"><img src="bridge-assignment.png" alt="bridge-assignment"></a></p>
+
+    <aside class="admonition warning">
+        <div class="admonition-title">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+   </svg></div><b>Loop prevention</b>
+        </div>
+        <div class="admonition-content">To prevent your network from a loop you should take care that the VLAN is not also stretched between the sites by any other solution in the underlay or anywhere else.
+You should also not combine HCX stretched networks with a NSX bridge, since this might also end in a unexpected loop.</div>
+    </aside>
+<h2 id="testing-the-comunication">Testing the comunication</h2>
+<p>The first ICMP test you can follow in the screenshot below is from VM <code>a-alpine3</code> to VM <code>a-alpine1</code> and includes the arp table as well as the local ip configuration to show you the mac adresses mentioned in the VM overview table.</p>
+<p><a href="icmp-1.png"><img src="icmp-1.png" alt="icmp-1"></a></p>
+<p>The second and third ICMP tests are showing the communication from VM <code>a-alpine3</code> to VM <code>b-alpine1</code> and VM <code>b-alpine3</code></p>
+<p><a href="icmp-2.png"><img src="icmp-2.png" alt="icmp-2"></a></p>
+<p>As show in the screenshot below a communication from VM <code>a-alpine3</code> to VM <code>b-alpine2</code>connected to a dedicated segment routed over the T1 router is also possible. This proves that the VM connected to the VLAN backed network is able to use the T1 router over the bridge.
+You can see that by inspecting the added arp table, where the defaut MAC of a NSX T1 router gateway IP is highlighted in red, as well as the default route configutred and shown below.</p>
+<p><a href="icmp-3.png"><img src="icmp-3.png" alt="icmp-3"></a></p>
+<p>In the last test I show you the packet loss you might recognize by setting <code>promiscous mode and forged transmits</code> to <code>Accept</code> instead of enabling <code>MAC Learning</code> and setting <code>forged transmits</code> to <code>Accept</code>.</p>
+]]></content>
+		</item>
+		
+		<item>
 			<title>Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability</title>
 			<link>https://sdn-techtalk.com/posts/multitep-ha/</link>
 			<pubDate>Thu, 02 Jan 2025 12:00:00 +0100</pubDate>

@@ -52,6 +52,13 @@
       <description></description>
     </item>
     <item>
+      <title>Multi Site</title>
+      <link>https://sdn-techtalk.com/tags/multi-site/</link>
+      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/multi-site/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Nested Lab</title>
       <link>https://sdn-techtalk.com/tags/nested-lab/</link>
       <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
@@ -70,13 +77,6 @@
       <link>https://sdn-techtalk.com/tags/nsx/</link>
       <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/nsx/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>NSX ALB</title>
-      <link>https://sdn-techtalk.com/tags/nsx-alb/</link>
-      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/nsx-alb/</guid>
       <description></description>
     </item>
   </channel>
