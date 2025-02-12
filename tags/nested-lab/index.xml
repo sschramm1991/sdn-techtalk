@@ -7,21 +7,21 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Steven Schramm</copyright>
-    <lastBuildDate>Sat, 11 Jan 2025 03:35:00 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 12 Feb 2025 12:20:00 +0100</lastBuildDate>
     <atom:link href="https://sdn-techtalk.com/tags/nested-lab/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Is it possible to use the NSX bridge within NSX Federation to extend a network for a single global segment to a VLAN in multiple locations?</title>
+      <link>https://sdn-techtalk.com/posts/nsxbridge-federation/</link>
+      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/posts/nsxbridge-federation/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;NSX Federation is a multi site solution for NSX available since NSX 3.0. After Federation was released, the feature set was very limited and many features like VRF and NSX bridge were not supported with Federration.&lt;/p&gt;&#xA;&lt;p&gt;Overview of some enhancements with NSX 4.x:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Support of Physical Servers in Federated Environments (4.0.0.1)&lt;/li&gt;&#xA;&lt;li&gt;Support of DFW Exclusion List (4.0.1.1)&lt;/li&gt;&#xA;&lt;li&gt;DFW Time-based rules (4.0.1.1)&lt;/li&gt;&#xA;&lt;li&gt;Overall Enable/Disable of Location DFW (4.0.1.1)&lt;/li&gt;&#xA;&lt;li&gt;L2 Bridge (4.1.0.0)&lt;/li&gt;&#xA;&lt;li&gt;Higher latency allowed between locations: Increased from 150 msec to 500 msec (4.1.0.0)&lt;/li&gt;&#xA;&lt;li&gt;VRF Lite feature can now be used with global T0 routers as parent T0 (4.2.1)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;In this article we will focus on the feature for NSX Bridge and validate if it is possible to stretch the same layer2 network simultaneously in both locations.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>AVI NSX Cloud - Is it possible to preserve the client IP for traffic forwarded by a One-Arm LoadBalancer?</title>
       <link>https://sdn-techtalk.com/posts/preserve-clientip/</link>
       <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/posts/preserve-clientip/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;LoadBalancing is a crucial feature to increase the availability and reduce the time to complete a failover for IT services. In the first moment it seems to be not to complex. You have multiple instances of your service and you forward the traffic to both of those instances to share the load.&#xA;But there a dozens of different applications and services with totally different requirements. Some of those applications are very simple and are dependent to local sessions or states inside a database. Other applications are stateless or the state is synced between the different instances.&#xA;Based on those requirements the following LoadBalancing features are a subset of the important features to understand.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Is it possible to use the NSX bridge within NSX Federation to extend a network for a single global segment to a VLAN in multiple locations?</title>
-      <link>https://sdn-techtalk.com/posts/nsxbridge-federation/</link>
-      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/posts/nsxbridge-federation/</guid>
-      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;NSX Federation is a multi site solution for NSX available since NSX 3.0. After Federation was released, the feature set was very limited and many features like VRF and NSX bridge were not supported with Federration.&lt;/p&gt;&#xA;&lt;p&gt;Overview of some enhancements with NSX 4.x:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Support of Physical Servers in Federated Environments (4.0.0.1)&lt;/li&gt;&#xA;&lt;li&gt;Support of DFW Exclusion List (4.0.1.1)&lt;/li&gt;&#xA;&lt;li&gt;DFW Time-based rules (4.0.1.1)&lt;/li&gt;&#xA;&lt;li&gt;Overall Enable/Disable of Location DFW (4.0.1.1)&lt;/li&gt;&#xA;&lt;li&gt;L2 Bridge (4.1.0.0)&lt;/li&gt;&#xA;&lt;li&gt;Higher latency allowed between locations: Increased from 150 msec to 500 msec (4.1.0.0)&lt;/li&gt;&#xA;&lt;li&gt;VRF Lite feature can now be used with global T0 routers as parent T0 (4.2.1)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;In this article we will focus on the feature for NSX Bridge and validate if it is possible to stretch the same layer2 network simultaneously in both locations.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Improving NSX Datacenter TEP performance and availability - Multi-TEP and TEP Group High Availability</title>

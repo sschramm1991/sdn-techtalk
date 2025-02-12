@@ -7,8 +7,64 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Steven Schramm</copyright>
-    <lastBuildDate>Sat, 11 Jan 2025 03:35:00 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 12 Feb 2025 12:20:00 +0100</lastBuildDate>
     <atom:link href="https://sdn-techtalk.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Multi Site</title>
+      <link>https://sdn-techtalk.com/tags/multi-site/</link>
+      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/multi-site/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Nested Lab</title>
+      <link>https://sdn-techtalk.com/tags/nested-lab/</link>
+      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/nested-lab/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Network</title>
+      <link>https://sdn-techtalk.com/tags/network/</link>
+      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/network/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Nsx</title>
+      <link>https://sdn-techtalk.com/tags/nsx/</link>
+      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/nsx/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>NSX Bridge</title>
+      <link>https://sdn-techtalk.com/tags/nsx-bridge/</link>
+      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/nsx-bridge/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>NSX Federation</title>
+      <link>https://sdn-techtalk.com/tags/nsx-federation/</link>
+      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/nsx-federation/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>VCF</title>
+      <link>https://sdn-techtalk.com/tags/vcf/</link>
+      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/vcf/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Vmware</title>
+      <link>https://sdn-techtalk.com/tags/vmware/</link>
+      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/vmware/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Advanced LoadBalancer</title>
       <link>https://sdn-techtalk.com/tags/advanced-loadbalancer/</link>
@@ -21,62 +77,6 @@
       <link>https://sdn-techtalk.com/tags/avi/</link>
       <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/avi/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>High Availability</title>
-      <link>https://sdn-techtalk.com/tags/high-availability/</link>
-      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/high-availability/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Homelab</title>
-      <link>https://sdn-techtalk.com/tags/homelab/</link>
-      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/homelab/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>LoadBalancer</title>
-      <link>https://sdn-techtalk.com/tags/loadbalancer/</link>
-      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/loadbalancer/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Loadsharing</title>
-      <link>https://sdn-techtalk.com/tags/loadsharing/</link>
-      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/loadsharing/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Multi Site</title>
-      <link>https://sdn-techtalk.com/tags/multi-site/</link>
-      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/multi-site/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Nested Lab</title>
-      <link>https://sdn-techtalk.com/tags/nested-lab/</link>
-      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/nested-lab/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Network</title>
-      <link>https://sdn-techtalk.com/tags/network/</link>
-      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/network/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Nsx</title>
-      <link>https://sdn-techtalk.com/tags/nsx/</link>
-      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/nsx/</guid>
       <description></description>
     </item>
   </channel>

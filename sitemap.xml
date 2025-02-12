@@ -2,6 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://sdn-techtalk.com/posts/nsxbridge-federation/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/multi-site/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/nested-lab/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/network/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/nsx/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/nsx-bridge/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/nsx-federation/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/posts/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/vcf/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/vmware/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
     <loc>https://sdn-techtalk.com/tags/advanced-loadbalancer/</loc>
     <lastmod>2025-01-11T03:35:00+01:00</lastmod>
   </url><url>
@@ -17,49 +53,13 @@
     <loc>https://sdn-techtalk.com/tags/homelab/</loc>
     <lastmod>2025-01-11T03:35:00+01:00</lastmod>
   </url><url>
-    <loc>https://sdn-techtalk.com/posts/nsxbridge-federation/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
     <loc>https://sdn-techtalk.com/tags/loadbalancer/</loc>
     <lastmod>2025-01-11T03:35:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/loadsharing/</loc>
     <lastmod>2025-01-11T03:35:00+01:00</lastmod>
   </url><url>
-    <loc>https://sdn-techtalk.com/tags/multi-site/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/tags/nested-lab/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/tags/network/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/tags/nsx/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
     <loc>https://sdn-techtalk.com/tags/nsx-alb/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/tags/nsx-bridge/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/tags/nsx-federation/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/posts/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/tags/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/tags/vcf/</loc>
-    <lastmod>2025-01-11T03:35:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/tags/vmware/</loc>
     <lastmod>2025-01-11T03:35:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/posts/multitep-ha/</loc>
