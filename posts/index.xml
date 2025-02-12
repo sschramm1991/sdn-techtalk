@@ -215,6 +215,9 @@ You should also not combine HCX stretched networks with a NSX bridge, since this
 <p>As shown in the screenshot below a communication from VM <code>a-alpine3</code> to VM <code>b-alpine2</code>connected to a dedicated segment routed over the T1 router is also possible. This proves that the VM connected to the VLAN backed network is able to use the T1 router through the bridge.
 You can see that by inspecting the added ARP table, where the default MAC of the NSX T1 router gateway IP is highlighted in red, as well as the default route configutred and shown below.</p>
 <p><a href="icmp-3.png"><img src="icmp-3.png" alt="icmp-3"></a></p>
+<p>In the last test I show you the packet loss you might recognize by setting <code>promiscous mode and forged transmits</code> to <code>Accept</code> instead of enabling <code>MAC Learning</code> and setting <code>forged transmits</code> to <code>Accept</code>.
+Further you will see duplicated packets, which are also caused by setting <code>promiscous mode</code>to <code>Accept</code>.</p>
+<p><a href="icmp-4.png"><img src="icmp-4.png" alt="icmp-4"></a></p>
 <h2 id="summary">Summary</h2>
 <p>The NSX bridge feature is a great enhancement within NSX federation and adds new opportunities to fulfill different customer requirements.
 It might be a new option to stretch VLANs between two locations in case you have NSX in place, but the underlay is not capable to stretch VLANs between the available locations.
