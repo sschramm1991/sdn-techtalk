@@ -215,7 +215,6 @@ You should also not combine HCX stretched networks with a NSX bridge, since this
 <p>As show in the screenshot below a communication from VM <code>a-alpine3</code> to VM <code>b-alpine2</code>connected to a dedicated segment routed over the T1 router is also possible. This proves that the VM connected to the VLAN backed network is able to use the T1 router over the bridge.
 You can see that by inspecting the added arp table, where the defaut MAC of a NSX T1 router gateway IP is highlighted in red, as well as the default route configutred and shown below.</p>
 <p><a href="icmp-3.png"><img src="icmp-3.png" alt="icmp-3"></a></p>
-<p>In the last test I show you the packet loss you might recognize by setting <code>promiscous mode and forged transmits</code> to <code>Accept</code> instead of enabling <code>MAC Learning</code> and setting <code>forged transmits</code> to <code>Accept</code>.</p>
 ]]></content>
 		</item>
 		
