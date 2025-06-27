@@ -10,13 +10,6 @@
     <lastBuildDate>Wed, 12 Feb 2025 12:20:00 +0100</lastBuildDate>
     <atom:link href="https://sdn-techtalk.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>K8s</title>
-      <link>https://sdn-techtalk.com/tags/k8s/</link>
-      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/k8s/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>Multi Site</title>
       <link>https://sdn-techtalk.com/tags/multi-site/</link>
       <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
@@ -38,17 +31,10 @@
       <description></description>
     </item>
     <item>
-      <title>NSX</title>
+      <title>Nsx</title>
       <link>https://sdn-techtalk.com/tags/nsx/</link>
       <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/nsx/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>NSX 9</title>
-      <link>https://sdn-techtalk.com/tags/nsx-9/</link>
-      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/nsx-9/</guid>
       <description></description>
     </item>
     <item>
@@ -66,17 +52,31 @@
       <description></description>
     </item>
     <item>
-      <title>Tanzu</title>
-      <link>https://sdn-techtalk.com/tags/tanzu/</link>
-      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/tanzu/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>VCF</title>
       <link>https://sdn-techtalk.com/tags/vcf/</link>
       <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/vcf/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Vmware</title>
+      <link>https://sdn-techtalk.com/tags/vmware/</link>
+      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/vmware/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Advanced LoadBalancer</title>
+      <link>https://sdn-techtalk.com/tags/advanced-loadbalancer/</link>
+      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/advanced-loadbalancer/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AVI</title>
+      <link>https://sdn-techtalk.com/tags/avi/</link>
+      <pubDate>Sat, 11 Jan 2025 03:35:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/avi/</guid>
       <description></description>
     </item>
   </channel>

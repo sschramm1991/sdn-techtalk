@@ -2,10 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://sdn-techtalk.com/posts/nsxbridge-federation/</loc>
-    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+    <loc>https://sdn-techtalk.com/posts/</loc>
+    <lastmod>2025-06-28T00:40:00+01:00</lastmod>
   </url><url>
-    <loc>https://sdn-techtalk.com/tags/k8s/</loc>
+    <loc>https://sdn-techtalk.com/</loc>
+    <lastmod>2025-06-28T00:40:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/posts/nsxbridge-federation/</loc>
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/multi-site/</loc>
@@ -20,34 +23,16 @@
     <loc>https://sdn-techtalk.com/tags/nsx/</loc>
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
-    <loc>https://sdn-techtalk.com/tags/nsx-9/</loc>
-    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
-  </url><url>
     <loc>https://sdn-techtalk.com/tags/nsx-bridge/</loc>
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/nsx-federation/</loc>
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
-    <loc>https://sdn-techtalk.com/posts/</loc>
-    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/</loc>
-    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
-  </url><url>
     <loc>https://sdn-techtalk.com/tags/</loc>
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
-    <loc>https://sdn-techtalk.com/tags/tanzu/</loc>
-    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
-  </url><url>
     <loc>https://sdn-techtalk.com/tags/vcf/</loc>
-    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/posts/vks-vpc/</loc>
-    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/tags/vks/</loc>
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/vmware/</loc>
@@ -87,6 +72,9 @@
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/esxi/</loc>
+    <lastmod>2024-12-21T19:54:18+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/tanzu/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/about/</loc>
