@@ -447,7 +447,7 @@ The output is omitted and just shows the affectd Load Balancer.</p>
 <p>The deployment is very simple and the requirements are just slightly changed compared to the integration without VPCs.
 From my point of view this type of integration is a very important milestone in the journey of creating a multi tenant platform which supports dynmaic K8s workloads, but is still secure and able to isolate the different K8s workloads.
 A isolation was already possible before the integration between VKS and VPCs, but much more complex and based on specific vDefend rules.</p>
-<p>I did not cover all the posibilities with VKS ad VPCs in this blog article, since vDefend is still something that could be used within the VPCs, as well as the Antrea and AVI integration.
+<p>I did not cover all the posibilities with VKS and VPCs in this blog article, since vDefend is still something that could be used within the VPCs, as well as the Antrea and AVI integration.
 Those topics will be discussed in future blog articles.</p>
 ]]></content>
 		</item>
