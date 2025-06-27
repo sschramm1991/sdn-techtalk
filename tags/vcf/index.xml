@@ -16,5 +16,12 @@
       <guid>https://sdn-techtalk.com/posts/nsxbridge-federation/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;NSX Federation is a multi site solution for NSX available since NSX 3.0. After Federation was released, the feature set was very limited and many features like VRF and NSX bridge were not supported with Federation.&lt;/p&gt;&#xA;&lt;p&gt;Overview of some enhancements with NSX 4.x:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Support of Physical Servers in Federated Environments (4.0.0.1)&lt;/li&gt;&#xA;&lt;li&gt;Support of DFW Exclusion List (4.0.1.1)&lt;/li&gt;&#xA;&lt;li&gt;DFW Time-based rules (4.0.1.1)&lt;/li&gt;&#xA;&lt;li&gt;Overall Enable/Disable of Location DFW (4.0.1.1)&lt;/li&gt;&#xA;&lt;li&gt;L2 Bridge (4.1.0.0)&lt;/li&gt;&#xA;&lt;li&gt;Higher latency allowed between locations: Increased from 150 msec to 500 msec (4.1.0.0)&lt;/li&gt;&#xA;&lt;li&gt;VRF Lite feature can now be used with global T0 routers as parent T0 (4.2.1)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;In this article we will focus on the feature of &lt;code&gt;NSX bridge&lt;/code&gt; and validate if it is possible to stretch the same layer2 network simultaneously in both locations.&lt;/p&gt;</description>
     </item>
+    <item>
+      <title>VCF 9 - VKS with NSX VPCs</title>
+      <link>https://sdn-techtalk.com/posts/vks-vpc/</link>
+      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/posts/vks-vpc/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;K8s is already a crucial part in the VMware ecosystem for many years and the level of integration in other products like NSX and AVI changed a lot in the past.&#xA;That is also true for the naming like &amp;ldquo;vSphere with Tanzu&amp;rdquo;, &amp;ldquo;vSphere IaaS&amp;rdquo; and &amp;ldquo;VKS&amp;rdquo; and perhaps more changes in the future.&#xA;For this blog post we will bring some spotlight to the integration for VKS with NSX VPCs, which is from my point of view a great enhancement from tenancy point of view.&lt;/p&gt;</description>
+    </item>
   </channel>
 </rss>

@@ -5,6 +5,9 @@
     <loc>https://sdn-techtalk.com/posts/nsxbridge-federation/</loc>
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
+    <loc>https://sdn-techtalk.com/tags/k8s/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
     <loc>https://sdn-techtalk.com/tags/multi-site/</loc>
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
@@ -15,6 +18,9 @@
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/nsx/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/nsx-9/</loc>
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/nsx-bridge/</loc>
@@ -32,7 +38,16 @@
     <loc>https://sdn-techtalk.com/tags/</loc>
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
+    <loc>https://sdn-techtalk.com/tags/tanzu/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
     <loc>https://sdn-techtalk.com/tags/vcf/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/posts/vks-vpc/</loc>
+    <lastmod>2025-02-12T12:20:00+01:00</lastmod>
+  </url><url>
+    <loc>https://sdn-techtalk.com/tags/vks/</loc>
     <lastmod>2025-02-12T12:20:00+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/vmware/</loc>
@@ -72,9 +87,6 @@
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/tags/esxi/</loc>
-    <lastmod>2024-12-21T19:54:18+01:00</lastmod>
-  </url><url>
-    <loc>https://sdn-techtalk.com/tags/tanzu/</loc>
     <lastmod>2024-12-21T19:54:18+01:00</lastmod>
   </url><url>
     <loc>https://sdn-techtalk.com/about/</loc>
