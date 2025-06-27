@@ -6,8 +6,410 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<copyright>Steven Schramm</copyright>
-		<lastBuildDate>Sat, 28 Jun 2025 00:40:00 +0100</lastBuildDate>
+		<lastBuildDate>Fri, 27 Jun 2025 22:00:00 +0100</lastBuildDate>
 		<atom:link href="https://sdn-techtalk.com/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>VCF 9 - VKS with NSX VPCs</title>
+			<link>https://sdn-techtalk.com/posts/vks-vpc/</link>
+			<pubDate>Fri, 27 Jun 2025 22:00:00 +0100</pubDate>
+			
+			<guid>https://sdn-techtalk.com/posts/vks-vpc/</guid>
+			<description><![CDATA[%!s(<nil>)]]></description>
+			<content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>K8s is already a crucial part in the VMware ecosystem for many years and the level of integration in other products like NSX and AVI changed a lot in the past.
+That is also true for the naming like &ldquo;vSphere with Tanzu&rdquo;, &ldquo;vSphere IaaS&rdquo; and &ldquo;VKS&rdquo; and perhaps more changes in the future.
+For this blog post we will bring some spotlight to the integration for VKS with NSX VPCs, which is from my point of view a great enhancement from tenancy point of view.</p>
+<p>As preperation for this blog post it is highly recommended to read the previous blog articel from my esteemed colleague Daniel Kriger aka SDN-Warrior about <a href="https://sdn-warrior.org/posts/vcf9-nsx-vpc/">&ldquo;VCF 9 and VPCs as part of NSX 9&rdquo;</a>.</p>
+<h2 id="lab-environment">LAB Environment</h2>
+<ul>
+<li>VCF 9</li>
+<li>NSX 9</li>
+<li>ESX 9</li>
+<li>NSX Native Load Balancer (no AVI integration)</li>
+<li>Vyos Router</li>
+<li>PFsense</li>
+</ul>
+<p>The following drawing shows an overview of the VPCs and corresponding network connectivity used for the VKS integration iny my lab.</p>
+<p><a href="vks-vpc.png"><img src="vks-vpc.png" alt="vpc-architecure-vks"></a></p>
+<h2 id="requirements">Requirements</h2>
+<p>Most of the requirements from the past are still valid and will be listed in the following list.</p>
+<ul>
+<li>Management network for the supervisor Cluster</li>
+<li>DRS set to Fully Automated</li>
+<li>vSphere HA</li>
+<li>NSX Edges in large form factor (vm-type)</li>
+<li>Minimum 3 ESXi Hosts in the vSphere cluster</li>
+<li>Service CIDR</li>
+<li>NTP Server</li>
+<li>DNS Server</li>
+</ul>
+<p>Beside the requirements which are unchanged the following is special for the initial integration of the supervisor cluster with VPCs.</p>
+<ul>
+<li>PreDefined Project where the Supervisor should be deployed</li>
+<li>VPC Connectivity Profile</li>
+<li>External IP Block</li>
+<li>Private Transit Gateway IP Block</li>
+<li>Private VPC CIDRs</li>
+<li>T0 router should be deployed in Active/ Standby HA mode</li>
+</ul>
+
+    <aside class="admonition warning">
+        <div class="admonition-title">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+   </svg></div><b>T0 router HA mode</b>
+        </div>
+        <div class="admonition-content">The integration of VKS without VPCs does support the use of Active/ Active T0 routers, which might be important from scaling point of view.
+If you are using VPCs for the VKS integration you are need to use a Active/ Standby T0 router, since all transit gateways and VPC gateways will inherit the HA mode from the connected T0 router.
+Using a Active/ Active VPC gateway is not allowed, since NAT rules will be automatically created on the VPC gateways. The same is true for LB services, if the NSX native LoadBalancer is used instead of AVI.</div>
+    </aside>
+<p>For the creation of the vSphere namespaces, you can either create additional NSX projects or use the same project as for the supervisor cluster.
+If you want to use a dedicated NSX project, you need to create it manually including Transit Gateway, external IP block and private transit gateway IP block.
+The corresponding VPCs can be either auto-created by the vSphere namespace creation process or you can manually create some VPCs and select them while creating a new vSphere namespace.
+A VPC which is manually created can also be used for multiple vSphere Namespaces, but in most situations a vSphere namespace will be used for isolating services and a dedicated VPC would be more applicable.</p>
+<h2 id="deployment-supervisor">Deployment Supervisor</h2>
+<p>The implementaion is very simple, if the NSX projects and VPCs are already predefined, since all the required networks are already defined in the chosen VPC.</p>
+<p>As shown in the following screenshot you have now a new option while supervisor activation, which is &ldquo;VCF netwoking with VPC&rdquo;.
+For the integration of VKS with NSX projects and VPCs you have to select this option and proceed with the next step.</p>
+<p><a href="supervisor-activation-step1.png"><img src="supervisor-activation-step1.png" alt="supervisor-activation-step1"></a></p>
+<p>The second step looks familiar, if you already used VKS with vSphere 8 and you are aware of the deployment option &ldquo;vSphere Zone Deployment&rdquo;.
+For the deployment of a single cluster you have to select the option &ldquo;Cluster Deployment&rdquo; and your vSphere clusters within the used vCenter will be validated against the requirements mentioned above.
+As soo as the validation is completed you can select your compatible vSphere cluster and proceed to the next step.</p>
+<p><a href="supervisor-activation-step2.png"><img src="supervisor-activation-step2.png" alt="supervisor-activation-step2"></a></p>
+<p>In the next step you will define the Management network including IP assignment mode, predefined network for the management of the VKS supervisor nodes as well as the IP and subnet parameters.
+Also important is to choose valid NTP and DNS servers to make sure the communication between the supervisor nodes and other components like vCenter and NSX Manager is working.
+The corresponding NSX Project and VPC is dependent on the selected management network which is <code>pubseg01</code>in this example.</p>
+<p><a href="supervisor-activation-step3.png"><img src="supervisor-activation-step3.png" alt="supervisor-activation-step3"></a></p>
+<p>After definiation of the management network it is required to define the workload network parameters as shown in the screenshot below.
+This is the firs sectio of the configuration, which is really different from the past. As you can see a ingress or egress network must not be defined.
+Instead of ingress and egress networks it is required to take advantage of the external and private IP blocks of the predefined VPC. Further the service CIDR has the same function as in earlier VKS versions and wil be used for services within K8s and will not be used beyond the K8s nodes. DNS and NTP is also required in this stage of the deployment.</p>
+<p><a href="supervisor-activation-step4.png"><img src="supervisor-activation-step4.png" alt="supervisor-activation-step4"></a></p>
+<p>For the advanced settings you are able to choose the size of the supervisor control plane, which is <code>small</code> for my lab.
+Optionally you are able to select a FQDN for the API of the supervisor, which is not required for my lab.</p>
+<p><a href="supervisor-activation-step5.png"><img src="supervisor-activation-step5.png" alt="supervisor-activation-step5"></a></p>
+<p>As a result you will see a summary of the most important settings done within the last 5 steps. After final validation of those settings the deployment can be started.</p>
+<p><a href="supervisor-activation-step6.png"><img src="supervisor-activation-step6.png" alt="supervisor-activation-step6"></a></p>
+<p>As a result of the deployment the following components and nsx objects are created.</p>
+<ul>
+<li>VPC with name <code>kube-system_&lt;some id&gt;</code></li>
+<li>Subnet for supervisor control plane workload network assigned to VPC <code>kube-system_&lt;some id&gt;</code> based on the private VPC CIDR defined in the workload network definition</li>
+<li>VPC with name <code>vmware-system-supervisor-services-vpc_&lt;some id&gt;</code></li>
+<li>Supervisor control plane nodes</li>
+<li>NSX native LoadBalancer mapped to VPC <code>kube-system_&lt;some id&gt;</code> used for services like K8s API, CSI controller and some other services of VKS (running on VPC gateway)</li>
+<li>SNAT rule for egress traffic (running on VPC gateway) with a IP assigned from <code>External IP Block</code> of the corresponding NSX project.</li>
+</ul>
+<h2 id="creating-vsphere-namespaces">Creating vSphere Namespaces</h2>
+<p>A vSphere namespace can be created and assigned to a automaticly created VPC as part of the vSphere Namespace creation process or assigned to a predefined VPC.
+If the VPC is not prefedined, it will be added within the default NSX project. The predefined VPC can be part of the default NSX Project or a dedicated NSX project.</p>
+<p>The following screenshot shows the creation of a vSphere Namespace with the option <code>I would like to override the default network settings</code> unchecked.
+Based on this configuration a vSphere Namespace will be created as well as a new autocreated VPC.</p>
+<p><a href="createNS-automatedVPC.png"><img src="createNS-automatedVPC.png" alt="createNS-automatedVPC"></a></p>
+<p>The autocreated VPC starts with the name of the vSphere Namespace followed by a random ID and the following objects are created in NSX.</p>
+<ul>
+<li>VPC with name <code>ns-test01_482ea8ab-e57f-473b-a677-457ff5aa91b0</code></li>
+<li>SNAT rule for egress traffic (running on VPC gateway) with a IP assigned from <code>External IP Block</code> of the corresponding NSX project.</li>
+<li>NSX native LoadBalancer mapped to VPC <code>ns-test01_482ea8ab-e57f-473b-a677-457ff5aa91b0</code> used for services like K8s API of the K8s clusters that will be created within the vSphere Namespace</li>
+</ul>
+<p>In the next example I will show the creation of vSphere Namespace with the assignment of a manually created VPC named <code>vpc-vks-prod</code>.
+As shown in the following screenshot it is required to select the checkbox for <code>I would like to override the default network settings</code></p>
+<p><a href="createNS-test04_step2.png"><img src="createNS-test04_step2.png" alt="createNS-test04_step2"></a></p>
+<p>After hitting <code>Next</code> you will see the <code>Network Settings</code>, where <code>Consume existing VPC</code> and the desired <code>NSX Project</code> is selected.
+For some reason the desired VPC <code>vpc-vks-prod</code>is not in the list of available VPCs and cannot be selected.</p>
+<p><a href="createNS-test04_step3_vpc-vks-prod-notShown.png"><img src="createNS-test04_step3_vpc-vks-prod-notShown.png" alt="createNS-test04_step3_vpc-vks-prod-notShown"></a></p>
+<p>Why is the desired VPC not in the list? It is already pre-created!
+To discover the cause of this issue it is recommended to check the log file <code>/var/log/vmware/wcp/wcpsvc.log</code>.
+Here you will more detailed information about the reason why a VPC is listed as available VPC or not.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">2025-06-18T20:59:28.926Z debug wcp [nsxt/validator.go:79] Processing vpc vpc01
+</span></span><span class="line"><span class="cl">2025-06-18T20:59:28.926Z debug wcp [nsxt/validator.go:79] Processing vpc vpc02
+</span></span><span class="line"><span class="cl">2025-06-18T20:59:28.927Z debug wcp [nsxt/validator.go:79] Processing vpc vks-dev
+</span></span><span class="line"><span class="cl">2025-06-18T20:59:28.927Z debug wcp [nsxt/validator.go:79] Processing vpc vpc-vks-prod
+</span></span><span class="line"><span class="cl">2025-06-18T20:59:28.992Z debug wcp [projects/utils.go:76] VPC &#39;/orgs/default/projects/vks-dev/vpcs/vpc-vks-prod&#39; is not compatible: VPC /orgs/default/projects/vks-dev/vpcs/vpc-vks-prod has no compatible Load balancer providers.
+</span></span></code></pre></div><p>As mentioned in the logs above the VPC <code>vpc-vks-prod</code> is not compatible, because it has no compatible Load Balancer.
+At this point it is getting a bit tricky, since the NSX Loadbalancing service cannot be enabled for manually created VPC. From UI point of view there is just the option to enable AVU, but not the NSX native Loadbalancer. The good news is that there is a way trough the API and therefore I validated the configuration of a autocreated VPC and checked the API documentaion of NSX to find the required API call.</p>
+<p>To enable the NSX native Load Balancer, you should execute the following API call shown here based on a curl command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">curl --location --request PUT &#39;https://nsx00.vcf00.training/policy/api/v1/orgs/default/projects/vks-dev/vpcs/vpc-vks-prod/vpc-lbs/lb-vks-prod01&#39; \
+</span></span><span class="line"><span class="cl">--header &#39;Content-Type: application/json&#39; \
+</span></span><span class="line"><span class="cl">--header &#39;Authorization: Basic YWRtaW46Vk13YXJlMSFWTXdhcmUxIQ==&#39; \
+</span></span><span class="line"><span class="cl">--header &#39;Cookie: JSESSIONID=08429D3CDD35E7947EA39D8565C885E8&#39; \
+</span></span><span class="line"><span class="cl">--data &#39;{
+</span></span><span class="line"><span class="cl">    &#34;resource_type&#34;: &#34;LBService&#34;,
+</span></span><span class="line"><span class="cl">    &#34;enabled&#34;: true,
+</span></span><span class="line"><span class="cl">    &#34;size&#34;:&#34;SMALL&#34;
+</span></span><span class="line"><span class="cl">}&#39;
+</span></span></code></pre></div><p>After the LB Service is enabled for the VPC, it is also visible in the list of VPCs within the vSphere Namespace creation process.</p>
+<p><a href="createNS-test04_step3_vpc-vks-prod-Shown.png"><img src="createNS-test04_step3_vpc-vks-prod-Shown.png" alt="createNS-test04_step3_vpc-vks-prod-Shown"></a></p>
+<p>Within the NSX UI you can also validate if the <code>NSX Loadbalancer</code> is activated for a specific VPC.</p>
+<p>NSX Load Balancer not activated:</p>
+<p><a href="vpc-vks-prod-noLB.png"><img src="vpc-vks-prod-noLB.png" alt="vpc-vks-prod-noLB"></a></p>
+<p>NSX Load Balancer activated:</p>
+<p><a href="vpc-vks-prod-LBactivated.png"><img src="vpc-vks-prod-LBactivated.png" alt="vpc-vks-prod-LBactivated"></a></p>
+<p>The created NSX objects are not the same compared to a vSphere Namespace assigned to a autocreated namespace, just the assigned VPC and NSX project might be different.</p>
+<h2 id="creating-k8s-clusters">Creating K8s Clusters</h2>
+<p>The creation of a K8s cluster within VKS is unchanged and it can be created as shown in the following example.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-YAML" data-lang="YAML"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">cluster.x-k8s.io/v1beta1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Cluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">tkc03</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">ns-test04</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">clusterNetwork</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">cidrBlocks</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;198.16.0.0/12&#34;</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">pods</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">cidrBlocks</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;192.12.0.0/16&#34;</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">topology</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l">tanzukubernetescluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l">v1.29.4---vmware.3-fips.1-tkg.1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">controlPlane</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">workers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">machineDeployments</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l">node-pool</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">node-pool-1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">variables</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vmClass</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">best-effort-small</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">storageClass</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">tanzu</span><span class="w">
+</span></span></span></code></pre></div><p>After creating the K8s cluster the following obejects are created within NSX in addition.</p>
+<ul>
+<li>Workload network for the K8s worker and master nodes based on the <code>private VPC CIDR</code></li>
+<li>LoadBalancer Virtual Services for the K8s API of the K8s cluster</li>
+</ul>
+<h2 id="isolation-tests">Isolation tests</h2>
+<p>To test the isolation I did the following two tests.</p>
+<ul>
+<li>Traceflow from k8s master of tkc02 to k8s worker of tkc02 (communication within same vSphere namespace and VPC)</li>
+<li>Traceflow from k8s master of tkc02 to k8s master of tkc03 (communication between different vSphere namespace assigned to different VPCs)</li>
+</ul>
+<h3 id="traceflow-from-k8s-master-of-tkc02-to-k8s-worker-of-tkc02">Traceflow from k8s master of tkc02 to k8s worker of tkc02</h3>
+<p>The following traceflow proved that the communication for multiple VMs within the same VPC is working as expected.</p>
+<p><a href="traceflow-same-vpc.png"><img src="traceflow-same-vpc.png" alt="traceflow-same-vpc"></a></p>
+<h3 id="traceflow-from-k8s-master-of-tkc02-to-k8s-master-of-tkc03">Traceflow from k8s master of tkc02 to k8s master of tkc03</h3>
+<p>The following traceflow proved that the communication from VPC <code>vpc-vks-dev</code> will not be routed to the VPC <code>vpc-vks-prod</code>.</p>
+<p><a href="traceflow-between-vpcs.png"><img src="traceflow-between-vpcs.png" alt="traceflow-between-vpcs"></a></p>
+<h2 id="validating-routing-nat-and-lb-through-nsx-edge-cli">Validating Routing, NAT and LB through NSX Edge CLI</h2>
+<p>In case you are using NSX projects the liklihood of using multiple projects is very high. That also means you are using multiple transit gateways which will be a bit confusing, if they are running on the same edge cluster.
+While using the CLI for inspecting the status of the logical routers, you will recognize a DR and SR for all created transit gateways with the exact same name. This will be even worse as more NSX projects with transit gateways you do have running on the same edge cluster.
+An example can be seen in the following output of my lab.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">nsxe01&gt; get gateways
+</span></span><span class="line"><span class="cl">Fri Jun 27 2025 UTC 20:01:30.530
+</span></span><span class="line"><span class="cl">Gateway
+</span></span><span class="line"><span class="cl">UUID                                   VRF    Gateway-ID   Name                              Type                        Ports   Neighbors
+</span></span><span class="line"><span class="cl">736a80e3-23f6-5a2d-81d6-bbefb2786666   0      0                                              TUNNEL                      4       6/5000
+</span></span><span class="line"><span class="cl">0e1de47c-e3b6-4c38-a904-219a50a59c72   1      4            SR-t0-01                          SERVICE_ROUTER_TIER0        7       2/50000
+</span></span><span class="line"><span class="cl">fecd5bf3-5cfc-4666-9a8b-2488f9384a4d   3      2            DR-t0-01                          DISTRIBUTED_ROUTER_TIER0    5       2/50000
+</span></span><span class="line"><span class="cl">4bafe1b4-cdd6-4719-87bc-a989664c219e   4      5            SR-VRF-Default Transit Gateway    VRF_SERVICE_ROUTER_TIER0    5       0/50000
+</span></span><span class="line"><span class="cl">59afa3ce-f036-46bc-a577-4cab48b22725   5      1            DR-VRF-Default Transit Gateway    VRF_DISTRIBUTED_ROUTER_TIER0 9       0/50000
+</span></span><span class="line"><span class="cl">9b498501-e115-4eda-96f7-037b15b8f006   6      11           DR-t1-01                          DISTRIBUTED_ROUTER_TIER1    4       2/50000
+</span></span><span class="line"><span class="cl">d405b694-d269-4db5-89ac-aae80eeb69fe   7      13           SR-vpc-mgmt01                     SERVICE_ROUTER_TIER1        5       2/50000
+</span></span><span class="line"><span class="cl">d662073d-6063-4445-95e7-e9eb0019ca8b   8      12           DR-vpc-mgmt01                     DISTRIBUTED_ROUTER_TIER1    6       0/50000
+</span></span><span class="line"><span class="cl">7f02acd5-b834-4d76-8dc9-52155ff1fcb3   9      15           SR-vpc02                          SERVICE_ROUTER_TIER1        5       2/50000
+</span></span><span class="line"><span class="cl">b3b32677-f610-460a-a900-aa7700177600   12     14           DR-vpc02                          DISTRIBUTED_ROUTER_TIER1    4       0/50000
+</span></span><span class="line"><span class="cl">075e7400-998a-4b90-8f9e-c9483a55b3f3   20     29           SR-kube-system_728cc606-4e34-462  SERVICE_ROUTER_TIER1        5       2/50000
+</span></span><span class="line"><span class="cl">                                                           4-bd4c-0bfdfa2792d5
+</span></span><span class="line"><span class="cl">db84e3e8-306e-46a4-bc72-840561b08dc1   21     28           DR-kube-system_728cc606-4e34-462  DISTRIBUTED_ROUTER_TIER1    4       0/50000
+</span></span><span class="line"><span class="cl">                                                           4-bd4c-0bfdfa2792d5
+</span></span><span class="line"><span class="cl">7e8aa7e3-1f09-4ad4-b155-4803d3335418   22     31           SR-vmware-system-supervisor-serv  SERVICE_ROUTER_TIER1        5       2/50000
+</span></span><span class="line"><span class="cl">                                                           ices-vpc_23142704-a564-440f-ace9
+</span></span><span class="line"><span class="cl">                                                           -820a21b28f06
+</span></span><span class="line"><span class="cl">405be5e0-4268-498e-90fb-dbbe71c59f1c   23     33           SR-ns-test01_482ea8ab-e57f-473b-  SERVICE_ROUTER_TIER1        5       2/50000
+</span></span><span class="line"><span class="cl">                                                           a677-457ff5aa91b0
+</span></span><span class="line"><span class="cl">0e8a4292-c9aa-49ef-9faa-2058c7b5043a   25     37           SR-VRF-Default Transit Gateway    VRF_SERVICE_ROUTER_TIER0    5       0/50000
+</span></span><span class="line"><span class="cl">93d2e99b-4cb1-4f40-9cdd-0d9eb3376acb   26     36           DR-VRF-Default Transit Gateway    VRF_DISTRIBUTED_ROUTER_TIER0 6       2/50000
+</span></span><span class="line"><span class="cl">f6be5a57-1a7a-483f-829d-32329ae2665a   27     40           SR-vpc-vks-dev                    SERVICE_ROUTER_TIER1        5       2/50000
+</span></span><span class="line"><span class="cl">6b4135fb-bd55-4d9b-a9be-30d2c1d4eb39   28     42           SR-vpc-vks-shared-services        SERVICE_ROUTER_TIER1        5       2/50000
+</span></span><span class="line"><span class="cl">80bf7130-067f-40bf-a062-daf5ea2d17a3   30     41           DR-vpc-vks-shared-services        DISTRIBUTED_ROUTER_TIER1    4       0/50000
+</span></span><span class="line"><span class="cl">1ef00d98-cef5-4db1-bfb3-994414cb3da4   31     39           DR-vpc-vks-dev                    DISTRIBUTED_ROUTER_TIER1    4       0/50000
+</span></span><span class="line"><span class="cl">11e9ad2f-74d8-4156-984a-5de036c0d9f8   32     44           SR-vpc-vks-prod                   SERVICE_ROUTER_TIER1        5       2/50000
+</span></span><span class="line"><span class="cl">b4b334d1-bd83-4bfa-98c9-8bfcc9d13124   33     43           DR-vpc-vks-prod                   DISTRIBUTED_ROUTER_TIER1    4       0/50000
+</span></span><span class="line"><span class="cl">1de383e3-f7c3-4b7f-be36-9b9f797a7bdf   34     46           SR-vpc-test                       SERVICE_ROUTER_TIER1        5       2/50000
+</span></span></code></pre></div><p>You might be able to differentiate them by comparing the port count shown as result of the privious command or by executing the command <code>get gateway &lt;UUID&gt; interfaces</code>.</p>
+<p>As soon as you know which is the transit gateway for the NSX project you want to inspect, you can proceed with the next steps.</p>
+<p>As an example we can try to discover the source router of a SNAT IP and the LoadBalancer VIP of a K8s Cluster API within vSphere namespace <code>vpc-vks-prod</code>.
+The IPs we are looking for, are higlighted in the following two screenshots.</p>
+<p>NAT Rule VPC <code>vpc-vks-prod</code>:</p>
+<p><a href="nat-rule-vpc-vks-prod.png"><img src="nat-rule-vpc-vks-prod.png" alt="nat-rule-vpc-vks-prod"></a></p>
+<p>LoadBalancer VIP K8s Cluster API VPC <code>vpc-vks-prod</code>:</p>
+<p><a href="lb-vip-vpc-vks-prod.png"><img src="lb-vip-vpc-vks-prod.png" alt="lb-vip-vpc-vks-prod"></a></p>
+<p>Based on the vSphere Namespace and assigned NSX project as well as VPC, we already have the following information.</p>
+<ul>
+<li>NSX project: <code>tenant01</code></li>
+<li>VPC name: <code>vpc-vks-prod</code></li>
+<li>T0 router where the corresponding transit gateway is connected to: <code>t0-01</code></li>
+<li>Default transit gateway of the NSX projects: <code>Default Transit Gateway</code></li>
+<li>VPC gateway name: <code>vpc-vks-prod</code></li>
+</ul>
+<p>Based on what we learned we already know the IPs should be located on the VPC gateway, but sometimes it is still required to validate if this is also what the T0 router learned and therefore the routing is initialized as expected.
+For the validation we should connect to the edge node with the active T0 router first. Which edge node does run the active T0 can be validated in the UI under the <code>Default</code>NSX project <code>Networking --&gt; Tier-0 Gateways</code> by clicking on the configured HA modes as shown in the following screenshot.</p>
+<p><a href="ha-mode-t0.png"><img src="ha-mode-t0.png" alt="ha-mode-t0"></a></p>
+<p>If you are connected to the egde node you should connect to the VRF of the T0 service router which is <code>VRF 1</code> in my lab as shown in the output of the command <code>get gateways</code>.
+Afterwards you should enter <code>get route</code> to validate the next hop.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">nsxe01&gt; vrf 1
+</span></span><span class="line"><span class="cl">nsxe01(tier0_sr[1])&gt; get route
+</span></span><span class="line"><span class="cl">Fri Jun 27 2025 UTC 20:47:24.494
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Flags: t0c - Tier0-Connected, t0s - Tier0-Static, b - BGP, o - OSPF
+</span></span><span class="line"><span class="cl">t0n - Tier0-NAT, t1s - Tier1-Static, t1c - Tier1-Connected,
+</span></span><span class="line"><span class="cl">t1n: Tier1-NAT, t1l: Tier1-LB VIP, t1ls: Tier1-LB SNAT,
+</span></span><span class="line"><span class="cl">t1d: Tier1-DNS FORWARDER, t1ipsec: Tier1-IPSec, isr: Inter-SR, isrs: Inter-SR-static
+</span></span><span class="line"><span class="cl">ivs: Inter-VRF-Static, tgws: Transit-Gateway-Static, &gt; - selected route, * - FIB route
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Total number of routes: 25
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">b  &gt; * 0.0.0.0/0 [20/0] via 192.168.19.254, uplink-281, 01w1d14h
+</span></span><span class="line"><span class="cl">b  &gt; * 0.0.0.0/0 [20/0] via 192.168.20.254, uplink-288, 01w1d14h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.0/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.1/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.2/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.3/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.4/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.5/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.6/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.7/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.8/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.9/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.10/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d03h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.11/32 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d02h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.200.0.64/26 [5/0] via 169.254.2.2, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.201.0.0/32 [5/0] via 169.254.2.3, inter-vrf-280, 01w2d04h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.201.0.1/32 [5/0] via 169.254.2.3, inter-vrf-280, 01w2d01h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.201.0.2/32  [5/0] via 169.254.2.3, inter-vrf-280, 01w2d00h
+</span></span><span class="line"><span class="cl">tgws&gt; * 10.201.0.3/32 [5/0] via 169.254.2.3, inter-vrf-280, 01w1d23h
+</span></span><span class="line"><span class="cl">t0c&gt; * 100.64.0.0/31 is directly connected, linked-305, 06w6d10h
+</span></span><span class="line"><span class="cl">t0c&gt; * 169.254.2.0/23 is directly connected, inter-vrf-280, 06w6d10h
+</span></span><span class="line"><span class="cl">t0c&gt; * 192.168.19.0/24 is directly connected, uplink-281, 06w6d10h
+</span></span><span class="line"><span class="cl">t0c&gt; * 192.168.20.0/24 is directly connected, uplink-288, 06w6d10h
+</span></span><span class="line"><span class="cl">t0c&gt; * fc0d:3a64:2334:3000::/64 is directly connected, linked-305, 06w6d10h
+</span></span><span class="line"><span class="cl">t0c&gt; * fc0d:3a64:2334:fde8::/64 is directly connected, inter-vrf-280, 06w6d10h
+</span></span><span class="line"><span class="cl">t0c&gt; * fe80::/64 is directly connected, inter-vrf-280, 06w6d10h
+</span></span><span class="line"><span class="cl">nsxe01(tier0_sr[1])&gt;
+</span></span></code></pre></div><p>Based on prefix <code>tgws</code> you can see that the next-hop for the LB VIP and SNAT IP is behind the corresponding transit gateway.
+As soon as you have this information the next step is to siwtch to the VRF of the transit gateway service router which is <code>VRF 25</code>in my lab.</p>
+<p>There you will execute the same command which delivers the following output in my lab.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">nsxe01&gt; vrf 25
+</span></span><span class="line"><span class="cl">nsxe01(tier0_vrf_sr[25])&gt; get route
+</span></span><span class="line"><span class="cl">Fri Jun 27 2025 UTC 21:09:33.265
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Flags: t0c - Tier0-Connected, t0s - Tier0-Static, b - BGP, o - OSPF
+</span></span><span class="line"><span class="cl">t0n - Tier0-NAT, t1s - Tier1-Static, t1c - Tier1-Connected,
+</span></span><span class="line"><span class="cl">t1n: Tier1-NAT, t1l: Tier1-LB VIP, t1ls: Tier1-LB SNAT,
+</span></span><span class="line"><span class="cl">t1d: Tier1-DNS FORWARDER, t1ipsec: Tier1-IPSec, isr: Inter-SR, isrs: Inter-SR-static
+</span></span><span class="line"><span class="cl">ivs: Inter-VRF-Static, tgws: Transit-Gateway-Static, &gt; - selected route, * - FIB route
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Total number of routes: 14
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">ivs&gt; * 0.0.0.0/0 [1/0] via 169.254.2.1, inter-vrf-588, 01w2d04h
+</span></span><span class="line"><span class="cl">t1n&gt; * 10.201.0.0/32 [3/0] via 100.64.0.1, downlink-595, 01w2d04h
+</span></span><span class="line"><span class="cl">t1l&gt; * 10.201.0.1/32 [3/0] via 100.64.0.1, downlink-595, 01w2d02h
+</span></span><span class="line"><span class="cl">t1n&gt; * 10.201.0.2/32 [3/0] via 100.64.0.3, downlink-639, 01w2d00h
+</span></span><span class="line"><span class="cl">t1l&gt; * 10.201.0.3/32 [3/0] via 100.64.0.3, downlink-639, 01w1d23h
+</span></span><span class="line"><span class="cl">t0c&gt; * 100.64.0.0/31 is directly connected, downlink-595, 01w2d04h
+</span></span><span class="line"><span class="cl">t0c&gt; * 100.64.0.2/31 is directly connected, downlink-639, 01w2d00h
+</span></span><span class="line"><span class="cl">t0c&gt; * 100.64.0.4/31 is directly connected, downlink-671, 01w0d10h
+</span></span><span class="line"><span class="cl">t0c&gt; * 169.254.2.0/23 is directly connected, inter-vrf-588, 01w2d04h
+</span></span><span class="line"><span class="cl">t0c&gt; * fc0d:3a64:2334:fde8::/64 is directly connected, inter-vrf-588, 01w2d04h
+</span></span><span class="line"><span class="cl">t0c&gt; * fcc4:2e20:cb1f:800::/64 is directly connected, downlink-639, 01w2d00h
+</span></span><span class="line"><span class="cl">t0c&gt; * fcc4:2e20:cb1f:1400::/64 is directly connected, downlink-595, 01w2d04h
+</span></span><span class="line"><span class="cl">t0c&gt; * fcc4:2e20:cb1f:7c00::/64 is directly connected, downlink-671, 01w0d10h
+</span></span><span class="line"><span class="cl">t0c&gt; * fe80::/64 is directly connected, inter-vrf-588, 01w2d04h
+</span></span></code></pre></div><p>Based on the prefix <code>t1n</code>and <code>t1l</code> you can see that the routed are pointing to a NAT IP and LB VIP, but the next-hop router will be a VPC gateway instead of a T1 router in this case.
+To find the next-hop router you can execute the command <code>get interfaces</code>within the VRF of the transit gateway to find the corresponding VPC gateway as shown in. the following output.
+The output is omitted and does show only the affected interface of the transit gateway which does have the second IP in the used /31 transit network between transit and VPC gateway.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">Interface     : 77c9406c-7d8c-5a78-8806-58c450a258af
+</span></span><span class="line"><span class="cl">Ifuid         : 639
+</span></span><span class="line"><span class="cl">Name          : default-vpc-vks-prod-t0_lrp
+</span></span><span class="line"><span class="cl">Fwd-mode      : IPV4_ONLY
+</span></span><span class="line"><span class="cl">Internal name : downlink-639
+</span></span><span class="line"><span class="cl">Mode          : lif
+</span></span><span class="line"><span class="cl">Port-type     : downlink
+</span></span><span class="line"><span class="cl">IP/Mask       : 100.64.0.2/31;fcc4:2e20:cb1f:800::1/64(NA);fe80::50:56ff:fe56:4452/64(NA)
+</span></span><span class="line"><span class="cl">MAC           : 02:50:56:56:44:52
+</span></span><span class="line"><span class="cl">VNI           : 74756
+</span></span><span class="line"><span class="cl">Access-VLAN   : untagged
+</span></span><span class="line"><span class="cl">LS port       : e88ce6d8-e06e-4f71-8eb5-74b66d3a0866
+</span></span><span class="line"><span class="cl">Urpf-mode     : STRICT_MODE
+</span></span><span class="line"><span class="cl">DAD-mode      : LOOSE
+</span></span><span class="line"><span class="cl">RA-mode       : SLAAC_DNS_THROUGH_RA(M=0, O=0)
+</span></span><span class="line"><span class="cl">Admin         : up
+</span></span><span class="line"><span class="cl">Op_state      : up
+</span></span><span class="line"><span class="cl">Enable-mcast  : False
+</span></span><span class="line"><span class="cl">MTU           : 1500
+</span></span><span class="line"><span class="cl">arp_proxy
+</span></span></code></pre></div><p>Based on the privious output we validated that the traffic towards the IPs <code>10.201.0.2</code> and <code>10.201.0.3</code> is routed to VPC gateway with the name <code>vpc-vks-prod</code>.</p>
+<p>As soon as we switched to the VRF of the VPC gateway which is <code>VRF 32</code>in my lab, we can validate the existence of the LB VIP and SNAT IP based on the following commands.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">nsxe01&gt; vrf 32
+</span></span><span class="line"><span class="cl">nsxe01(tier1_sr[32])&gt; get firewall interfaces
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">Interface           : 352e9a1b-9b23-43c7-be85-dec752255429
+</span></span><span class="line"><span class="cl">Type                : UPLINK
+</span></span><span class="line"><span class="cl">Sync enabled        : true
+</span></span><span class="line"><span class="cl">Name                : default-vpc-vks-prod-t1_lrp
+</span></span><span class="line"><span class="cl">VRF ID              : 32
+</span></span><span class="line"><span class="cl">Context entity      : 11e9ad2f-74d8-4156-984a-5de036c0d9f8
+</span></span><span class="line"><span class="cl">Context name        : SR-vpc-vks-prod
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Interface           : 50f8bae3-8ea8-4795-a404-f1b40dcdc389
+</span></span><span class="line"><span class="cl">Type                : BACKPLANE
+</span></span><span class="line"><span class="cl">Sync enabled        : true
+</span></span><span class="line"><span class="cl">Name                : bp-sr0-port
+</span></span><span class="line"><span class="cl">VRF ID              : 32
+</span></span><span class="line"><span class="cl">Context entity      : 11e9ad2f-74d8-4156-984a-5de036c0d9f8
+</span></span><span class="line"><span class="cl">Context name        : SR-vpc-vks-prod
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></div><p>From the privious output we will need to copy the UUID of the interface from type <code>uplink</code> and execute the following command to validate that the SNAT IP is configured on the VPC gateway.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">nsxe01&gt; get firewall &lt;interface uuid&gt; ruleset rules
+</span></span><span class="line"><span class="cl">Fri Jun 27 2025 UTC 21:28:15.304
+</span></span><span class="line"><span class="cl">DNAT rule count: 2
+</span></span><span class="line"><span class="cl">    Rule ID   : 1
+</span></span><span class="line"><span class="cl">    Rule      : in protocol tcp natpass from any to ip 10.201.0.3 port 6443 lb lbtype L4 lbidletimeout 1800 lbclosetimeout 8 lboptions 8ffc3a7d-8423-4bb5-b572-8406be91e55f 7c0b6e7c-21ea-4fd3-a0df-f7563bf3ba46 tag &#39;loadbalancer&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Rule ID   : 2
+</span></span><span class="line"><span class="cl">    Rule      : in protocol tcp natpass from any to ip 172.18.1.3 port 6443 lb lbtype L4 lboptions 8ffc3a7d-8423-4bb5-b572-8406be91e55f 6e12f884-577f-4c14-9060-85024de60790 with lbrule tag &#39;loadbalancer&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SNAT rule count: 2
+</span></span><span class="line"><span class="cl">    Rule ID   : 3
+</span></span><span class="line"><span class="cl">    Rule      : out protocol tcp natpass from any to ip 172.18.1.3 port 6443 lb lbtype L7 lboptions 8ffc3a7d-8423-4bb5-b572-8406be91e55f 6e12f884-577f-4c14-9060-85024de60790 tag &#39;loadbalancer&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Rule ID   : 536870932
+</span></span><span class="line"><span class="cl">    Rule      : out protocol any prenat from ip 172.18.1.0/24 to any snat ip 10.201.0.2 port 37001-65535
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Firewall rule count: 0
+</span></span></code></pre></div><p>For the Load Balancer you can use the command <code>get load-balancers</code> outside of any VRF, search for the name of the LoadBalancer shown under the <code>Network Services</code>of the VPC and validate the service router id shown in the following ouput.
+The output is omitted and just shows the affectd Load Balancer.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">nsxe01&gt; get load-balancers
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">Load Balancer
+</span></span><span class="line"><span class="cl">Applied To                         :
+</span></span><span class="line"><span class="cl">    Logical Router Id              : b4b334d1-bd83-4bfa-98c9-8bfcc9d13124
+</span></span><span class="line"><span class="cl">    Service Router Id              : 11e9ad2f-74d8-4156-984a-5de036c0d9f8
+</span></span><span class="line"><span class="cl">Display Name                       : lb-vks-prod01
+</span></span><span class="line"><span class="cl">Enabled                            : True
+</span></span><span class="line"><span class="cl">UUID                               : 8ffc3a7d-8423-4bb5-b572-8406be91e55f
+</span></span><span class="line"><span class="cl">Log Level                          : LB_LOG_LEVEL_INFO
+</span></span><span class="line"><span class="cl">Relax Scale Validation             : True
+</span></span><span class="line"><span class="cl">Size                               : SMALL
+</span></span><span class="line"><span class="cl">Tenant Context                     :
+</span></span><span class="line"><span class="cl">    Org                            : default
+</span></span><span class="line"><span class="cl">    Proj                           : vks-dev
+</span></span><span class="line"><span class="cl">    Vpc                            : 4h1WsqhV
+</span></span><span class="line"><span class="cl">Virtual Server Id                  : 7c0b6e7c-21ea-4fd3-a0df-f7563bf3ba46
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></div><h2 id="summary">Summary</h2>
+<p>The deployment is very simple and the requirements are just slightly changed compared to the integration without VPCs.
+From my point of view this type of integration is a very important milestone in the journey of creating a multi tenant platform which supports dynmaic K8s workloads, but is still secure and able to isolate the different K8s workloads.
+A isolation was already possible before the integration between VKS and VPCs, but much more complex and based on specific vDefend rules.</p>
+<p>I did not cover all the posibilities with VKS ad VPCs in this blog article, since vDefend is still something that could be used within the VPCs, as well as the Antrea and AVI integration.
+Those topics will be discussed in future blog articles.</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Is it possible to use the NSX bridge within NSX Federation to extend a network for a single global segment to a VLAN in multiple locations?</title>
