@@ -187,12 +187,53 @@ At this point it is getting a bit tricky, since the NSX Loadbalancing service ca
 <li>Traceflow from k8s master of tkc02 to k8s worker of tkc02 (communication within same vSphere namespace and VPC)</li>
 <li>Traceflow from k8s master of tkc02 to k8s master of tkc03 (communication between different vSphere namespace assigned to different VPCs)</li>
 </ul>
-<h3 id="traceflow-from-k8s-master-of-tkc02-to-k8s-worker-of-tkc02">Traceflow from k8s master of tkc02 to k8s worker of tkc02</h3>
-<p>The following traceflow proved that the communication for multiple VMs within the same VPC is working as expected.</p>
+<h3 id="traceflow-from-k8s-master-of-tkc02-to-k8s-worker-of-tkc02-layer-2-communication-same-vpc">Traceflow from k8s master of tkc02 to k8s worker of tkc02 (Layer 2 communication same VPC)</h3>
+<p>The following traceflow proved that the communication for multiple VMs within the same VPC and network is working as expected.</p>
 <p><a href="traceflow-same-vpc.png"><img src="traceflow-same-vpc.png" alt="traceflow-same-vpc"></a></p>
+
+    <aside class="admonition warning">
+        <div class="admonition-title">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+   </svg></div><b>Layer2 only communication</b>
+        </div>
+        <div class="admonition-content">The communication between the VMs is Layer2 only from NSX point of view and just forwared between the ESXi hosts over the Overlay.
+No NSX router is involved in the communication.</div>
+    </aside>
+<h3 id="traceflow-from-k8s-master-of-tkc02-to-k8s-master-of-tkc04-master-layer-3-communication-same-vpc">Traceflow from k8s master of tkc02 to k8s master of tkc04 master (Layer 3 communication same VPC)</h3>
+<p>The following traceflow proved that the communication for multiple VMs within the same VPC  connected to different networks is working as expected and routing is done over VPC gateway only.</p>
+<p><a href="traceflow-same-vpc-l3.png"><img src="traceflow-same-vpc-l3.png" alt="traceflow-same-vpc-l3"></a></p>
+
+    <aside class="admonition warning">
+        <div class="admonition-title">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+   </svg></div><b>Fully distributed Layer3 communication same VPC</b>
+        </div>
+        <div class="admonition-content">The communication between the VMs is routed over the VPC Gateway, but fully distributed, since no stateful sercvice is involved and both networks are connected to the same VPC gateway.</div>
+    </aside>
 <h3 id="traceflow-from-k8s-master-of-tkc02-to-k8s-master-of-tkc03">Traceflow from k8s master of tkc02 to k8s master of tkc03</h3>
 <p>The following traceflow proved that the communication from VPC <code>vpc-vks-dev</code> will not be routed to the VPC <code>vpc-vks-prod</code>.</p>
 <p><a href="traceflow-between-vpcs.png"><img src="traceflow-between-vpcs.png" alt="traceflow-between-vpcs"></a></p>
+
+    <aside class="admonition warning">
+        <div class="admonition-title">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+   </svg></div><b>Traffic is sent over edge cluster</b>
+        </div>
+        <div class="admonition-content">The communication sent from the private VPC CIDR to a private VPC CIDR of a different VPC will be sent to the edge cluster, since the source VPC is not able to route to the destination.
+As a result the traffic will be routed Noth/South to the physical peer router behind the T0 router.</div>
+    </aside>
 <h2 id="validating-routing-nat-and-lb-through-nsx-edge-cli">Validating Routing, NAT and LB through NSX Edge CLI</h2>
 <p>In case you are using NSX projects the liklihood of using multiple projects is very high. That also means you are using multiple transit gateways which will be a bit confusing, if they are running on the same edge cluster.
 While using the CLI for inspecting the status of the logical routers, you will recognize a DR and SR for all created transit gateways with the exact same name. This will be even worse as more NSX projects with transit gateways you do have running on the same edge cluster.
