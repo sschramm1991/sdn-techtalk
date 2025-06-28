@@ -20,7 +20,7 @@
 <p>K8s is already a crucial part in the VMware ecosystem for many years and the level of integration in other products like NSX and AVI changed a lot in the past.
 That is also true for the naming like &ldquo;vSphere with Tanzu&rdquo;, &ldquo;vSphere IaaS&rdquo; and &ldquo;VKS&rdquo; and perhaps more changes in the future.
 For this blog post we will bring some spotlight to the integration for VKS with NSX VPCs, which is from my point of view a great enhancement from tenancy point of view.</p>
-<p>As preperation for this blog post it is highly recommended to read the previous blog articel from my esteemed colleague Daniel Kriger aka SDN-Warrior about <a href="https://sdn-warrior.org/posts/vcf9-nsx-vpc/">&ldquo;VCF 9 and VPCs as part of NSX 9&rdquo;</a>.</p>
+<p>As preperation for this blog post it is highly recommended to read the previous blog articel from my esteemed colleague Daniel Krieger aka SDN-Warrior about <a href="https://sdn-warrior.org/posts/vcf9-nsx-vpc/">&ldquo;VCF 9 and VPCs as part of NSX 9&rdquo;</a>.</p>
 <h2 id="lab-environment">LAB Environment</h2>
 <ul>
 <li>VCF 9</li>
@@ -85,8 +85,8 @@ Also important is to choose valid NTP and DNS servers to make sure the communica
 The corresponding NSX Project and VPC is dependent on the selected management network which is <code>pubseg01</code>in this example.</p>
 <p><a href="supervisor-activation-step3.png"><img src="supervisor-activation-step3.png" alt="supervisor-activation-step3"></a></p>
 <p>After definiation of the management network it is required to define the workload network parameters as shown in the screenshot below.
-This is the firs sectio of the configuration, which is really different from the past. As you can see a ingress or egress network must not be defined.
-Instead of ingress and egress networks it is required to take advantage of the external and private IP blocks of the predefined VPC. Further the service CIDR has the same function as in earlier VKS versions and wil be used for services within K8s and will not be used beyond the K8s nodes. DNS and NTP is also required in this stage of the deployment.</p>
+This is the first section of the configuration, which is really different from the past. Compared to the past a ingress or egress network must not be defined.
+Instead of ingress and egress networks it is required to take advantage of the external and private IP blocks of the predefined VPC. Furthermore the service CIDR has the same function as in earlier VKS versions and will be used for services within K8s, but will not be used beyond the K8s nodes. DNS and NTP is also required in this stage of the deployment.</p>
 <p><a href="supervisor-activation-step4.png"><img src="supervisor-activation-step4.png" alt="supervisor-activation-step4"></a></p>
 <p>For the advanced settings you are able to choose the size of the supervisor control plane, which is <code>small</code> for my lab.
 Optionally you are able to select a FQDN for the API of the supervisor, which is not required for my lab.</p>
@@ -121,7 +121,7 @@ As shown in the following screenshot it is required to select the checkbox for <
 For some reason the desired VPC <code>vpc-vks-prod</code>is not in the list of available VPCs and cannot be selected.</p>
 <p><a href="createNS-test04_step3_vpc-vks-prod-notShown.png"><img src="createNS-test04_step3_vpc-vks-prod-notShown.png" alt="createNS-test04_step3_vpc-vks-prod-notShown"></a></p>
 <p>Why is the desired VPC not in the list? It is already pre-created!
-To discover the cause of this issue it is recommended to check the log file <code>/var/log/vmware/wcp/wcpsvc.log</code>.
+To discover the cause of this issue it is recommended to check the log file <code>/var/log/vmware/wcp/wcpsvc.log</code> on the vCenter.
 Here you will more detailed information about the reason why a VPC is listed as available VPC or not.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">2025-06-18T20:59:28.926Z debug wcp [nsxt/validator.go:79] Processing vpc vpc01
 </span></span><span class="line"><span class="cl">2025-06-18T20:59:28.926Z debug wcp [nsxt/validator.go:79] Processing vpc vpc02
@@ -129,7 +129,7 @@ Here you will more detailed information about the reason why a VPC is listed as 
 </span></span><span class="line"><span class="cl">2025-06-18T20:59:28.927Z debug wcp [nsxt/validator.go:79] Processing vpc vpc-vks-prod
 </span></span><span class="line"><span class="cl">2025-06-18T20:59:28.992Z debug wcp [projects/utils.go:76] VPC &#39;/orgs/default/projects/vks-dev/vpcs/vpc-vks-prod&#39; is not compatible: VPC /orgs/default/projects/vks-dev/vpcs/vpc-vks-prod has no compatible Load balancer providers.
 </span></span></code></pre></div><p>As mentioned in the logs above the VPC <code>vpc-vks-prod</code> is not compatible, because it has no compatible Load Balancer.
-At this point it is getting a bit tricky, since the NSX Loadbalancing service cannot be enabled for manually created VPC. From UI point of view there is just the option to enable AVU, but not the NSX native Loadbalancer. The good news is that there is a way trough the API and therefore I validated the configuration of a autocreated VPC and checked the API documentaion of NSX to find the required API call.</p>
+At this point it is getting a bit tricky, since the NSX Loadbalancing service cannot be enabled for manually created VPCs. From UI point of view there is just the option to enable AVI, but not the NSX native Loadbalancer. The good news is that there is a way trough the API and therefore I validated the configuration of a autocreated VPC and checked the API documentaion of NSX to find the required API call.</p>
 <p>To enable the NSX native Load Balancer, you should execute the following API call shown here based on a curl command.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">curl --location --request PUT &#39;https://nsx00.vcf00.training/policy/api/v1/orgs/default/projects/vks-dev/vpcs/vpc-vks-prod/vpc-lbs/lb-vks-prod01&#39; \
 </span></span><span class="line"><span class="cl">--header &#39;Content-Type: application/json&#39; \
