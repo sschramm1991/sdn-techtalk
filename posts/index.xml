@@ -86,7 +86,7 @@ The corresponding NSX Project and VPC is dependent on the selected management ne
 <p><a href="supervisor-activation-step3.png"><img src="supervisor-activation-step3.png" alt="supervisor-activation-step3"></a></p>
 <p>After definiation of the management network it is required to define the workload network parameters as shown in the screenshot below.
 This is the first section of the configuration, which is really different from the past. Compared to the past a ingress or egress network must not be defined.
-Instead of ingress and egress networks it is required to take advantage of the external and private IP blocks of the predefined VPC. Furthermore the service CIDR has the same function as in earlier VKS versions and will be used for services within K8s, but will not be used beyond the K8s nodes. DNS and NTP is also required in this stage of the deployment.</p>
+Instead of ingress and egress networks it is required to take advantage of the external and private IP blocks of the predefined VPC. Furthermore the service CIDR has the same function as in earlier VKS versions and will be used for services within K8s, but not beyond the K8s nodes. DNS and NTP is also required in this stage of the deployment.</p>
 <p><a href="supervisor-activation-step4.png"><img src="supervisor-activation-step4.png" alt="supervisor-activation-step4"></a></p>
 <p>For the advanced settings you are able to choose the size of the supervisor control plane, which is <code>small</code> for my lab.
 Optionally you are able to select a FQDN for the API of the supervisor, which is not required for my lab.</p>
@@ -121,7 +121,7 @@ As shown in the following screenshot it is required to select the checkbox for <
 For some reason the desired VPC <code>vpc-vks-prod</code>is not in the list of available VPCs and cannot be selected.</p>
 <p><a href="createNS-test04_step3_vpc-vks-prod-notShown.png"><img src="createNS-test04_step3_vpc-vks-prod-notShown.png" alt="createNS-test04_step3_vpc-vks-prod-notShown"></a></p>
 <p>Why is the desired VPC not in the list? It is already pre-created!
-To discover the cause of this issue it is recommended to check the log file <code>/var/log/vmware/wcp/wcpsvc.log</code> on the vCenter.
+To identify the cause of this issue you should check the log file <code>/var/log/vmware/wcp/wcpsvc.log</code> on vCenter.
 Here you will more detailed information about the reason why a VPC is listed as available VPC or not.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plaintext" data-lang="Plaintext"><span class="line"><span class="cl">2025-06-18T20:59:28.926Z debug wcp [nsxt/validator.go:79] Processing vpc vpc01
 </span></span><span class="line"><span class="cl">2025-06-18T20:59:28.926Z debug wcp [nsxt/validator.go:79] Processing vpc vpc02
