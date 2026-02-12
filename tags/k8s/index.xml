@@ -7,8 +7,15 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Steven Schramm</copyright>
-    <lastBuildDate>Fri, 27 Jun 2025 22:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 11 Feb 2026 21:00:00 +0100</lastBuildDate>
     <atom:link href="https://sdn-techtalk.com/tags/k8s/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VCF 9 - VKS with NSX VPCs and AVI</title>
+      <link>https://sdn-techtalk.com/posts/vks-vpc-avi/</link>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/posts/vks-vpc-avi/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;In my last blog post I wrote about the integration of VKS with NSX and VPCs. As LoadBalancer I used the NSX native version and the AVI integration was not done.&#xA;In addition to the last blog post I will describe now how VPCs can be used for VKS in combination with AVI.&#xA;If you already used AVI for VKS in the past you might be already aware of some limitations like Service Engines vNIC limit which might be solved with the VPC based AVI integration. Further the AVI integration with VPCs takes advantage of tenancy capabilities of AVI, which is also a great enhancement from my point of view.&#xA;Sure there are still some limitations and problems in the new integration, but if not it would be boring.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>VCF 9 - VKS with NSX VPCs</title>
       <link>https://sdn-techtalk.com/posts/vks-vpc/</link>

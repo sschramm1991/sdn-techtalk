@@ -7,76 +7,76 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Steven Schramm</copyright>
-    <lastBuildDate>Fri, 27 Jun 2025 22:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 11 Feb 2026 21:00:00 +0100</lastBuildDate>
     <atom:link href="https://sdn-techtalk.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AVI</title>
+      <link>https://sdn-techtalk.com/tags/avi/</link>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0100</pubDate>
+      <guid>https://sdn-techtalk.com/tags/avi/</guid>
+      <description></description>
+    </item>
     <item>
       <title>K8s</title>
       <link>https://sdn-techtalk.com/tags/k8s/</link>
-      <pubDate>Fri, 27 Jun 2025 22:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/k8s/</guid>
       <description></description>
     </item>
     <item>
       <title>Nested Lab</title>
       <link>https://sdn-techtalk.com/tags/nested-lab/</link>
-      <pubDate>Fri, 27 Jun 2025 22:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/nested-lab/</guid>
       <description></description>
     </item>
     <item>
       <title>Network</title>
       <link>https://sdn-techtalk.com/tags/network/</link>
-      <pubDate>Fri, 27 Jun 2025 22:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/network/</guid>
       <description></description>
     </item>
     <item>
       <title>NSX</title>
       <link>https://sdn-techtalk.com/tags/nsx/</link>
-      <pubDate>Fri, 27 Jun 2025 22:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/nsx/</guid>
       <description></description>
     </item>
     <item>
       <title>NSX 9</title>
       <link>https://sdn-techtalk.com/tags/nsx-9/</link>
-      <pubDate>Fri, 27 Jun 2025 22:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/nsx-9/</guid>
       <description></description>
     </item>
     <item>
       <title>Tanzu</title>
       <link>https://sdn-techtalk.com/tags/tanzu/</link>
-      <pubDate>Fri, 27 Jun 2025 22:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/tanzu/</guid>
       <description></description>
     </item>
     <item>
       <title>VCF</title>
       <link>https://sdn-techtalk.com/tags/vcf/</link>
-      <pubDate>Fri, 27 Jun 2025 22:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/vcf/</guid>
       <description></description>
     </item>
     <item>
       <title>VKS</title>
       <link>https://sdn-techtalk.com/tags/vks/</link>
-      <pubDate>Fri, 27 Jun 2025 22:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/vks/</guid>
       <description></description>
     </item>
     <item>
       <title>Vmware</title>
       <link>https://sdn-techtalk.com/tags/vmware/</link>
-      <pubDate>Fri, 27 Jun 2025 22:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0100</pubDate>
       <guid>https://sdn-techtalk.com/tags/vmware/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Multi Site</title>
-      <link>https://sdn-techtalk.com/tags/multi-site/</link>
-      <pubDate>Wed, 12 Feb 2025 12:20:00 +0100</pubDate>
-      <guid>https://sdn-techtalk.com/tags/multi-site/</guid>
       <description></description>
     </item>
   </channel>
