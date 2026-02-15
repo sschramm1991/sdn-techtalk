@@ -17,9 +17,10 @@
 			<guid>https://sdn-techtalk.com/posts/vks-vpc-avi/</guid>
 			<description><![CDATA[%!s(<nil>)]]></description>
 			<content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
-<p>In my last blog post I wrote about the integration of VKS with NSX and VPCs. As LoadBalancer I used the NSX native version and the AVI integration was not done.
+<p>In my last blog post I wrote about the integration of VKS with NSX and VPCs. As LoadBalancer I used the NSX native version and the AVI integration was not covered.
 In addition to the last blog post I will describe now how VPCs can be used for VKS in combination with AVI.
-If you already used AVI for VKS in the past you might be already aware of some limitations like Service Engines vNIC limit which might be solved with the VPC based AVI integration. Further the AVI integration with VPCs takes advantage of tenancy capabilities of AVI, which is also a great enhancement from my point of view.
+If you already used AVI for VKS in the past you might be aware of some limitations like the vNIC limit of the Service Engines. The impact of this scalability limition is reduced with the VPC based AVI integration.
+Further the AVI tenancy feature will be combined with NSX projects to esure the isolation for the workload is implemented on all different products. For VKS it is implemented with vSphere Namespaces, for NSX the tenancy is implemented by using NSX projects sumpplemented by VPCs and for AVI the NSX projects are automatically combined with a AVI tenant for each NSX project.
 Sure there are still some limitations and problems in the new integration, but if not it would be boring.</p>
 <p>If you are not aware of the vNIC limitations regarding AVI and VKS integrations without using VPCs, I can recommend the following blog post
 <a href="https://evoila.com/blog/scaling-with-nsx-t-and-alb-beyond-vnic-limits/">&ldquo;Scaling with NSX-T and ALB beyond vNIC limits&rdquo;</a>.</p>
@@ -89,7 +90,7 @@ Further the requirement of the connection between AVI controller nodes, Service 
 <ul>
 <li>NSX Project: <code>nsx-tenant1</code></li>
 <li>VPC: <code>vpc-tenant01-prod</code></li>
-<li>VPC Connectivity Profile:  ````Default VPC Connectivity Profile```</li>
+<li>VPC Connectivity Profile:  <code>Default VPC Connectivity Profile</code></li>
 <li>Private CIDR (VPC): <code>172.19.0.0/20</code></li>
 </ul>
 </li>
