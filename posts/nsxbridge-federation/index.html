@@ -82,7 +82,58 @@ Support of Physical Servers in Federated Environments (4.0.0.1) Support of DFW E
 }
 </script><title>Is it possible to use the NSX bridge within NSX Federation to extend a network for a single global segment to a VLAN in multiple locations?</title>
 <link rel="stylesheet dns-prefetch preconnect preload prefetch" as="style" href="https://sdn-techtalk.com/css/style.min.8b863a6add4baedb36010f4233f6bd7badbf22947bbada8623ee59ddb27c54b1.css" integrity="sha256-i4Y6at1Lrts2AQ9CM/a9e62/IpR7utqGI+5Z3bJ8VLE=" crossorigin="anonymous">
-	</head>
+	
+<link rel="stylesheet" href="https://cdn.kiprotect.com/klaro/latest/klaro.css" />
+
+
+<script defer src="https://cdn.kiprotect.com/klaro/latest/klaro.js"></script>
+
+
+<script>
+var klaroConfig = {
+    version: 1,
+    elementID: 'klaro',
+    storageMethod: 'cookie',
+    cookieName: 'klaro-consent',
+    cookieExpiresAfterDays: 365,
+    mustConsent: true,
+    noticeAsModal: true,
+    acceptAll: true,
+
+    services: [
+        {
+            name: 'google-analytics',
+            title: 'Google Analytics',
+            purposes: ['analytics'],
+            default: false,
+
+            callback: function(consent) {
+                if (consent) {
+                    loadGA();
+                }
+            }
+        }
+    ]
+};
+
+function loadGA() {
+    if (window.gaLoaded) return;
+    window.gaLoaded = true;
+
+    var s = document.createElement('script');
+    s.src = "https://www.googletagmanager.com/gtag/js?id=G-FY3KXDLF98";
+    s.async = true;
+    document.head.appendChild(s);
+
+    s.onload = function() {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-FY3KXDLF98');
+    };
+}
+</script>
+</head>
 <body id="page">
 	<header id="site-header">
 		<div class="hdr-wrapper section-inner">
