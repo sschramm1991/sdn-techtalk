@@ -44,6 +44,7 @@ Further the requirement of the connection between AVI controller nodes, Service 
 <li>AVI enterprice or enterprise cloud services license</li>
 <li>VKS and VPC related networks, no additianal networks for AVI inetgartion needed</li>
 <li>VKS guest cluster of VKS must be deplyoed in a custom nsx project, otherwise the mapping between AVI tenant and NSX project is not working</li>
+<li>Replace AVI controller certificate. The certificate content must match the FQDN, hostname and IPs of the controller with the corresponding CN and SAN contents</li>
 </ul>
 <h2 id="lab-specific-components">LAB specific components</h2>
 <p>For the integration of VKS with NSX VPCs and AVI the following nsx objects are relevant.</p>
@@ -209,7 +210,7 @@ If multiple NSX clouds with the same NSX Manager and the same transport zone are
    </svg></div><b>Troubleshooting hint</b>
         </div>
         <div class="admonition-content">If you must deactivate your Supervisor Cluster  for some reason it fails sometimes with the error message<code>Avi client not initialized</code>.
-In this situation it is required to deregister the onboarded AVI as shown in the following knowledge base article <a href="https://evoila.com/blog/scaling-with-nsx-t-and-alb-beyond-vnic-limits/">&ldquo;vsphere-with-tanzu-deactivation-fails&rdquo;</a>.</div>
+In this situation it is required to deregister the onboarded AVI as shown in the following knowledge base article <a href="https://knowledge.broadcom.com/external/article/414120/vsphere-with-tanzu-deactivation-fails-wi.html">&ldquo;vsphere-with-tanzu-deactivation-fails&rdquo;</a>.</div>
     </aside>
 <p>As next step it is required to configure the desired service engine group for each tenant. For the VPC integration of AVI, VKS always uses the serive engine group <code>Default-Group</code> and the deployed service engines are not shared between the tenants. Each tenant will deploy it´s own service engines.
 For the service engine group the parameters for <code>vCenter Server</code>, <code>Cluster</code> and <code>Datastore</code> should be configured.</p>
